@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"arui-tw.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":"ture","version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Background  因為有 share 的 data，會被多個 content 去用他，所以需要 就算只有一個 core，也會有 Concurrent 的問題（因為會有 content switch） 重點就是他們 execute 的 order Consumer &amp; Producer Problem  用 counter 去記還有幾個空位 Producer 1234567while">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[OS] Chapter 6 — Process Synchronization">
+<meta property="og:url" content="https://arui-tw.github.io/Chapter%206%20%E2%80%94%20Process%20Synchronization/">
+<meta property="og:site_name" content="ARui&#39;s Blog">
+<meta property="og:description" content="Background  因為有 share 的 data，會被多個 content 去用他，所以需要 就算只有一個 core，也會有 Concurrent 的問題（因為會有 content switch） 重點就是他們 execute 的 order Consumer &amp; Producer Problem  用 counter 去記還有幾個空位 Producer 1234567while">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://arui-tw.github.io/assets/OS-Chapter-6-Process-Synchronization/Untitled.png">
+<meta property="og:image" content="https://arui-tw.github.io/assets/OS-Chapter-6-Process-Synchronization/Untitled%202.png">
+<meta property="og:image" content="https://arui-tw.github.io/assets/OS-Chapter-6-Process-Synchronization/Untitled%208.png">
+<meta property="article:published_time" content="2022-01-31T10:05:24.000Z">
+<meta property="article:modified_time" content="2022-01-31T09:23:58.503Z">
+<meta property="article:author" content="ARui">
+<meta property="article:tag" content="Operating System">
+<meta property="article:tag" content="Notes">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://arui-tw.github.io/assets/OS-Chapter-6-Process-Synchronization/Untitled.png">
+
+
+<link rel="canonical" href="https://arui-tw.github.io/Chapter%206%20%E2%80%94%20Process%20Synchronization/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://arui-tw.github.io/Chapter%206%20%E2%80%94%20Process%20Synchronization/","path":"Chapter 6 — Process Synchronization/","title":"[OS] Chapter 6 — Process Synchronization"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>[OS] Chapter 6 — Process Synchronization | ARui's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">ARui's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#background"><span class="nav-number">1.</span> <span class="nav-text">Background</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#race-condition"><span class="nav-number">1.1.</span> <span class="nav-text">Race Condition</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#critical-section"><span class="nav-number">2.</span> <span class="nav-text">Critical Section</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#critical-section-requirements"><span class="nav-number">2.1.</span> <span class="nav-text">Critical Section
+Requirements</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#review-slide"><span class="nav-number">2.2.</span> <span class="nav-text">Review Slide</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#software-solution"><span class="nav-number">3.</span> <span class="nav-text">Software Solution</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#petersons-solution-for-two-processes"><span class="nav-number">3.1.</span> <span class="nav-text">Peterson’s Solution for
+Two Processes</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#proof"><span class="nav-number">3.1.1.</span> <span class="nav-text">Proof</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#producerconsumer-problem"><span class="nav-number">3.2.</span> <span class="nav-text">Producer&#x2F;Consumer Problem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bakery-algorithm-n-processes"><span class="nav-number">3.3.</span> <span class="nav-text">Bakery Algorithm (n
+processes)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#synchronization-hardware"><span class="nav-number">4.</span> <span class="nav-text">Synchronization Hardware</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#atomic-instruction"><span class="nav-number">4.1.</span> <span class="nav-text">Atomic instruction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#testandset"><span class="nav-number">4.1.1.</span> <span class="nav-text">TestAndSet()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#swap"><span class="nav-number">4.1.2.</span> <span class="nav-text">Swap()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#review-slide-2"><span class="nav-number">4.2.</span> <span class="nav-text">Review Slide (2)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#semaphores"><span class="nav-number">5.</span> <span class="nav-text">Semaphores</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#posix-semaphore"><span class="nav-number">5.1.</span> <span class="nav-text">POSIX Semaphore</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#non-busy-waiting-implementation"><span class="nav-number">5.2.</span> <span class="nav-text">Non-busy waiting
+Implementation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cooperation-synchronization"><span class="nav-number">5.3.</span> <span class="nav-text">Cooperation Synchronization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#deadlocks-starvation"><span class="nav-number">5.4.</span> <span class="nav-text">Deadlocks &amp; Starvation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#review-slide-3"><span class="nav-number">5.5.</span> <span class="nav-text">Review Slide (3)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#classical-problems-of-synchronization"><span class="nav-number">6.</span> <span class="nav-text">Classical Problems of
+Synchronization</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#bounded-buffer-problem"><span class="nav-number">6.1.</span> <span class="nav-text">Bounded-Buffer Problem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#readers-writers-problem"><span class="nav-number">6.2.</span> <span class="nav-text">Readers-Writers Problem</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#first-reader-writer-algorithm"><span class="nav-number">6.2.1.</span> <span class="nav-text">First Reader-Writer
+Algorithm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dining-philosophers-problem"><span class="nav-number">6.2.2.</span> <span class="nav-text">Dining-Philosophers Problem</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#monitors"><span class="nav-number">7.</span> <span class="nav-text">Monitors</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#monitor-condition-variables"><span class="nav-number">7.1.</span> <span class="nav-text">(Monitor) Condition Variables</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#thread-programming"><span class="nav-number">8.</span> <span class="nav-text">Thread Programming</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pthread-lockmutex-routines"><span class="nav-number">8.1.</span> <span class="nav-text">Pthread Lock&#x2F;Mutex Routines</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#condition-variables-cv"><span class="nav-number">8.2.</span> <span class="nav-text">Condition Variables (CV)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#threadpool-implementation"><span class="nav-number">8.3.</span> <span class="nav-text">ThreadPool Implementation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#synchronized-tools-in-java"><span class="nav-number">8.4.</span> <span class="nav-text">Synchronized Tools in JAVA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#review-slides-4"><span class="nav-number">8.5.</span> <span class="nav-text">Review Slides (4)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#atomic-transactions"><span class="nav-number">9.</span> <span class="nav-text">Atomic Transactions</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#review-slides-5"><span class="nav-number">9.1.</span> <span class="nav-text">Review Slides (5)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#textbook-problem-set"><span class="nav-number">10.</span> <span class="nav-text">Textbook Problem Set</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ARui</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/arui-tw" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;arui-tw" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chen108060030@gapp.nthu.edu.tw" title="E-Mail → mailto:chen108060030@gapp.nthu.edu.tw" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/profile.php?id=100002082516453" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100002082516453" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://arui-tw.github.io/Chapter%206%20%E2%80%94%20Process%20Synchronization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ARui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ARui's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [OS] Chapter 6 — Process Synchronization
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-01-31 18:05:24 / Modified: 17:23:58" itemprop="dateCreated datePublished" datetime="2022-01-31T18:05:24+08:00">2022-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Notes/" itemprop="url" rel="index"><span itemprop="name">Notes</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>12k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="background">Background</h1>
+<ul>
+<li>因為有 share 的 data，會被多個 content 去用他，所以需要</li>
+<li>就算只有一個 core，也會有 Concurrent 的問題（因為會有 content
+switch）</li>
+<li>重點就是他們 execute 的 order</li>
+<li>Consumer &amp; Producer Problem
+<ul>
+<li><p>用 counter 去記還有幾個空位</p></li>
+<li><p>Producer</p>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">	nextItem = <span class="built_in">getItem</span>( );</span><br><span class="line">	<span class="keyword">while</span> (counter == BUFFER_SIZE);</span><br><span class="line">	buffer[in] = nextItem;</span><br><span class="line">	in = (in + <span class="number">1</span>) % BUFFER_SIZE;</span><br><span class="line">	counter++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p></li>
+<li><p>Consumer</p>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">	<span class="keyword">while</span> (counter == <span class="number">0</span>) ;</span><br><span class="line">	item = buffer[out];</span><br><span class="line">	out = (out + <span class="number">1</span>) % BUFFER_SIZE;</span><br><span class="line">	counter--;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p></li>
+<li><p>但是 counter 會是這兩隻 thread
+共用的東東，所以會出現不一致的問題：</p>
+<ul>
+<li><p><code>counter++</code></p>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">move ax, counter</span><br><span class="line">add  ax, <span class="number">1</span></span><br><span class="line">move counter, ax</span><br></pre></td></tr></table></figure></p></li>
+<li><p><code>counter--</code></p>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">move bx, counter</span><br><span class="line">sub  bx, <span class="number">1</span></span><br><span class="line">move counter, bx</span><br></pre></td></tr></table></figure></p></li>
+<li><p>但是…如果是這樣呢？（counter initially is 5）</p>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">producer: move ax, counter   <span class="comment">// ax = 5</span></span><br><span class="line">producer: add ax, <span class="number">1</span>          <span class="comment">// ax = 6</span></span><br><span class="line">context <span class="keyword">switch</span></span><br><span class="line">consumer: move bx, counter   <span class="comment">// bx = 5</span></span><br><span class="line">consumer: sub bx, <span class="number">1</span>          <span class="comment">// bx = 4</span></span><br><span class="line">context <span class="keyword">switch</span></span><br><span class="line">producer: move counter, ax   <span class="comment">// counter = 6</span></span><br><span class="line">context <span class="keyword">switch</span></span><br><span class="line">consumer: move counter, bx   <span class="comment">// counter = 4</span></span><br></pre></td></tr></table></figure></p>
+<p>不過如果不是 preemptive 就不會有這個問題了。</p></li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="race-condition">Race Condition</h2>
+<aside>
+<p>📖 多個 process 操作 shared data
+concurrently，結果會取決於最後完成的人。（這是描述一個問題點，所以是因為有
+race condition，要用同步化解決）</p>
+</aside>
+<ul>
+<li>Single processor 的可以用 disable interrupt 或 non-preemptive CPU
+來解決。</li>
+</ul>
+<h1 id="critical-section">Critical Section</h1>
+<ul>
+<li><p><del>一個 process 之間溝通的 protocol</del></p></li>
+<li><p>Critical section: 會產生 race condition 的那段程式碼。</p></li>
+<li><p>Mutually exclusive: 會有相同 critical section 的
+process。他們要在那段 critical section 被迫去 serialize。</p>
+<figure>
+<img src="/assets/OS-Chapter-6-Process-Synchronization/Untitled.png"
+alt="Remainder section: 剩下的" />
+<figcaption aria-hidden="true">Remainder section: 剩下的</figcaption>
+</figure></li>
+</ul>
+<h2 id="critical-section-requirements">Critical Section
+Requirements</h2>
+<ol type="1">
+<li>Mutual Exclusion: if process P is executing in its CS, no other
+processes can be executing in their CS</li>
+<li>Progress: 有 process 想要進去空的 critical
+section，就應該要讓他馬上進去。（有效性）</li>
+<li>Bounded Waiting: 不能讓等的人一直等，要 bound 他的 waiting
+time。（公平性）</li>
+</ol>
+<ul>
+<li>2 和 3 是可捨取的</li>
+</ul>
+<h2 id="review-slide">Review Slide</h2>
+<ul>
+<li>Race condition?</li>
+<li>Critical-Section (CS) problem? 4 sections?
+<ul>
+<li>entry, CS, exit, remainder</li>
+</ul></li>
+<li>3 requirements for solutions to CS problems?
+<ul>
+<li>mutual exclusion</li>
+<li>progress</li>
+<li>bounded waiting</li>
+</ul></li>
+</ul>
+<h1 id="software-solution">Software Solution</h1>
+<ul>
+<li><p>Assume only 2 processes, <span class="math inline">\(P_0\)</span>
+and <span class="math inline">\(P_1\)</span></p></li>
+<li><p>用 <code>turn</code> 決定輪到誰</p>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%201.png" /></p>
+<ul>
+<li>因為是用 single instruction 去 set，所以不會被中斷詠唱</li>
+<li>Requirements
+<ol type="1">
+<li>Mutual Exclusion: Yes</li>
+<li>Progress: <strong>Nope</strong>，不符合 Progress 的條件， 因為 <span
+class="math inline">\(P_0\)</span> 可能已經繞一圈想上去了，但是因為
+<span class="math inline">\(P_1\)</span> 還沒進過 CS，所以他進不去</li>
+<li>Bounded Waiting: Yes，因為是 Round robin.</li>
+</ol></li>
+</ul></li>
+</ul>
+<h2 id="petersons-solution-for-two-processes">Peterson’s Solution for
+Two Processes</h2>
+<ul>
+<li><p>跟剛剛那個很像，但是多了一個 flag，用來表示他是不是想要進去
+critical section（True 就是他準備好進去了）</p></li>
+<li><p>對方可以看到別人的 flag，但是只有自己可以改自己的</p></li>
+<li><p>所以進去的時候就是別人不想進去，或是你拿到 token 了（i.e.
+對方沒拿到 token）</p>
+<figure>
+<img src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%202.png"
+alt="注意是要在進去前把 turn 值給對方" />
+<figcaption aria-hidden="true">注意是要在<strong>進去前</strong>把 turn
+值給對方</figcaption>
+</figure></li>
+</ul>
+<h3 id="proof">Proof</h3>
+<ul>
+<li>Mutual exclusion: 用反證
+<ol type="1">
+<li><p>假設他們可以同時在裡面</p></li>
+<li><p>那下面的條件就要同時存在。</p>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%203.png" /></p></li>
+<li><p>因為他們都在裡面，所以 flag 都是 true</p></li>
+<li><p>但是 turn 不可能同時是 0 且 1</p></li>
+<li><p>所以不可能同時進去</p></li>
+</ol></li>
+<li>Progress
+<ol type="1">
+<li>假設 <span class="math inline">\(P_0\)</span> 想要進去，且 <span
+class="math inline">\(P_1\)</span> 不想要進去，要證這時候 <span
+class="math inline">\(P_0\)</span> 應該要要可以進去 ⇒
+好像也不用證，反正就可以啊</li>
+<li>兩個都想進去的時候，那就看
+<code>turn</code>，一定有其中一個可以進去</li>
+</ol></li>
+<li>Bounded Waiting
+<ul>
+<li>假設當 <span class="math inline">\(P_1\)</span> 想要進去，但是 <span
+class="math inline">\(P_0\)</span> 在裡面。</li>
+</ul>
+<ol type="1">
+<li><p><span class="math inline">\(P_0\)</span> 一離開 CS 就把
+<code>flag</code> 設成 False 了，所以馬上就輪到 <span
+class="math inline">\(P_1\)</span> 了</p></li>
+<li><p><span class="math inline">\(P_0\)</span> 如果一離開 CS
+就又想進去（可能因為剩下的都是 CPU burst，所以就沒有被 content switch
+掉）</p>
+<p>⇒ 但是因為會在最一開始把 token 給別人，所以會被讓給別人作</p></li>
+</ol></li>
+</ul>
+<h2 id="producerconsumer-problem">Producer/Consumer Problem</h2>
+<ul>
+<li><p>如果先進 Consumer 就會 deadlock（i.e. 程式沒有在前進，但是 CPU
+在燒）。</p>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%204.png" /></p></li>
+<li><p>正確但是低效能。</p>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%205.png" /></p></li>
+<li><p>正確且優質。</p>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%206.png" /></p></li>
+</ul>
+<h2 id="bakery-algorithm-n-processes">Bakery Algorithm (n
+processes)</h2>
+<ul>
+<li>像去麵包店</li>
+</ul>
+<ol type="1">
+<li>在每次進去 CS 前，要抽號碼牌</li>
+<li>號碼牌最小的先進（因為 counter 是用 <code>++</code>
+的，所以<strong>只能</strong>保證是 non-decrease order 的，e.g. 1, 2, 3,
+3, 4, 4, 4, 5）</li>
+<li>如果號碼牌一樣，就根據 process ID，小的先</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Process i</span></span><br><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">	choosing[i] = <span class="literal">true</span>;  <span class="comment">// 開始抽</span></span><br><span class="line">	num[i] = <span class="built_in">max</span>(num[<span class="number">0</span>], num[<span class="number">1</span>], ..., num[n<span class="number">-1</span>]) + <span class="number">1</span>; <span class="comment">// get ticket</span></span><br><span class="line">	choosing[i] = <span class="literal">false</span>; <span class="comment">// 抽完了</span></span><br><span class="line">	<span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">		<span class="keyword">while</span> (choosing[j]);  <span class="comment">// 確定他抽完了才可以比</span></span><br><span class="line">		<span class="keyword">while</span> ((num[j] != <span class="number">0</span>) &amp;&amp;     <span class="comment">// num 是 0 就是不想進去</span></span><br><span class="line">					 ((num[j], j) &lt; (num[i], i))); <span class="comment">// 比較每一個 j 確定我是最小的</span></span><br><span class="line">	&#125;</span><br><span class="line">		**critical section**</span><br><span class="line">	num[i] = <span class="number">0</span>;</span><br><span class="line">		**reminder section**</span><br><span class="line">&#125; <span class="keyword">while</span>(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>最小號碼一定先做 → first come first serve → bounded-waiting
+time</li>
+<li>如果沒有 choosing
+<ol type="1">
+<li>假設目前最大是 5</li>
+<li>P4 抽的比較快，抽到 6，這時候 P1 還是 0</li>
+<li>然後 P4 會進去 CS（他這時候會以為 P1 沒有要進去，因為他是 0）</li>
+<li>接下來 P1 抽完了，抽到 6，他就去跟 P4 比，發現跟他一樣，但是他的 pid
+比較小，所以他就開開心心的進去了。然後就沒有然後了。(race condition
+by355)</li>
+</ol>
+<ul>
+<li>如果有 locking，P4 就會等到 P1 先抽完再跟他比</li>
+</ul></li>
+</ul>
+<h1 id="synchronization-hardware">Synchronization Hardware</h1>
+<p>只要用到 Hardware 的就算是（包括之前的 disable interrupt）</p>
+<h2 id="atomic-instruction">Atomic instruction</h2>
+<p>一個 CPU 的 instruction，所以一定會一次做完。</p>
+<p>不需要 library 的 support，內建就有了。</p>
+<h3 id="testandset"><code>TestAndSet()</code></h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">boolean <span class="title">TestAndSet</span> <span class="params">(<span class="keyword">bool</span> &amp;lock)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">bool</span> value = lock;</span><br><span class="line">	lock = TRUE;   <span class="comment">// 不論結果，都會鎖起來</span></span><br><span class="line">	<span class="keyword">return</span> value;  <span class="comment">// return 的是原本的值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%207.png" /></p>
+<ul>
+<li><p>Mutual exclusion: Yes</p>
+<p>⇒ 因為只有正在 CS 裡面的人把他設成 Flase 才可以放下一個進去</p></li>
+<li><p>Progress: Yes</p>
+<p>⇒ 只要沒人在裡面，想進去就可以馬上進去</p></li>
+<li><p>Bounded-Wait: No</p>
+<p>⇒ 因為先搶先贏，所以可能一直搶不到</p>
+<p>⇒ P0 的 CS 結束了，但是 CPU burst 還沒完，所以他又搶到
+lock，然後進去之後 CPU burst 結束了，content switch。換
+P1，但是他被擋在外面，CPU burst 燒完之後都輪不到他 QQ，又回到 P0
+繼續。</p></li>
+</ul>
+<h3 id="swap"><code>Swap()</code></h3>
+<p>把值對調。</p>
+<figure>
+<img src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%208.png"
+alt="一開始會把 key 設成 True，然後就在 while 裡面一直把 lock 跟 key 交換。如果 lock 在別的地方被設成 False 了，就可以進去 CS 了。" />
+<figcaption aria-hidden="true">一開始會把 key 設成 True，然後就在 while
+裡面一直把 lock 跟 key 交換。如果 lock 在別的地方被設成 False
+了，就可以進去 CS 了。</figcaption>
+</figure>
+<ul>
+<li>特性也跟剛剛一樣</li>
+</ul>
+<h2 id="review-slide-2">Review Slide (2)</h2>
+<ul>
+<li>Use software solution to solve CS?
+<ul>
+<li>Peterson’s and Bakery algorithms</li>
+</ul></li>
+<li>Use HW support to solve CS?
+<ul>
+<li><code>TestAndSet()</code>, <code>Swap()</code></li>
+</ul></li>
+</ul>
+<h1 id="semaphores">Semaphores</h1>
+<ul>
+<li>Resource counting 的問題。</li>
+<li>一個值 indicate 想要透過 semaphore 保護的資源的數量多寡。
+<ul>
+<li>If #record = 1 → binary semaphore, mutex lock</li>
+<li>if #record &gt; 1 → counting semaphore</li>
+</ul></li>
+<li>用兩個 atomic operation：
+<ol type="1">
+<li><p><code>wait</code>：搶資源</p>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">wait</span>(S) &#123;</span><br><span class="line">	<span class="keyword">while</span> (S &lt;= <span class="number">0</span>); <span class="comment">// busy waiting</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>用的是 Spinlock → 等待還是會燒 CPU（因為一直在作指令）</p></li>
+<li><p><code>signal</code>：放資源</p>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">signal</span>(S) &#123;</span><br><span class="line">	S++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p></li>
+</ol></li>
+</ul>
+<h2 id="posix-semaphore">POSIX Semaphore</h2>
+<ul>
+<li><p>他是 OS 的 API</p></li>
+<li><p>Semaphore is part of POSIX standard BUT it is not belonged to
+Pthread</p>
+<ul>
+<li>It can be used with or <strong>without</strong> thread</li>
+</ul></li>
+<li><p>因為 lock 多是在 threads 之間，semaphore 多是在 process
+之間。</p></li>
+<li><p>POSIX Semaphore routines:</p>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sem_init</span>(<span class="keyword">sem_t</span> *sem, <span class="keyword">int</span> pshared, <span class="keyword">unsigned</span> <span class="keyword">int</span> value)</span><br><span class="line"><span class="built_in">sem_wait</span>(<span class="keyword">sem_t</span> *sem)</span><br><span class="line"><span class="built_in">sem_post</span>(<span class="keyword">sem_t</span> *sem)</span><br><span class="line"><span class="built_in">sem_getvalue</span>(<span class="keyword">sem_t</span> *sem, <span class="keyword">int</span> *valptr) <span class="comment">// check</span></span><br><span class="line"><span class="built_in">sem_destory</span>(<span class="keyword">sem_t</span> *sem)</span><br></pre></td></tr></table></figure></p></li>
+<li><p>Example:</p>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;semaphore.h&gt;</span></span></span><br><span class="line"><span class="keyword">sem_t</span> sem;</span><br><span class="line"><span class="built_in">sem_init</span>(&amp;sem);</span><br><span class="line"><span class="built_in">sem_wait</span>(&amp;sem);</span><br><span class="line">	<span class="comment">// critical section</span></span><br><span class="line"><span class="built_in">sem_post</span>(&amp;sem);</span><br><span class="line"><span class="built_in">sem_destory</span>(&amp;sem);</span><br></pre></td></tr></table></figure></p></li>
+<li><p>Another example</p>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">	<span class="built_in">wait</span>(mutex);   <span class="comment">// pthread_mutex_lock(&amp;mutex)</span></span><br><span class="line">		<span class="comment">// critical section</span></span><br><span class="line">	<span class="built_in">signal</span>(mutex); <span class="comment">// pthread_mutex_unlock(&amp;mutex)</span></span><br><span class="line">		<span class="comment">// remainder section</span></span><br><span class="line">&#125; <span class="keyword">while</span>(<span class="number">1</span>);</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>Progress: Yes</li>
+<li>Bounded waiting: 取決於 <code>wait</code> 的實作</li>
+</ul></li>
+</ul>
+<h2 id="non-busy-waiting-implementation">Non-busy waiting
+Implementation</h2>
+<aside>
+<p>✏️ Waiting 的應該要被 put to sleep（所以有要要去 wake up 他）</p>
+</aside>
+<ul>
+<li><p>Semaphore is data struct with a queue （可以用各種 queue
+strategy）</p>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">	<span class="keyword">int</span> value;        <span class="comment">// init to 0</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">process</span> *<span class="title">L</span>;</span></span><br><span class="line">	<span class="comment">// “PCB” queue </span></span><br><span class="line">&#125; semaphore;</span><br></pre></td></tr></table></figure></p>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%209.png" /></p></li>
+<li><p><code>wait()</code> and <code>signal()</code></p>
+<ul>
+<li>需要用到 <code>block()</code> and <code>wakeup()</code> 兩個 system
+calls。（明顯的缺點，需要多用到 system call）</li>
+</ul>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">signal</span><span class="params">(semaphore S)</span> </span>&#123; </span><br><span class="line">	S.value++;</span><br><span class="line">	<span class="keyword">if</span> (S.value &lt;= <span class="number">0</span>) &#123;         <span class="comment">// 注意有 `=`，因為我們先 `++` 了 </span></span><br><span class="line">		remove a process P from S.L; </span><br><span class="line">		<span class="built_in">wakeup</span>(P);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">wait</span><span class="params">(semaphore S)</span> </span>&#123;</span><br><span class="line">	S.value--;  <span class="comment">// subtract first</span></span><br><span class="line">	<span class="keyword">if</span> (S.value &lt; <span class="number">0</span>) &#123;         <span class="comment">// 注意沒有 `=`</span></span><br><span class="line">		add <span class="keyword">this</span> process to S.L; <span class="comment">// 要先放進去才能去睡覺</span></span><br><span class="line">		<span class="built_in">block</span>();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p></li>
+<li><p>更多行加上更多 share data（那些 queue），所以要確保他有 atomic
+的特性。可以用：</p>
+<ul>
+<li>Single-processor: disable interrupts</li>
+<li>Multi-processor:
+<ul>
+<li>HW support (e.g. Test-And-Set, Swap)</li>
+<li>SW solution (Peterson’s solution, Bakery algorithm)</li>
+</ul></li>
+</ul>
+<figure>
+<img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2010.png"
+alt="注意不要包到 sleep 和 wakeup，不然會 deadlock。" />
+<figcaption aria-hidden="true">注意不要包到 sleep 和 wakeup，不然會
+deadlock。</figcaption>
+</figure></li>
+<li><p>如果等待時間短，不如用 busy waiting，不然要一直 call system
+call。</p></li>
+</ul>
+<h2 id="cooperation-synchronization">Cooperation Synchronization</h2>
+<p>因為會有資料的 independency，所以也可以用這個來解。</p>
+<ul>
+<li><p>Example:</p>
+<ul>
+<li><p>P1 executes S1; P2 executes S2 (S2 be executed only after S1 has
+completed)</p></li>
+<li><p><code>sync</code> 一開始設成 0</p>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2011.png" /></p></li>
+</ul></li>
+<li><p>A More Complicated Example (DAG)</p>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2012.png" /></p>
+<ul>
+<li>(Initially, all semaphores are 0)</li>
+</ul>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2013.png" /></p></li>
+</ul>
+<h2 id="deadlocks-starvation">Deadlocks &amp; Starvation</h2>
+<ul>
+<li>Deadlocks: 2 processes are waiting indefinitely for each other to
+release resources（程式之間彼此互卡）</li>
+<li>Starvation:
+<ul>
+<li>example: LIFO (Last In First Out) queue in semaphore process
+queue</li>
+<li>有人可以執行只是輪不到我</li>
+</ul></li>
+</ul>
+<h2 id="review-slide-3">Review Slide (3)</h2>
+<ul>
+<li>What’s semaphore? 2 operations?</li>
+<li>What’s busy-waiting (Spinlock) semaphore?</li>
+<li>What’s non-busy-waiting (Non-Spinlock) semaphore?</li>
+<li>How to ensure atomic wait &amp; signal ops?</li>
+<li>Deadlock? starvation?</li>
+</ul>
+<h1 id="classical-problems-of-synchronization">Classical Problems of
+Synchronization</h1>
+<p>解決方法很多，重點是去定義問題。</p>
+<ul>
+<li>Bounded-Buffer (Producer-Consumer) Problem</li>
+<li>Reader-Writers Problem</li>
+<li>Dining-Philosopher Problem</li>
+</ul>
+<h2 id="bounded-buffer-problem">Bounded-Buffer Problem</h2>
+<p>就上面那些問題。</p>
+<ul>
+<li>A pool of <em>n</em> buffers, each capable of holding one item</li>
+<li>Producer:
+<ul>
+<li>grab an empty buffer</li>
+<li>place an item into the buffer</li>
+<li>waits if no empty buffer is available</li>
+</ul></li>
+<li>Consumer:
+<ul>
+<li>grab a buffer and retracts the item</li>
+<li>place the buffer back to the free pool</li>
+<li>waits if all buffers are empty</li>
+</ul></li>
+</ul>
+<h2 id="readers-writers-problem">Readers-Writers Problem</h2>
+<ul>
+<li>reader processes → 只會讀</li>
+<li>writer processes → 只會寫</li>
+<li>如果都是 reader 那沒差，反正同時 read 也不會出事。但是 writer
+就只能一個人寫，連 reader 都不能同時 read。（Exclusive access）</li>
+<li>Different variations involving priority
+<ul>
+<li><p><strong>First RW problem</strong>: no reader will be kept waiting
+unless a writer is updating a shared object
+（只要符合上面的基本定義就好了）</p></li>
+<li><p><strong>Second RW problem</strong>: first 的條件加上 writer 不能
+starvation。</p>
+<p>→ Writer 要比較高的 priority</p>
+<p>→ once a writer is ready, no new reader may start reading</p></li>
+</ul></li>
+</ul>
+<h3 id="first-reader-writer-algorithm">First Reader-Writer
+Algorithm</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// mutual exclusion for write</span></span><br><span class="line">semaphore wrt = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// mutual exclusion for readcount</span></span><br><span class="line">semaphore mutex=<span class="number">1</span>  <span class="comment">// 保護 readcount</span></span><br><span class="line"><span class="keyword">int</span> readcount=<span class="number">0</span>;   <span class="comment">// 有多少人要 read</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Writer</span>() &#123; </span><br><span class="line">	<span class="keyword">while</span>(<span class="literal">true</span>) &#123;</span><br><span class="line">		<span class="built_in">wait</span>(wrt);</span><br><span class="line">			**<span class="comment">// Writer Code**</span></span><br><span class="line">		<span class="built_in">signal</span>(wrt);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Reader</span>() &#123;</span><br><span class="line">	<span class="keyword">while</span>(<span class="literal">true</span>) &#123;</span><br><span class="line">		<span class="built_in">wait</span>(mutex);</span><br><span class="line">		</span><br><span class="line">		readcount++;</span><br><span class="line">		<span class="comment">// Acquire write lock if reads haven’t</span></span><br><span class="line">		<span class="comment">// 全部 reader 共用一個 write lock</span></span><br><span class="line">		<span class="keyword">if</span> (readcount == <span class="number">1</span>) <span class="comment">// 代表原本沒有人在 read</span></span><br><span class="line">			<span class="built_in">wait</span>(wrt);        <span class="comment">// 所以需要要過來</span></span><br><span class="line"></span><br><span class="line">		<span class="built_in">signal</span>(mutex);</span><br><span class="line"></span><br><span class="line">			**<span class="comment">// Reader Code**</span></span><br><span class="line"></span><br><span class="line">		<span class="built_in">wait</span>(mutex);</span><br><span class="line"></span><br><span class="line">		readcount--;</span><br><span class="line">		<span class="comment">// release write lock if no more reads</span></span><br><span class="line">		<span class="keyword">if</span> (readcount == <span class="number">0</span>)  <span class="comment">// 代表沒有人要 read 了</span></span><br><span class="line">			<span class="built_in">signal</span>(wrt);       <span class="comment">// 就可以放掉了</span></span><br><span class="line"></span><br><span class="line">		<span class="built_in">signal</span>(mutex);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>Writer 會有 starvation，因為 reader 共用一個
+lock，所以可以一直輪流佔著</p>
+<p>⇒ Second RW problem solve it.</p></li>
+</ul>
+<h3 id="dining-philosophers-problem">Dining-Philosophers Problem</h3>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2014.png" /></p>
+<ul>
+<li>每個人左邊跟右邊都有一根筷子（五個人五隻筷子）
+<ul>
+<li>吃飯需要兩隻筷子</li>
+<li>一隻筷子只能一個人拿</li>
+<li>吃完就要把筷子放下</li>
+</ul></li>
+<li>Deadlock problem
+<ul>
+<li>每個人拿左邊的筷子直到吃完飯 → 卡死</li>
+</ul></li>
+<li>Starvation problem
+<ul>
+<li>不能讓人一直拿，一直吃</li>
+</ul></li>
+</ul>
+<h1 id="monitors">Monitors</h1>
+<aside>
+<p>💡 動機：因為前面很難，要在對的地方用對的東西，不能多，不能少。</p>
+</aside>
+<ul>
+<li><p>目的是要更抽象化（他是在 language level）</p></li>
+<li><p>跟 OO 很像</p></li>
+<li><p>像是由一個 class 定義的東西：有自己的 methods、variables、private
+variables。</p></li>
+<li><p>（Private variables 只能由自己的 methods 操作）</p></li>
+<li><p>和 OO 不同的是他會確保他的 process 只會有一個在
+<strong>active</strong> (running) 的狀態</p></li>
+<li><p>Schematic View ****</p>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2015.png" /></p>
+<ul>
+<li>Shared data → private variable</li>
+<li>Operations → methods</li>
+<li>Initialization code → constructor</li>
+<li>Entry queue → 想要用 monitors 的傢伙</li>
+</ul></li>
+</ul>
+<h2 id="monitor-condition-variables">(Monitor) Condition Variables</h2>
+<ul>
+<li><p>他是一個獨立的同步化 tool，跟 monitor 沒關係</p></li>
+<li><p>Event driven</p></li>
+<li><p>To allow a process to wait <strong>within</strong> the monitor, a
+condition variable must be declared, as</p>
+<p><code>condition x, y;</code></p></li>
+<li><p>Can be used with <code>wait()</code> and <code>signal()</code>
+（但是跟上面的那些毫無關係，請不要搞混，定義完全不同）</p>
+<ul>
+<li><p><code>x.wait()</code></p>
+<p>有一個 event queue，所以這像是 enqueue。（上面的那個是
+counting）</p></li>
+<li><p><code>x.signal()</code></p>
+<p>像是 dequeue，把裡面的 process
+叫醒去工作。如果裡面沒有東西，就啥都不會發生。（如果是
+semaphore，值會繼續加上去）</p></li>
+</ul></li>
+</ul>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2016.png" /></p>
+<ul>
+<li><p>Dining Philosophers Example</p>
+<ul>
+<li>Thinking — 根本沒要吃</li>
+<li>假設大家都是看得到彼此的狀態的（i.e. 有 Global information）</li>
+</ul>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">monitor dp &#123;</span><br><span class="line">	<span class="class"><span class="keyword">enum</span> &#123;</span>thinking, hungry, eating&#125; state[<span class="number">5</span>]; <span class="comment">// current state</span></span><br><span class="line">	condition self[<span class="number">5</span>]; <span class="comment">// delay eating if can’t obtain chopsticks</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">pickup</span> <span class="params">(<span class="keyword">int</span> i)</span>    <span class="comment">// pickup chopsticks</span></span></span><br><span class="line"><span class="function">	<span class="keyword">void</span> <span class="title">putdown</span> <span class="params">(<span class="keyword">int</span> i)</span>   <span class="comment">// putdown chopsticks</span></span></span><br><span class="line"><span class="function">	<span class="keyword">void</span> <span class="title">test</span> <span class="params">(<span class="keyword">int</span> i)</span>      <span class="comment">// try to eat</span></span></span><br><span class="line"><span class="function">	<span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) </span><br><span class="line">			state[i] = thinking;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">void</span> <span class="title">pickup</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">	state[i] = hungry;</span><br><span class="line">	<span class="built_in">test</span>(i);               <span class="comment">// try to eat (to prevent deadlock)</span></span><br><span class="line">	<span class="keyword">if</span> (state[i] != eating)  <span class="comment">// 沒成功吃到</span></span><br><span class="line">		self[i].<span class="built_in">wait</span>();        <span class="comment">// wait to eat</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">putdown</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">  state[i] = thinking;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// check if neighbors are waiting to eat</span></span><br><span class="line">	<span class="comment">// 叫他們起來吃飯</span></span><br><span class="line">	<span class="built_in">test</span>((i+<span class="number">4</span>) % <span class="number">5</span>);</span><br><span class="line">	<span class="built_in">test</span>((i+<span class="number">1</span>) % <span class="number">5</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> ((state[(i + <span class="number">4</span>) % <span class="number">5</span>] != eating) </span><br><span class="line">		&amp;&amp; (state[(i + <span class="number">1</span>) % <span class="number">5</span>] != eating) <span class="comment">// 左邊和右邊有沒有在吃</span></span><br><span class="line">		&amp;&amp; (state[i] == hungry)) &#123;        <span class="comment">// 和我想不想吃</span></span><br><span class="line">		<span class="comment">// No neighbors are eating and Pi is hungry</span></span><br><span class="line">		state[i] = eating;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 把他自己叫起（如果是 pickup call 的，這是沒有用的</span></span><br><span class="line">		<span class="comment">// 但是如果是 putdown call 的，那就會搖醒睡著的）</span></span><br><span class="line">		self[i].<span class="built_in">signal</span>(); </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>An illustration</p>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2017.png" /></p>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2018.png" /></p>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2019.png" /></p>
+<figure>
+<img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2020.png"
+alt="P2 test 失敗，所以去 waiting" />
+<figcaption aria-hidden="true">P2 test 失敗，所以去 waiting</figcaption>
+</figure>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2021.png" /></p>
+<figure>
+<img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2022.png"
+alt="P2 被叫醒了" />
+<figcaption aria-hidden="true">P2 被叫醒了</figcaption>
+</figure>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2023.png" /></p></li>
+</ul></li>
+</ul>
+<h1 id="thread-programming">Thread Programming</h1>
+<p>（考試比較不會考）</p>
+<h2 id="pthread-lockmutex-routines">Pthread Lock/Mutex Routines</h2>
+<p>To use mutex:</p>
+<ul>
+<li>Declared as of type <code>pthread_mutex_t</code></li>
+<li>Initialized with <code>pthread_mutex_init()</code></li>
+<li>Destroyed with <code>pthread_mutex_destory()</code></li>
+<li>Use <code>pthread_mutex_lock()</code> and
+<code>pthread_mutex_unlock()</code></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> “pthread.h”</span></span><br><span class="line">pthread_mutex mutex;</span><br><span class="line"><span class="built_in">pthread_mutex_init</span> (&amp;mutex, <span class="literal">NULL</span>);  <span class="comment">// NULL -&gt; optional configuration</span></span><br><span class="line"><span class="built_in">pthread_mutex_lock</span>(&amp;mutex);</span><br><span class="line">	**<span class="comment">// Critical Section**</span></span><br><span class="line"><span class="built_in">pthread_mutex_unlock</span>(&amp;mutex);</span><br><span class="line"><span class="built_in">pthread_mutex_destory</span>(&amp;mutex);</span><br></pre></td></tr></table></figure>
+<h2 id="condition-variables-cv">Condition Variables (CV)</h2>
+<p>跟上面的一樣。</p>
+<ul>
+<li><p>In Pthread, CV type is a <code>pthread_cond_t</code></p>
+<ul>
+<li>Use <code>pthread_cond_init()</code> ****to initialize</li>
+<li><code>pthread_cond_wait (&amp;theCV, &amp;somelock)</code></li>
+<li><code>pthread_cond_signal (&amp;theCV)</code></li>
+<li><code>pthread_cond_broadcast (&amp;theCV)</code> → 把 queue
+裡面全部的 thread 都叫醒（i.e. 對他們全部作 <code>signal</code>）</li>
+</ul></li>
+<li><p>Example</p>
+<ul>
+<li>一個 thread 在 x = 0 的時候做事</li>
+<li>另一個負責 x--</li>
+</ul>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2024.png" /></p>
+<ul>
+<li><p>一定要把 wait 和 signal 在 mutex 被 lock 的時候才能用（不然連
+code 都不會跑）</p>
+<ol type="1">
+<li>因為 call wait 和 signal 的時候，大多會和其他 conditional variable
+有相依性（In this case: <code>x</code>），所以 lock
+起來才是合理的。</li>
+<li>要確保 <code>cond</code> 不會有 concurrent write 的問題。</li>
+</ol>
+<p>⇒ 所以至少要包到他本身和他的觸發條件。</p></li>
+<li><p>What really happens...</p>
+<ol type="1">
+<li><p><code>action</code>: Lock <code>mutex</code></p>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2025.png" /></p></li>
+<li><p><code>action</code> call <code>wait</code>, put thread into sleep
+and <strong>release the lock</strong>. ⇒ 因為 <code>wait</code> 會直接
+release <code>mutex</code> （所以不是下面那行做的，是 <code>wait</code>
+就直接 release 掉了！）</p>
+<p><code>counter</code> lock <code>mutex</code></p>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2026.png" /></p></li>
+<li><p><code>conter</code> go into CS and call <code>signal</code>.</p>
+<p><code>action</code> is waked up, but thread is locked.
+（<code>unlock</code> 會先呼叫 <code>lock</code>
+確定可以跑，但顯然不行，因為 lock 還在 counter 那邊 ）</p>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2027.png" /></p></li>
+<li><p><code>counter</code> call unlock.</p>
+<p><code>action</code> Re-acquire lock and resume execution</p>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2028.png" /></p></li>
+<li><p><code>action</code> release lock</p>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2029.png" /></p></li>
+</ol>
+<ul>
+<li>另一個我們之所以要用 lock 包住的原因。</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="threadpool-implementation">ThreadPool Implementation</h2>
+<ul>
+<li><p>Task structure</p>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2030.png" /></p>
+<ul>
+<li>存 function pointer 跟 argument</li>
+</ul></li>
+<li><p>ThreadPool structure</p>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2031.png" /></p>
+<ul>
+<li><code>thread_count</code> — 紀錄一共有多少 threads</li>
+<li><code>*thread</code> — threadPool</li>
+<li><code>head</code> — <code>*queue</code> 的 head</li>
+<li><code>tail</code> — <code>*queue</code> 的 tail</li>
+<li><code>shutdown</code> — threadPool 是不是要結束掉了（決定要不要
+break while loop）</li>
+</ul></li>
+<li><p>Allocate thread and task queue</p>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2032.png" /></p></li>
+<li><p>Implement</p>
+<figure>
+<img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2033.png"
+alt="注意有個 mutex_lock 也會去檢查 count 是不是 0，如果是，那目前沒有工作，先睡覺（notify is our condition variable）" />
+<figcaption aria-hidden="true">注意有個 <code>mutex_lock</code>
+也會去檢查 <code>count</code> 是不是
+0，如果是，那目前沒有工作，先睡覺（notify is our condition
+variable）</figcaption>
+</figure>
+<figure>
+<img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2034.png"
+alt="有事情做了，或是被 wake up 起來了，就可以做事了。 最後是 call function pointer。（注意是要放在 CS 外面，這樣才有平行度）" />
+<figcaption aria-hidden="true">有事情做了，或是被 wake up
+起來了，就可以做事了。 最後是 call function pointer。（注意是要放在 CS
+外面，這樣才有平行度）</figcaption>
+</figure></li>
+</ul>
+<h2 id="synchronized-tools-in-java">Synchronized Tools in JAVA</h2>
+<ul>
+<li><p>Synchronized Methods (Monitor)</p>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SynchronizedCounter</span> </span>&#123; </span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> c = <span class="number">0</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">increment</span><span class="params">()</span> </span>&#123; c++; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">decrement</span><span class="params">()</span> </span>&#123; c--; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">int</span> <span class="title">value</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> c; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>加上 synchronized 就可以保證只有一個才操作。所以可以看到有動到
+<code>c</code> 的都有加。如果沒有動到 share data
+的，可以不用加，增加平行度。</p></li>
+<li><p>Synchronized Statement (Mutex Lock)</p>
+<p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">synchronized</span>(p1)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">int</span> i = <span class="number">10</span>; <span class="comment">// statement without locking requirement</span></span><br><span class="line">		p1.display(s1);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p></li>
+</ul>
+<h2 id="review-slides-4">Review Slides (4)</h2>
+<ul>
+<li>Bounded-buffer problem?</li>
+<li>Reader-Writer problem?</li>
+<li>Dining Philosopher problem?</li>
+<li>What is monitor and why need monitor?</li>
+</ul>
+<h1 id="atomic-transactions">Atomic Transactions</h1>
+<p>（考試不太會提）</p>
+<ul>
+<li>System Model
+<ul>
+<li>Transaction: 一系列的 operation</li>
+<li>Atomic Transaction: 需要一次完成 transaction，all or nothing</li>
+<li>DB 很容易需要</li>
+</ul></li>
+<li>File I/O Example
+<ul>
+<li>Transaction 是一連串的 read and write</li>
+<li>像是 version control 的工具，需要有 commit
+（成功）、abort（失敗）、rolled back（失敗後要 undo）</li>
+<li>所以重點是要有 log
+<ul>
+<li>因為有 log 才能回推重建</li>
+<li>也叫做 checkpoint</li>
+<li>存在 secondary storage</li>
+</ul></li>
+<li>也會有 checkpoints
+<ul>
+<li>還原點，上一個 commit 的點</li>
+<li>說不定會直接不 undo，然後 apply checkpoint</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="review-slides-5">Review Slides (5)</h2>
+<ul>
+<li>What is atomic transaction?</li>
+<li>Purpose of commit, abort, rolled-back?</li>
+<li>How to use log and checkpoints?</li>
+</ul>
+<h1 id="textbook-problem-set">Textbook Problem Set</h1>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2035.png" /></p>
+<p><img
+src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2036.png" /></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>ARui
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://arui-tw.github.io/Chapter%206%20%E2%80%94%20Process%20Synchronization/" title="[OS] Chapter 6 — Process Synchronization">https://arui-tw.github.io/Chapter 6 — Process Synchronization/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Operating-System/" rel="tag"># Operating System</a>
+              <a href="/tags/Notes/" rel="tag"># Notes</a>
+          </div>
+
+        
+
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-coffee"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ARui</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
