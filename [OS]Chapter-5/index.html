@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.arui.dev","root":"/","images":"/images","scheme":"Gemini","darkmode":"ture","version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Notion 好讀版  Basic Concepts 因為 multiprogramming 所以才要 scheduling。 CPU-I&#x2F;O burst cycle → 東西要嘛在 CPU 要嘛在 I&#x2F;O   所以每一個 process 就切成在 CPU burst 和在 I&#x2F;O burst I&#x2F;O-bound program → 大部分在做 I&#x2F;O ⇒ 不等於 I&#x2F;O burst 的 cycl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[OS] Chapter 5 — Process Scheduling">
+<meta property="og:url" content="https://blog.arui.dev/[OS]Chapter-5/">
+<meta property="og:site_name" content="ARui&#39;s Blog">
+<meta property="og:description" content="Notion 好讀版  Basic Concepts 因為 multiprogramming 所以才要 scheduling。 CPU-I&#x2F;O burst cycle → 東西要嘛在 CPU 要嘛在 I&#x2F;O   所以每一個 process 就切成在 CPU burst 和在 I&#x2F;O burst I&#x2F;O-bound program → 大部分在做 I&#x2F;O ⇒ 不等於 I&#x2F;O burst 的 cycl">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%201.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%202.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%203.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%204.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%205.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%206.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%207.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%208.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%209.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%2010.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%2011.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%2012.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%2013.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%2014.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%2015.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%2016.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%2017.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%2018.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%2019.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%2020.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%2021.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%2022.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%2023.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%2024.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%2025.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%2026.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%2027.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%2028.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled%2029.png">
+<meta property="article:published_time" content="2022-01-31T10:05:24.000Z">
+<meta property="article:modified_time" content="2022-01-31T14:50:30.578Z">
+<meta property="article:author" content="ARui">
+<meta property="article:tag" content="Operating System">
+<meta property="article:tag" content="Notes">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-5/Untitled.png">
+
+
+<link rel="canonical" href="https://blog.arui.dev/[OS]Chapter-5/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.arui.dev/[OS]Chapter-5/","path":"[OS]Chapter-5/","title":"[OS] Chapter 5 — Process Scheduling"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>[OS] Chapter 5 — Process Scheduling | ARui's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">ARui's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#basic-concepts"><span class="nav-number">1.</span> <span class="nav-text">Basic Concepts</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#cpu-io-burst-cycle"><span class="nav-number">1.1.</span> <span class="nav-text">CPU-I&#x2F;O burst cycle</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cpu-scheduler"><span class="nav-number">1.2.</span> <span class="nav-text">CPU Scheduler</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#preemptive-vs.-non-preemptive"><span class="nav-number">1.2.1.</span> <span class="nav-text">Preemptive vs.
+Non-preemptive</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dispatcher"><span class="nav-number">1.3.</span> <span class="nav-text">Dispatcher</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scheduling-algorithms"><span class="nav-number">2.</span> <span class="nav-text">Scheduling Algorithms</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#first-come-first-served-fcfs-scheduling"><span class="nav-number">2.1.</span> <span class="nav-text">First-Come,
+First-Served (FCFS) scheduling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shortest-job-first-sjf-scheduling"><span class="nav-number">2.2.</span> <span class="nav-text">Shortest-Job-First (SJF)
+scheduling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#priority-scheduling"><span class="nav-number">2.3.</span> <span class="nav-text">Priority Scheduling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#round-robin-rr-scheduling"><span class="nav-number">2.4.</span> <span class="nav-text">Round-Robin (RR) Scheduling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#multilevel-queue-scheduling"><span class="nav-number">2.5.</span> <span class="nav-text">Multilevel Queue Scheduling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#multilevel-feedback-queue-scheduling"><span class="nav-number">2.6.</span> <span class="nav-text">Multilevel Feedback Queue
+Scheduling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#evaluation-methods"><span class="nav-number">2.7.</span> <span class="nav-text">Evaluation Methods</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#review-slide-i"><span class="nav-number">2.8.</span> <span class="nav-text">Review Slide (I)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#special-scheduling-issues"><span class="nav-number">3.</span> <span class="nav-text">Special Scheduling Issues</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#multi-processor-scheduling"><span class="nav-number">3.1.</span> <span class="nav-text">Multi-Processor Scheduling</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#processor-affinity"><span class="nav-number">3.1.1.</span> <span class="nav-text">Processor affinity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#numa-and-cpu-scheduling"><span class="nav-number">3.1.2.</span> <span class="nav-text">NUMA and CPU Scheduling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#load-balancing"><span class="nav-number">3.1.3.</span> <span class="nav-text">Load-balancing</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#multi-core-processor-scheduling"><span class="nav-number">3.2.</span> <span class="nav-text">Multi-Core Processor
+Scheduling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#real-time-scheduling"><span class="nav-number">3.3.</span> <span class="nav-text">Real-Time Scheduling</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#real-time-scheduling-algorithms"><span class="nav-number">3.3.1.</span> <span class="nav-text">Real-Time Scheduling
+Algorithms</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#review-slide-ii"><span class="nav-number">3.4.</span> <span class="nav-text">Review Slide (II)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scheduling-case-study"><span class="nav-number">4.</span> <span class="nav-text">Scheduling Case Study</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#solaris"><span class="nav-number">4.1.</span> <span class="nav-text">Solaris</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#windows"><span class="nav-number">4.2.</span> <span class="nav-text">Windows</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#linux"><span class="nav-number">4.3.</span> <span class="nav-text">Linux</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#textbook-questions"><span class="nav-number">5.</span> <span class="nav-text">Textbook Questions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#qa"><span class="nav-number">6.</span> <span class="nav-text">QA</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ARui</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/arui-tw" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;arui-tw" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:mail@arui.dev" title="E-Mail → mailto:mail@arui.dev" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/profile.php?id=100002082516453" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100002082516453" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/[OS]Chapter-5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ARui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ARui's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [OS] Chapter 5 — Process Scheduling
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-01-31 18:05:24 / Modified: 22:50:30" itemprop="dateCreated datePublished" datetime="2022-01-31T18:05:24+08:00">2022-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Operating-System-Notes/" itemprop="url" rel="index"><span itemprop="name">Operating System Notes</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>6k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <div class="note default"><p><a
+target="_blank" rel="noopener" href="https://arui-tw.notion.site/Chapter-5-Process-Scheduling-ade82d3c9cb94423b787100fbce02fd1">Notion
+好讀版</a></p>
+</div>
+<h1 id="basic-concepts">Basic Concepts</h1>
+<p>因為 multiprogramming 所以才要 scheduling。</p>
+<h2 id="cpu-io-burst-cycle">CPU-I/O burst cycle</h2>
+<p>→ 東西要嘛在 CPU 要嘛在 I/O</p>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled.png" /></p>
+<ul>
+<li><p>所以每一個 process 就切成在 CPU burst 和在 I/O burst</p></li>
+<li><p>I/O-bound program → 大部分在做 I/O</p>
+<p>⇒ 不等於 I/O burst 的 cycle 數比 CPU
+多（數量應該要是一樣的，因為一個做完接另一個），應該要是一個 burst
+要很久。</p></li>
+<li><p>CPU-bound program → 大部分在做 CPU</p></li>
+<li><p>CPU 大多是短的 burst 很多</p>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%201.png" /></p></li>
+</ul>
+<h2 id="cpu-scheduler">CPU Scheduler</h2>
+<p>Ready state → Running state</p>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%202.png" /></p>
+<p>下面都假設是 single core，只有單一隻程式</p>
+<h3 id="preemptive-vs.-non-preemptive">Preemptive vs.
+Non-preemptive</h3>
+<ul>
+<li>Preemptive → 一個 process 可以在 CPU burst 中間被打斷</li>
+<li>Non-preemptive → 一個 process 不能在 CPU burst
+中間被打斷，一定要做完的</li>
+<li>CPU scheduling 要做事的時間點：
+<ol type="1">
+<li><font color=#A865C9>A process switch from running to waiting → CPU
+空下來了，可以加東西囉</font></li>
+<li>A process switch from running to ready（可能是 timer
+到了，所以被丟過去了）→ CPU 空下來了，可以加東西囉</li>
+<li>A process switch from waiting to ready → 看看有沒有更重要，需要就把
+running 的拿掉換他</li>
+<li><font color=#A865C9>A process terminates → CPU
+空下來了，可以加東西囉</font></li>
+</ol>
+<ul>
+<li>紫色是 Non-preemptive 的 scheduler 只能做的事</li>
+</ul></li>
+<li>大部分都是 preemptive。（Windows, Mac OS）</li>
+<li>Preemptive issue
+<ul>
+<li>會打斷東西，所以可能會 raise condition（如果不打斷就不會產生）</li>
+<li>會影響到 OS 需不需要處理 synchronisation 的問題</li>
+<li>Unix solution: 進到 kernel space 就 disable 2 和 3（就會變成
+non-preemptive）</li>
+</ul></li>
+</ul>
+<span id="more"></span>
+<h2 id="dispatcher">Dispatcher</h2>
+<ul>
+<li>把 scheduler 選出來的東西丟到 CPU 裡面的苦工。（Switching
+context...）</li>
+<li>要很有效率</li>
+</ul>
+<h1 id="scheduling-algorithms">Scheduling Algorithms</h1>
+<ul>
+<li>Scheduling Criteria → 定義效能的指標
+<ul>
+<li>CPU utilization
+<ul>
+<li>0% ~ 100% (per core)</li>
+<li>通常大概會在 40% ~ 90% 之間</li>
+</ul></li>
+<li>Throughput
+<ul>
+<li>每單位時間可以完成多少工作（processes）</li>
+<li>High throughput computer system → 目標就是要最大化 through 的
+computer system</li>
+<li>很常見，比 utilization 重要（對 user 來講比較有感覺）</li>
+</ul></li>
+<li>Turnaround time
+<ul>
+<li>單一 process 的角度來量測</li>
+<li>進到 new 到 terminate 的時間（submission ~ completion）</li>
+<li>通常會看平均、最大值、最小值、distribution 等等</li>
+</ul></li>
+<li>Waiting time
+<ul>
+<li>在 ready queue 的總時間（不包括 waiting time）</li>
+<li>是純粹因為 scheduling 的原因所以不能執行</li>
+</ul></li>
+<li>Response time
+<ul>
+<li>new 到第一次回應（第一次進到 running）</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="first-come-first-served-fcfs-scheduling">First-Come,
+First-Served (FCFS) scheduling</h2>
+<p>先來先排</p>
+<p>會給 CPU burst time，根據他們進來的順序</p>
+<ul>
+<li><p>Example</p>
+<ul>
+<li>P1(24), P2(3), P3(3)</li>
+</ul>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%203.png" /></p>
+<ul>
+<li>Waiting time: P1 = 0, P2 = 24, P3 = 27</li>
+<li>Average Waiting Time (AWT): (0 + 24 + 27) / 3 = 17</li>
+</ul></li>
+<li><p>Convoy effect (Head of line blocking):
+可以很快執行的被要跑很久的擋住了</p></li>
+</ul>
+<h2 id="shortest-job-first-sjf-scheduling">Shortest-Job-First (SJF)
+scheduling</h2>
+<ul>
+<li><p>Optimal solution → minimum average waiting time</p></li>
+<li><p>最短 CPU burst time 的先做</p></li>
+<li><p>Two schemes</p>
+<ol type="1">
+<li>Non-preemptive</li>
+<li>Preemptive</li>
+</ol></li>
+<li><p>Non-preemptive example</p>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%204.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%205.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%206.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%207.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%208.png" /></p></li>
+<li><p>有時候 ready queue 會是空的，那 CPU 就 idle。</p></li>
+<li><p>AWT 不要算到 CPU idle 的時間。</p></li>
+<li><p>Preemptive example</p>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%209.png" /></p>
+<figure>
+<img src="/assets/%5BOS%5DChapter-5/Untitled%2010.png"
+alt="7-2 &gt; 4 → content switch!  一般的方式可能是把 P1 加回 Ready queue 裡面，然後再挑最短的出來" />
+<figcaption aria-hidden="true">7-2 &gt; 4 → content switch!<br>
+一般的方式可能是把 P1 加回 Ready queue
+裡面，然後再挑最短的出來</figcaption>
+</figure>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%2011.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%2012.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%2013.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%2014.png" /></p>
+<figure>
+<img src="/assets/%5BOS%5DChapter-5/Untitled%2015.png"
+alt="比上面的更短" />
+<figcaption aria-hidden="true">比上面的更短</figcaption>
+</figure></li>
+<li><p>但是因為沒有 future
+knowledge，所以實作不出來（所以會預測，但是失準就 GG）</p>
+<ul>
+<li><p>Approximate SJF: time series,
+用歷史和上次的結果去調整比例來算</p>
+<p><span class="math display">\[
+  \tau_{n+1}=\alpha t_n+(1-\alpha)\tau_n
+  \]</span></p>
+<ul>
+<li><p><span class="math inline">\(\tau\)</span> is the history and
+<span class="math inline">\(t\)</span> is the new one</p></li>
+<li><p><span class="math inline">\(\alpha\)</span> usually set as <span
+class="math inline">\(1/2\)</span></p></li>
+<li><p>Example</p>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%2016.png" /></p>
+<p>We guess 10 for the first time.</p></li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="priority-scheduling">Priority Scheduling</h2>
+<ul>
+<li>每個 process 就有一個 priority
+的值（要怎麼決定，啥時決定，都可以），然後就照那個決定</li>
+<li>最 general 的，上面的兩個也可以說是 priority scheduling</li>
+<li>Problem:
+<ul>
+<li>Starvation: 可能有 process 會永遠沒有排程到
+<ul>
+<li>Solution: aging → 等越久，priority 越高</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="round-robin-rr-scheduling">Round-Robin (RR) Scheduling</h2>
+<ul>
+<li><p>每一個 process 都只能執行一定的時間（a.k.a time quantum, usually
+10 ~ 100 ms），時間到就被踢出來重新排隊</p></li>
+<li><p>容易實作，公平</p></li>
+<li><p>Performance</p>
+<ul>
+<li>TQ too large → FIFO (FCFS)
+<ul>
+<li>如果不在乎 fairness，那這樣也 OK</li>
+</ul></li>
+<li>TQ too small → (context switch) overhead increase
+<ul>
+<li>如果 CPU 沒什麼人在用，那這樣也 OK</li>
+</ul></li>
+<li>所以就看系統需求</li>
+</ul></li>
+<li><p>Example</p>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%2017.png" /></p></li>
+<li><p>Response time 通常會是最小的，但是 turn around time
+通常會很大</p></li>
+</ul>
+<h2 id="multilevel-queue-scheduling">Multilevel Queue Scheduling</h2>
+<ul>
+<li><p>上面都是 single queue</p></li>
+<li><p>現在這個有很多 ready queue，一個 process 只會進到其中一個
+queue</p>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%2018.png" /></p></li>
+<li><p>每一個單一 queue
+都可以用上面那些解法，我們現在要解決的是怎麼從這麼多 queue 中挑哪一個
+queue 來 deqeue</p>
+<ul>
+<li>Fixed priority scheduling: 根據 queue 的 priority 開始挑
+<ul>
+<li>一樣會有 starvation → 最上面一定要清完才能作下面的，最下面的 queue
+可能會排不到</li>
+</ul></li>
+<li>Time slice: 每一個 queue 會有各自被選中的機率，選中就從那邊
+dequeue</li>
+</ul></li>
+<li><p>我們要決定哪一個 process 要加到哪個 queue，但是要在 <strong>run
+之前</strong>就做決定，且加進去就會一直待在裡面，所以可能會東西作一作就變成不應該在那個
+queue 的，這樣不好。所以有下面的：</p></li>
+</ul>
+<h2 id="multilevel-feedback-queue-scheduling">Multilevel Feedback Queue
+Scheduling</h2>
+<ul>
+<li><p>Queues 不會分是要作哪種 process，所以 process 可以在 queues
+中移動。（所以叫 feedback）</p></li>
+<li><p>所以 Higher level 一定都會先被執行（可以作 aging to prevent
+starvation）</p></li>
+<li><p>所以我們要做的事情就變成要決定誰會移到哪個
+queue（跟上面要做的事完全不同）</p></li>
+<li><p>幾乎都是根據 I/O 的時間來排，i.e. <strong>I/O-bound
+的程式會放到上面的 queue。</strong>（因為通常 I/O-bound 的程式 CPU
+通常會跑比較快）</p></li>
+<li><p>Example</p>
+<ul>
+<li>移動條件：如果超過 TQ，就往後踢</li>
+</ul>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%2019.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%2020.png" /></p></li>
+<li><p>所以我們需要決定</p>
+<ul>
+<li>有幾個 queues</li>
+<li>每個 queue 用哪種 single queue 的演算法</li>
+<li>什麼時候 process 要移動</li>
+</ul></li>
+</ul>
+<h2 id="evaluation-methods">Evaluation Methods</h2>
+<ul>
+<li>Deterministic modeling — Given 已知且固定的
+input，去比較各個方式（超沒用，通常當例子用）</li>
+<li>Queueing model — 用數學（Queue
+theory）去算（不是很準，偏向理論）</li>
+<li>Simulation — 模擬然後得到結果（這只有部分功能）</li>
+<li>Implementation — 就實作出來（這已經完整了）</li>
+</ul>
+<h2 id="review-slide-i">Review Slide (I)</h2>
+<ul>
+<li>Preemptive scheduling vs Non-preemptive scheduling?</li>
+<li>Issues of preemptive scheduling</li>
+<li>Turnaround time? Waiting time? Response time? Throughput?</li>
+<li>Scheduling algorithms
+<ul>
+<li>FCFS</li>
+<li>Preemptive SJF, Nonpreemptive SJF</li>
+<li>Priority scheduling</li>
+<li>RR</li>
+<li>Multilevel queue</li>
+<li>Multilevel feedback queue</li>
+</ul></li>
+</ul>
+<h1 id="special-scheduling-issues">Special Scheduling Issues</h1>
+<h2 id="multi-processor-scheduling">Multi-Processor Scheduling</h2>
+<ul>
+<li>硬體會跟 scheduler 講說他需要多少，就拿給他</li>
+<li>Asymmetric multiprocessing
+<ul>
+<li>會有一個 centralise 的傢伙在處理誰要去哪</li>
+<li>就沒有 synchronise 的問題</li>
+<li>但是會浪費一個 core 在處理</li>
+</ul></li>
+<li>Symmetric multiprocessing (SMP)
+<ul>
+<li>直接開搶，所以需要 lock 來處理 synchronise 的問題</li>
+</ul></li>
+</ul>
+<h3 id="processor-affinity">Processor affinity</h3>
+<p>把 process 綁在一個 CPU 上（不同 CPU burst 可能會在不同 core
+上）（是為了要處理資料在換 core 的時候資料要重新 cache）</p>
+<ul>
+<li>Type:
+<ul>
+<li>soft affinity
+<ul>
+<li>如果有空的，就還是會去用</li>
+</ul></li>
+<li>Hard affinity
+<ul>
+<li>就算有空的， 也不會用</li>
+</ul></li>
+</ul></li>
+<li>如果系統的 loading 沒有很高，這是一定有好處沒壞處的，但是如果很多
+process 在搶 core，那這就沒啥用了。</li>
+</ul>
+<h3 id="numa-and-cpu-scheduling">NUMA and CPU Scheduling</h3>
+<ul>
+<li>NUMA (non-uniform memory access)
+<ul>
+<li>有些 CPU 離某些 memory 比較近，所以還要把 process 放到離 CPU
+比較近的 memory</li>
+</ul></li>
+</ul>
+<h3 id="load-balancing">Load-balancing</h3>
+<ul>
+<li><p>Push Migration — 把工作推出去，如果 loading
+輕，就用這個去丟工作</p></li>
+<li><p>Pull Migration — 把工作拉進來，如果 loading
+重，就用這個去丟工作</p>
+<p>Load balancing often counteracts the benefits of processor affinity
+(355)</p></li>
+</ul>
+<h2 id="multi-core-processor-scheduling">Multi-Core Processor
+Scheduling</h2>
+<ul>
+<li><p>Multi-core Processor — memory stall: 需要等 access memory
+的時間</p></li>
+<li><p>Multi-threaded multi-core systems</p>
+<ul>
+<li>把上面等 memory access 的時間拿來做事</li>
+</ul>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%2021.png" /></p>
+<ul>
+<li>Two ways:
+<ol type="1">
+<li>fine-grained: 把所有 stage
+的東西都記下來，所以東西不會掉。但是就需要很多硬體資源去記。（快，成本高）</li>
+<li>coarse-grained: 會 flush 不用的東西</li>
+</ol></li>
+</ul></li>
+<li><p>Scheduling for Multi-threaded multi-core systems</p>
+<ul>
+<li>Hardware 跟 software 說要幾個 process，然後 software 就給他</li>
+<li>要怎麼去處理要來的 process（執行在哪個 core）就給 hardware 決定</li>
+</ul></li>
+</ul>
+<h2 id="real-time-scheduling">Real-Time Scheduling</h2>
+<p>Real-time does not mean speed, but keeping deadlines</p>
+<ul>
+<li>Soft real-time — 希望可以不要 miss deadline，但是 miss
+也不會炸開</li>
+<li>Hard real-time — 絕對不能 miss deadline</li>
+</ul>
+<h3 id="real-time-scheduling-algorithms">Real-Time Scheduling
+Algorithms</h3>
+<p>比前面多了 period 的參數 →
+每過多久就會重新出現，要在下一次出現前做完這次的。（E.g., (0, 4, 10) →
+0，10，20 都會出現一次）</p>
+<ul>
+<li>FCFS — Non-RTS</li>
+<li>Rate-Monotonic (RM) Scheduling
+<ul>
+<li><p>Static (Fixed) → 跑得時候不會改變</p></li>
+<li><p>Shortest period first</p></li>
+<li><p>Example</p>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%2022.png" /></p></li>
+</ul></li>
+<li>Earliest-Deadline-First (EDF) algorithm
+<ul>
+<li><p>Dynamic → 跑得時候，每一個的 priority 會變動（因為離 deadline
+的時間會變近）</p></li>
+<li><p>Early deadline first</p></li>
+<li><p>Miss deadline 會被 bound 住</p></li>
+<li><p>Example</p>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%2023.png" /></p></li>
+</ul></li>
+</ul>
+<h2 id="review-slide-ii">Review Slide (II)</h2>
+<ul>
+<li>What is Processor affinity?</li>
+<li>Real-time scheduler
+<ul>
+<li>Rate-Monotonic</li>
+<li>Earliest deadline first</li>
+</ul></li>
+</ul>
+<h1 id="scheduling-case-study">Scheduling Case Study</h1>
+<h2 id="solaris">Solaris</h2>
+<ul>
+<li>Priority-based multilevel feedback queue scheduling</li>
+<li>六個 class — 更像是六個
+queue，反正最上面的一定會先做。裡面小的會再自己排序</li>
+</ul>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%2024.png" /></p>
+<ul>
+<li>Example
+<ul>
+<li>the <strong>higher</strong> the priority, the
+<strong>smaller</strong> the time slice（因為我們希望 priority 高的，CPU
+burst time 是短的，所以很快搶到就要很快放掉）
+<ul>
+<li>Time quantum expired: 只要使用超過你的 time
+slice，就根據下表調整你的 priority。（因為感覺你是更 CPU burst 的）</li>
+<li>Return from sleep: 從 sleep (i.e. I/O wait) 回來就提升
+priority。（因為可以縮短等待時間）</li>
+</ul>
+<img src="/assets/%5BOS%5DChapter-5/Untitled%2025.png" /></li>
+</ul></li>
+</ul>
+<h2 id="windows">Windows</h2>
+<p>跟剛剛的差不多</p>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%2026.png" /></p>
+<h2 id="linux">Linux</h2>
+<ul>
+<li><p>值越小，priority 越高</p></li>
+<li><p>分成兩個 class 而已</p></li>
+<li><p>Priority 高的，分到的 time quantum 越大</p>
+<p>⇒ 因為這邊的 time quantum 是 budget 的概念，只要用完就會被丟到
+waiting queue</p></li>
+<li><p>所以他是用比較 fairness 的作法</p></li>
+</ul>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%2027.png" /></p>
+<ul>
+<li>Algorithm
+<ul>
+<li>一開始大家都在 active array，然後時間到就被丟到 expired
+array。（這樣就算是 low priority 的也可以被做到）</li>
+<li>最後 active array 被清空了就把兩個 array 的指標對調。</li>
+<li>所以他是一輪一輪的做。</li>
+</ul>
+<img src="/assets/%5BOS%5DChapter-5/Untitled%2028.png" /></li>
+</ul>
+<h1 id="textbook-questions">Textbook Questions</h1>
+<p><img src="/assets/%5BOS%5DChapter-5/Untitled%2029.png" /></p>
+<h1 id="qa">QA</h1>
+<ul>
+<li>What is CPU-burst?
+<ul>
+<li>程式正在做 CPU 的 instruction，除此之外的時間都是 I/O-burst</li>
+</ul></li>
+<li>Preemptive vs. Non-preemptive?
+<ul>
+<li>Preemptive：在 CPU burst 間 scheduler 可以 interrupt 做 scheduling
+的動作</li>
+<li>Non-preemptive：在 CPU burst 間 scheduler 不能 interrupt 做
+scheduling 的動作（但是 hardware 還是可以 interrupt 的）</li>
+</ul></li>
+</ul>
+<div class="note warning"><p>此筆記為清華大學周志遠教授作業系統之課堂筆記，所有內容及圖片皆取材於課堂內容。<br />
+如內容有誤，歡迎來信 <a
+href="mailto:mail@arui.dev">mail@arui.dev</a>。</p>
+</div>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>ARui
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://blog.arui.dev/[OS]Chapter-5/" title="[OS] Chapter 5 — Process Scheduling">https://blog.arui.dev/[OS]Chapter-5/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Operating-System/" rel="tag"># Operating System</a>
+              <a href="/tags/Notes/" rel="tag"># Notes</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/%5BOS%5DChapter-6/" rel="next" title="[OS] Chapter 6 — Process Synchronization">
+                  [OS] Chapter 6 — Process Synchronization <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-coffee"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ARui</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

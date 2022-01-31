@@ -19,31 +19,65 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"arui-tw.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":"ture","version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
-<meta name="description" content="Background  因為有 share 的 data，會被多個 content 去用他，所以需要 就算只有一個 core，也會有 Concurrent 的問題（因為會有 content switch） 重點就是他們 execute 的 order Consumer &amp; Producer Problem  用 counter 去記還有幾個空位 Producer 1234567while">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.arui.dev","root":"/","images":"/images","scheme":"Gemini","darkmode":"ture","version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Notion 好讀版  Background  因為有 share 的 data，會被多個 content 去用他，所以需要 就算只有一個 core，也會有 Concurrent 的問題（因為會有 content switch） 重點就是他們 execute 的 order Consumer &amp; Producer Problem  用 counter 去記還有幾個空位 Producer 1">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[OS] Chapter 6 — Process Synchronization">
-<meta property="og:url" content="https://arui-tw.github.io/Chapter%206%20%E2%80%94%20Process%20Synchronization/">
+<meta property="og:url" content="https://blog.arui.dev/[OS]Chapter-6/">
 <meta property="og:site_name" content="ARui&#39;s Blog">
-<meta property="og:description" content="Background  因為有 share 的 data，會被多個 content 去用他，所以需要 就算只有一個 core，也會有 Concurrent 的問題（因為會有 content switch） 重點就是他們 execute 的 order Consumer &amp; Producer Problem  用 counter 去記還有幾個空位 Producer 1234567while">
+<meta property="og:description" content="Notion 好讀版  Background  因為有 share 的 data，會被多個 content 去用他，所以需要 就算只有一個 core，也會有 Concurrent 的問題（因為會有 content switch） 重點就是他們 execute 的 order Consumer &amp; Producer Problem  用 counter 去記還有幾個空位 Producer 1">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://arui-tw.github.io/assets/OS-Chapter-6-Process-Synchronization/Untitled.png">
-<meta property="og:image" content="https://arui-tw.github.io/assets/OS-Chapter-6-Process-Synchronization/Untitled%202.png">
-<meta property="og:image" content="https://arui-tw.github.io/assets/OS-Chapter-6-Process-Synchronization/Untitled%208.png">
-<meta property="article:published_time" content="2022-01-31T10:05:24.000Z">
-<meta property="article:modified_time" content="2022-01-31T09:23:58.503Z">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%201.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%202.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%203.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%204.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%205.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%206.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%207.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%208.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%209.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2010.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2011.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2012.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2013.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2014.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2015.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2016.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2017.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2018.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2019.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2020.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2021.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2022.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2023.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2024.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2025.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2026.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2027.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2028.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2029.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2030.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2031.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2032.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2033.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2034.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2035.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2036.png">
+<meta property="article:published_time" content="2022-01-31T10:06:24.000Z">
+<meta property="article:modified_time" content="2022-01-31T14:42:25.653Z">
 <meta property="article:author" content="ARui">
 <meta property="article:tag" content="Operating System">
 <meta property="article:tag" content="Notes">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://arui-tw.github.io/assets/OS-Chapter-6-Process-Synchronization/Untitled.png">
+<meta name="twitter:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled.png">
 
 
-<link rel="canonical" href="https://arui-tw.github.io/Chapter%206%20%E2%80%94%20Process%20Synchronization/">
+<link rel="canonical" href="https://blog.arui.dev/[OS]Chapter-6/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://arui-tw.github.io/Chapter%206%20%E2%80%94%20Process%20Synchronization/","path":"Chapter 6 — Process Synchronization/","title":"[OS] Chapter 6 — Process Synchronization"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.arui.dev/[OS]Chapter-6/","path":"[OS]Chapter-6/","title":"[OS] Chapter 6 — Process Synchronization"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>[OS] Chapter 6 — Process Synchronization | ARui's Blog</title>
@@ -145,13 +179,13 @@ Algorithm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" hr
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -166,7 +200,7 @@ Algorithm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" hr
         <a href="https://github.com/arui-tw" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;arui-tw" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:chen108060030@gapp.nthu.edu.tw" title="E-Mail → mailto:chen108060030@gapp.nthu.edu.tw" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+        <a href="mailto:mail@arui.dev" title="E-Mail → mailto:mail@arui.dev" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
       </span>
       <span class="links-of-author-item">
         <a href="https://www.facebook.com/profile.php?id=100002082516453" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100002082516453" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
@@ -208,7 +242,7 @@ Algorithm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" hr
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://arui-tw.github.io/Chapter%206%20%E2%80%94%20Process%20Synchronization/">
+    <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/[OS]Chapter-6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -233,7 +267,7 @@ Algorithm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" hr
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2022-01-31 18:05:24 / Modified: 17:23:58" itemprop="dateCreated datePublished" datetime="2022-01-31T18:05:24+08:00">2022-01-31</time>
+      <time title="Created: 2022-01-31 18:06:24 / Modified: 22:42:25" itemprop="dateCreated datePublished" datetime="2022-01-31T18:06:24+08:00">2022-01-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -262,7 +296,11 @@ Algorithm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" hr
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="background">Background</h1>
+        <div class="note default"><p><a
+target="_blank" rel="noopener" href="https://arui-tw.notion.site/Chapter-6-Process-Synchronization-dc2fdd2951b047f78a39377759ebe90c">Notion
+好讀版</a></p>
+</div>
+<h1 id="background">Background</h1>
 <ul>
 <li>因為有 share 的 data，會被多個 content 去用他，所以需要</li>
 <li>就算只有一個 core，也會有 Concurrent 的問題（因為會有 content
@@ -298,6 +336,7 @@ race condition，要用同步化解決）</p>
 <li>Single processor 的可以用 disable interrupt 或 non-preemptive CPU
 來解決。</li>
 </ul>
+<span id="more"></span>
 <h1 id="critical-section">Critical Section</h1>
 <ul>
 <li><p><del>一個 process 之間溝通的 protocol</del></p></li>
@@ -305,7 +344,7 @@ race condition，要用同步化解決）</p>
 <li><p>Mutually exclusive: 會有相同 critical section 的
 process。他們要在那段 critical section 被迫去 serialize。</p>
 <figure>
-<img src="/assets/OS-Chapter-6-Process-Synchronization/Untitled.png"
+<img src="/assets/%5BOS%5DChapter-6/Untitled.png"
 alt="Remainder section: 剩下的" />
 <figcaption aria-hidden="true">Remainder section: 剩下的</figcaption>
 </figure></li>
@@ -342,8 +381,7 @@ time。（公平性）</li>
 <li><p>Assume only 2 processes, <span class="math inline">\(P_0\)</span>
 and <span class="math inline">\(P_1\)</span></p></li>
 <li><p>用 <code>turn</code> 決定輪到誰</p>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%201.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%201.png" /></p>
 <ul>
 <li>因為是用 single instruction 去 set，所以不會被中斷詠唱</li>
 <li>Requirements
@@ -365,7 +403,7 @@ critical section（True 就是他準備好進去了）</p></li>
 <li><p>所以進去的時候就是別人不想進去，或是你拿到 token 了（i.e.
 對方沒拿到 token）</p>
 <figure>
-<img src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%202.png"
+<img src="/assets/%5BOS%5DChapter-6/Untitled%202.png"
 alt="注意是要在進去前把 turn 值給對方" />
 <figcaption aria-hidden="true">注意是要在<strong>進去前</strong>把 turn
 值給對方</figcaption>
@@ -377,8 +415,7 @@ alt="注意是要在進去前把 turn 值給對方" />
 <ol type="1">
 <li><p>假設他們可以同時在裡面</p></li>
 <li><p>那下面的條件就要同時存在。</p>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%203.png" /></p></li>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%203.png" /></p></li>
 <li><p>因為他們都在裡面，所以 flag 都是 true</p></li>
 <li><p>但是 turn 不可能同時是 0 且 1</p></li>
 <li><p>所以不可能同時進去</p></li>
@@ -411,14 +448,11 @@ class="math inline">\(P_1\)</span> 了</p></li>
 <ul>
 <li><p>如果先進 Consumer 就會 deadlock（i.e. 程式沒有在前進，但是 CPU
 在燒）。</p>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%204.png" /></p></li>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%204.png" /></p></li>
 <li><p>正確但是低效能。</p>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%205.png" /></p></li>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%205.png" /></p></li>
 <li><p>正確且優質。</p>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%206.png" /></p></li>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%206.png" /></p></li>
 </ul>
 <h2 id="bakery-algorithm-n-processes">Bakery Algorithm (n
 processes)</h2>
@@ -456,8 +490,7 @@ by355)</li>
 <p>不需要 library 的 support，內建就有了。</p>
 <h3 id="testandset"><code>TestAndSet()</code></h3>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">boolean <span class="title">TestAndSet</span> <span class="params">(<span class="keyword">bool</span> &amp;lock)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">bool</span> value = lock;</span><br><span class="line">	lock = TRUE;   <span class="comment">// 不論結果，都會鎖起來</span></span><br><span class="line">	<span class="keyword">return</span> value;  <span class="comment">// return 的是原本的值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%207.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%207.png" /></p>
 <ul>
 <li><p>Mutual exclusion: Yes</p>
 <p>⇒ 因為只有正在 CS 裡面的人把他設成 Flase 才可以放下一個進去</p></li>
@@ -473,7 +506,7 @@ P1，但是他被擋在外面，CPU burst 燒完之後都輪不到他 QQ，又�
 <h3 id="swap"><code>Swap()</code></h3>
 <p>把值對調。</p>
 <figure>
-<img src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%208.png"
+<img src="/assets/%5BOS%5DChapter-6/Untitled%208.png"
 alt="一開始會把 key 設成 True，然後就在 while 裡面一直把 lock 跟 key 交換。如果 lock 在別的地方被設成 False 了，就可以進去 CS 了。" />
 <figcaption aria-hidden="true">一開始會把 key 設成 True，然後就在 while
 裡面一直把 lock 跟 key 交換。如果 lock 在別的地方被設成 False
@@ -540,8 +573,7 @@ Implementation</h2>
 <li><p>Semaphore is data struct with a queue （可以用各種 queue
 strategy）</p>
 <p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">	<span class="keyword">int</span> value;        <span class="comment">// init to 0</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">process</span> *<span class="title">L</span>;</span></span><br><span class="line">	<span class="comment">// “PCB” queue </span></span><br><span class="line">&#125; semaphore;</span><br></pre></td></tr></table></figure></p>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%209.png" /></p></li>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%209.png" /></p></li>
 <li><p><code>wait()</code> and <code>signal()</code></p>
 <ul>
 <li>需要用到 <code>block()</code> and <code>wakeup()</code> 兩個 system
@@ -560,8 +592,7 @@ calls。（明顯的缺點，需要多用到 system call）</li>
 </ul></li>
 </ul>
 <figure>
-<img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2010.png"
+<img src="/assets/%5BOS%5DChapter-6/Untitled%2010.png"
 alt="注意不要包到 sleep 和 wakeup，不然會 deadlock。" />
 <figcaption aria-hidden="true">注意不要包到 sleep 和 wakeup，不然會
 deadlock。</figcaption>
@@ -577,17 +608,14 @@ call。</p></li>
 <li><p>P1 executes S1; P2 executes S2 (S2 be executed only after S1 has
 completed)</p></li>
 <li><p><code>sync</code> 一開始設成 0</p>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2011.png" /></p></li>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%2011.png" /></p></li>
 </ul></li>
 <li><p>A More Complicated Example (DAG)</p>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2012.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%2012.png" /></p>
 <ul>
 <li>(Initially, all semaphores are 0)</li>
 </ul>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2013.png" /></p></li>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%2013.png" /></p></li>
 </ul>
 <h2 id="deadlocks-starvation">Deadlocks &amp; Starvation</h2>
 <ul>
@@ -661,8 +689,7 @@ lock，所以可以一直輪流佔著</p>
 <p>⇒ Second RW problem solve it.</p></li>
 </ul>
 <h3 id="dining-philosophers-problem">Dining-Philosophers Problem</h3>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2014.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%2014.png" /></p>
 <ul>
 <li>每個人左邊跟右邊都有一根筷子（五個人五隻筷子）
 <ul>
@@ -692,8 +719,7 @@ variables。</p></li>
 <li><p>和 OO 不同的是他會確保他的 process 只會有一個在
 <strong>active</strong> (running) 的狀態</p></li>
 <li><p>Schematic View ****</p>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2015.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%2015.png" /></p>
 <ul>
 <li>Shared data → private variable</li>
 <li>Operations → methods</li>
@@ -720,8 +746,7 @@ counting）</p></li>
 semaphore，值會繼續加上去）</p></li>
 </ul></li>
 </ul>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2016.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%2016.png" /></p>
 <ul>
 <li><p>Dining Philosophers Example</p>
 <ul>
@@ -734,28 +759,21 @@ src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2016.png" /></p>
 <p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> ((state[(i + <span class="number">4</span>) % <span class="number">5</span>] != eating) </span><br><span class="line">		&amp;&amp; (state[(i + <span class="number">1</span>) % <span class="number">5</span>] != eating) <span class="comment">// 左邊和右邊有沒有在吃</span></span><br><span class="line">		&amp;&amp; (state[i] == hungry)) &#123;        <span class="comment">// 和我想不想吃</span></span><br><span class="line">		<span class="comment">// No neighbors are eating and Pi is hungry</span></span><br><span class="line">		state[i] = eating;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 把他自己叫起（如果是 pickup call 的，這是沒有用的</span></span><br><span class="line">		<span class="comment">// 但是如果是 putdown call 的，那就會搖醒睡著的）</span></span><br><span class="line">		self[i].<span class="built_in">signal</span>(); </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <ul>
 <li><p>An illustration</p>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2017.png" /></p>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2018.png" /></p>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2019.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%2017.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%2018.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%2019.png" /></p>
 <figure>
-<img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2020.png"
+<img src="/assets/%5BOS%5DChapter-6/Untitled%2020.png"
 alt="P2 test 失敗，所以去 waiting" />
 <figcaption aria-hidden="true">P2 test 失敗，所以去 waiting</figcaption>
 </figure>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2021.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%2021.png" /></p>
 <figure>
-<img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2022.png"
+<img src="/assets/%5BOS%5DChapter-6/Untitled%2022.png"
 alt="P2 被叫醒了" />
 <figcaption aria-hidden="true">P2 被叫醒了</figcaption>
 </figure>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2023.png" /></p></li>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%2023.png" /></p></li>
 </ul></li>
 </ul>
 <h1 id="thread-programming">Thread Programming</h1>
@@ -786,8 +804,7 @@ src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2023.png" /></p></li>
 <li>一個 thread 在 x = 0 的時候做事</li>
 <li>另一個負責 x--</li>
 </ul>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2024.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%2024.png" /></p>
 <ul>
 <li><p>一定要把 wait 和 signal 在 mutex 被 lock 的時候才能用（不然連
 code 都不會跑）</p>
@@ -801,28 +818,23 @@ code 都不會跑）</p>
 <li><p>What really happens...</p>
 <ol type="1">
 <li><p><code>action</code>: Lock <code>mutex</code></p>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2025.png" /></p></li>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%2025.png" /></p></li>
 <li><p><code>action</code> call <code>wait</code>, put thread into sleep
 and <strong>release the lock</strong>. ⇒ 因為 <code>wait</code> 會直接
 release <code>mutex</code> （所以不是下面那行做的，是 <code>wait</code>
 就直接 release 掉了！）</p>
 <p><code>counter</code> lock <code>mutex</code></p>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2026.png" /></p></li>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%2026.png" /></p></li>
 <li><p><code>conter</code> go into CS and call <code>signal</code>.</p>
 <p><code>action</code> is waked up, but thread is locked.
 （<code>unlock</code> 會先呼叫 <code>lock</code>
 確定可以跑，但顯然不行，因為 lock 還在 counter 那邊 ）</p>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2027.png" /></p></li>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%2027.png" /></p></li>
 <li><p><code>counter</code> call unlock.</p>
 <p><code>action</code> Re-acquire lock and resume execution</p>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2028.png" /></p></li>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%2028.png" /></p></li>
 <li><p><code>action</code> release lock</p>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2029.png" /></p></li>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%2029.png" /></p></li>
 </ol>
 <ul>
 <li>另一個我們之所以要用 lock 包住的原因。</li>
@@ -832,14 +844,12 @@ src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2029.png" /></p></li>
 <h2 id="threadpool-implementation">ThreadPool Implementation</h2>
 <ul>
 <li><p>Task structure</p>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2030.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%2030.png" /></p>
 <ul>
 <li>存 function pointer 跟 argument</li>
 </ul></li>
 <li><p>ThreadPool structure</p>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2031.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%2031.png" /></p>
 <ul>
 <li><code>thread_count</code> — 紀錄一共有多少 threads</li>
 <li><code>*thread</code> — threadPool</li>
@@ -849,12 +859,10 @@ src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2031.png" /></p>
 break while loop）</li>
 </ul></li>
 <li><p>Allocate thread and task queue</p>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2032.png" /></p></li>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%2032.png" /></p></li>
 <li><p>Implement</p>
 <figure>
-<img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2033.png"
+<img src="/assets/%5BOS%5DChapter-6/Untitled%2033.png"
 alt="注意有個 mutex_lock 也會去檢查 count 是不是 0，如果是，那目前沒有工作，先睡覺（notify is our condition variable）" />
 <figcaption aria-hidden="true">注意有個 <code>mutex_lock</code>
 也會去檢查 <code>count</code> 是不是
@@ -862,8 +870,7 @@ alt="注意有個 mutex_lock 也會去檢查 count 是不是 0，如果是，那
 variable）</figcaption>
 </figure>
 <figure>
-<img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2034.png"
+<img src="/assets/%5BOS%5DChapter-6/Untitled%2034.png"
 alt="有事情做了，或是被 wake up 起來了，就可以做事了。 最後是 call function pointer。（注意是要放在 CS 外面，這樣才有平行度）" />
 <figcaption aria-hidden="true">有事情做了，或是被 wake up
 起來了，就可以做事了。 最後是 call function pointer。（注意是要放在 CS
@@ -921,10 +928,12 @@ alt="有事情做了，或是被 wake up 起來了，就可以做事了。 最�
 <li>How to use log and checkpoints?</li>
 </ul>
 <h1 id="textbook-problem-set">Textbook Problem Set</h1>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2035.png" /></p>
-<p><img
-src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2036.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%2035.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-6/Untitled%2036.png" /></p>
+<div class="note warning"><p>此筆記為清華大學周志遠教授作業系統之課堂筆記，所有內容及圖片皆取材於課堂內容。<br />
+如內容有誤，歡迎來信 <a
+href="mailto:mail@arui.dev">mail@arui.dev</a>。</p>
+</div>
 
     </div>
 
@@ -942,7 +951,7 @@ src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2036.png" /></p>
   </li>
   <li class="post-copyright-link">
       <strong>Post link: </strong>
-      <a href="https://arui-tw.github.io/Chapter%206%20%E2%80%94%20Process%20Synchronization/" title="[OS] Chapter 6 — Process Synchronization">https://arui-tw.github.io/Chapter 6 — Process Synchronization/</a>
+      <a href="https://blog.arui.dev/[OS]Chapter-6/" title="[OS] Chapter 6 — Process Synchronization">https://blog.arui.dev/[OS]Chapter-6/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
@@ -957,6 +966,15 @@ src="/assets/OS-Chapter-6-Process-Synchronization/Untitled%2036.png" /></p>
 
         
 
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/%5BOS%5DChapter-5/" rel="prev" title="[OS] Chapter 5 — Process Scheduling">
+                  <i class="fa fa-chevron-left"></i> [OS] Chapter 5 — Process Scheduling
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
     </footer>
   </article>
 </div>
