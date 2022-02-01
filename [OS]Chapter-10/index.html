@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.arui.dev","root":"/","images":"/images","scheme":"Gemini","darkmode":"ture","version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Notion 好讀版   ✏️ 從使用者的角度去看  File Concept File 也是抽像的概念。  📖 File (Data): a logical storage unit created by OS   Physical storage unit in disk  File attributes (Metadata)  Identifier: non-human-readable">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[OS] Chapter 10 — File System Interface">
+<meta property="og:url" content="https://blog.arui.dev/[OS]Chapter-10/">
+<meta property="og:site_name" content="ARui&#39;s Blog">
+<meta property="og:description" content="Notion 好讀版   ✏️ 從使用者的角度去看  File Concept File 也是抽像的概念。  📖 File (Data): a logical storage unit created by OS   Physical storage unit in disk  File attributes (Metadata)  Identifier: non-human-readable">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-10/Untitled.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-10/Untitled%201.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-10/Untitled%202.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-10/Untitled%203.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-10/Untitled%204.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-10/Untitled%205.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-10/Untitled%206.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-10/Untitled%207.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-10/Untitled%208.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-10/Untitled%209.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-10/Untitled%2010.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-10/Untitled%2011.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-10/Untitled%2012.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-10/Untitled%2013.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-10/Untitled%2014.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-10/Untitled%2015.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-10/Untitled%2016.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-10/Untitled%2017.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-10/Untitled%2018.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-10/Untitled%2019.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-10/Untitled%2020.png">
+<meta property="article:published_time" content="2022-01-31T10:10:24.000Z">
+<meta property="article:modified_time" content="2022-02-01T14:22:32.828Z">
+<meta property="article:author" content="ARui">
+<meta property="article:tag" content="Operating System">
+<meta property="article:tag" content="Notes">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-10/Untitled.png">
+
+
+<link rel="canonical" href="https://blog.arui.dev/[OS]Chapter-10/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.arui.dev/[OS]Chapter-10/","path":"[OS]Chapter-10/","title":"[OS] Chapter 10 — File System Interface"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>[OS] Chapter 10 — File System Interface | ARui's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">ARui's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#file-concept"><span class="nav-number">1.</span> <span class="nav-text">File Concept</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#access-methods"><span class="nav-number">2.</span> <span class="nav-text">Access Methods</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#review-slides-i"><span class="nav-number">2.1.</span> <span class="nav-text">Review Slides (I)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#directory-structure"><span class="nav-number">3.</span> <span class="nav-text">Directory Structure</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#directory-basics"><span class="nav-number">3.1.</span> <span class="nav-text">Directory Basics</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#directory-structure-1"><span class="nav-number">3.2.</span> <span class="nav-text">Directory structure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#single-level-directory"><span class="nav-number">3.2.1.</span> <span class="nav-text">Single-Level Directory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#two-level-directory"><span class="nav-number">3.2.2.</span> <span class="nav-text">Two-Level Directory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tree-structured-directory"><span class="nav-number">3.2.3.</span> <span class="nav-text">Tree-Structured Directory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#acyclic-graph-directory"><span class="nav-number">3.2.4.</span> <span class="nav-text">Acyclic-Graph Directory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#general-graph-directory"><span class="nav-number">3.2.5.</span> <span class="nav-text">General-Graph Directory</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#review-slides-ii"><span class="nav-number">3.3.</span> <span class="nav-text">Review Slides (II)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#file-system-mounting-file-sharing"><span class="nav-number">4.</span> <span class="nav-text">File System Mounting &amp;
+File Sharing</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mounting"><span class="nav-number">4.1.</span> <span class="nav-text">Mounting</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sharing"><span class="nav-number">4.2.</span> <span class="nav-text">Sharing</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#protection"><span class="nav-number">5.</span> <span class="nav-text">Protection</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#review-slides-iii"><span class="nav-number">5.1.</span> <span class="nav-text">Review Slides (III)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#textbook-problem-set"><span class="nav-number">6.</span> <span class="nav-text">Textbook Problem Set</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ARui</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/arui-tw" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;arui-tw" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:mail@arui.dev" title="E-Mail → mailto:mail@arui.dev" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/profile.php?id=100002082516453" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100002082516453" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/[OS]Chapter-10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ARui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ARui's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [OS] Chapter 10 — File System Interface
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-01-31 18:10:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:10:24+08:00">2022-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-01 22:22:32" itemprop="dateModified" datetime="2022-02-01T22:22:32+08:00">2022-02-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Operating-System-Notes/" itemprop="url" rel="index"><span itemprop="name">Operating System Notes</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>3.8k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <div class="note default"><p><a
+target="_blank" rel="noopener" href="https://arui-tw.notion.site/Chapter-10-File-System-Interface-588a7531b9aa40058c8423706f01da16">Notion
+好讀版</a></p>
+</div>
+<aside>
+<p>✏️ 從使用者的角度去看</p>
+</aside>
+<h1 id="file-concept">File Concept</h1>
+<p>File 也是抽像的概念。</p>
+<aside>
+<p>📖 <strong>File (Data)</strong>: a logical storage unit created by
+OS</p>
+</aside>
+<ul>
+<li><p>Physical storage unit in disk</p>
+<p><img src="/assets/%5BOS%5DChapter-10/Untitled.png" /></p></li>
+<li><p>File attributes (Metadata)</p>
+<ul>
+<li>Identifier: non-human-readable name</li>
+<li>Name</li>
+<li>Type</li>
+<li>Location</li>
+<li>Size</li>
+<li><strong>Protection</strong></li>
+<li>Last-access time, Last-updated time</li>
+</ul></li>
+<li><p>File operations</p>
+<ul>
+<li>Create</li>
+<li>Write</li>
+<li>Read</li>
+<li>Repositioning within a file (i.e. file seek)</li>
+<li>Delete</li>
+<li>Truncating → 切掉尾巴</li>
+<li>Appending → 貼在尾巴 <span id="more"></span></li>
+</ul></li>
+<li><p>Open-File Tables</p>
+<p>注意他存的是 metadata，不是 data</p>
+<ul>
+<li>Per-process table
+<ul>
+<li><p>Tracking all files opened by this process</p></li>
+<li><p>跟操作這個 file 有關的資訊（independent 的）</p></li>
+<li><p>File pointer → process 操作這個檔案到的位置</p></li>
+<li><p>裡面還有一個 pointer 指到 file 的 System-wide table</p>
+<p>⇒ 這樣就可以避免資料一致性的問題，所以才不要 duplicate 一份到
+Per-process table 裡面</p></li>
+</ul></li>
+<li>System-wide table ****
+<ul>
+<li>不管誰操作都要看到的資訊（share 的）</li>
+<li>File size, disk location</li>
+</ul></li>
+</ul>
+<p><img src="/assets/%5BOS%5DChapter-10/Untitled%201.png" /></p></li>
+<li><p>Open File Attributes</p>
+<ul>
+<li>File pointer (per-process)</li>
+<li>File open count (system table)</li>
+<li>Disk location (system table)</li>
+<li>Access rights (per-process)</li>
+</ul></li>
+<li><p>File types</p>
+<ul>
+<li><p>.exe, .com, .obj, .cc, .mov, etc</p>
+<p><img src="/assets/%5BOS%5DChapter-10/Untitled%202.png" /></p></li>
+<li><p>Hint for OS to operate file in a reasonable way</p></li>
+</ul></li>
+</ul>
+<h1 id="access-methods">Access Methods</h1>
+<p>是以使用者的角度來看：</p>
+<ul>
+<li><p>Sequential access</p>
+<ul>
+<li>連續的存取</li>
+<li><code>fread</code>, <code>fwrite</code></li>
+</ul>
+<p><img src="/assets/%5BOS%5DChapter-10/Untitled%203.png" /></p></li>
+<li><p>Direct (relative) access a.k.a random access</p>
+<ul>
+<li>Call API 需要給他位址</li>
+<li>像是使用 table</li>
+<li>使用者要自己維護位址（With great power comes great
+responsibility）</li>
+</ul></li>
+</ul>
+<p><img src="/assets/%5BOS%5DChapter-10/Untitled%204.png" /></p>
+<ul>
+<li>Index Access Methods
+<ul>
+<li><p>DB</p></li>
+<li><p>用 index 去存取資料</p>
+<p><img src="/assets/%5BOS%5DChapter-10/Untitled%205.png" /></p></li>
+<li><p>Index: contains pointers to blocks of a file</p></li>
+<li><p>With a large file → index could become too large</p></li>
+<li><p>To find a record in a file:</p>
+<ul>
+<li>search the index file → find the pointer</li>
+<li>use the pointer to directly access the record</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="review-slides-i">Review Slides (I)</h2>
+<ul>
+<li>File vs. Sector, Track</li>
+<li>Open-file (in-memory) attributes
+<ul>
+<li>Per-process, system-wide?</li>
+</ul></li>
+<li>File-access methods?
+<ul>
+<li>Sequential access</li>
+<li>Direct access</li>
+<li>Index access</li>
+</ul></li>
+</ul>
+<h1 id="directory-structure">Directory Structure</h1>
+<h2 id="directory-basics">Directory Basics</h2>
+<ul>
+<li><p>Partition (Raw partition) — 儲存的空間切割後變成單獨的 partition
+作是使用和管理，但是這個區塊我們<strong>還沒作格式化的動作</strong></p></li>
+<li><p>Volume — 我們有把他作 formatted（File system 的格式化）
+的動作了（File system 的專有名詞）→ 強調這是由 <strong>file
+system</strong> 管理使用的空間</p></li>
+<li><p>Directories — used by file system to store the information about
+the files in the partition</p></li>
+<li><p>File-System Organization</p>
+<figure>
+<img src="/assets/%5BOS%5DChapter-10/Untitled%206.png"
+alt="Volume 和 Partition 是可以跨 disk 的" />
+<figcaption aria-hidden="true">Volume 和 Partition 是可以跨 disk
+的</figcaption>
+</figure></li>
+<li><p>File name 本身也是 directory 的一部分</p>
+<ul>
+<li>因為要找到 file，就要有 file name</li>
+<li>所以 Directory 的最後一層是 file name</li>
+</ul>
+<figure>
+<img src="/assets/%5BOS%5DChapter-10/Untitled%207.png"
+alt="圈圈是 directory 的最後一層，方框是 file content" />
+<figcaption aria-hidden="true">圈圈是 directory 的最後一層，方框是 file
+content</figcaption>
+</figure></li>
+<li><p>Directory Operations</p>
+<ul>
+<li>Search for a file</li>
+<li>Create a file</li>
+<li>Delete a file</li>
+<li>List a directory</li>
+<li>Rename a file</li>
+<li>Traverse the file system</li>
+</ul></li>
+</ul>
+<h2 id="directory-structure-1">Directory structure</h2>
+<h3 id="single-level-directory">Single-Level Directory</h3>
+<ul>
+<li>指的是沒有資料夾，完全只有檔案</li>
+<li>Single 指的是 file name</li>
+<li>File name 很容易打架，因為不能重複</li>
+<li>因為是 flat 的，所以每次都要 scan through，效能差</li>
+</ul>
+<p><img src="/assets/%5BOS%5DChapter-10/Untitled%208.png" /></p>
+<h3 id="two-level-directory">Two-Level Directory</h3>
+<ul>
+<li>出現了資料夾</li>
+<li>一個 user 一個資料夾，所以還是有上面的問題</li>
+</ul>
+<p><img src="/assets/%5BOS%5DChapter-10/Untitled%209.png" /></p>
+<h3 id="tree-structured-directory">Tree-Structured Directory</h3>
+<ul>
+<li>Multi-Level</li>
+<li>有 absolute path 和 relative path</li>
+</ul>
+<p><img src="/assets/%5BOS%5DChapter-10/Untitled%2010.png" /></p>
+<h3 id="acyclic-graph-directory">Acyclic-Graph Directory</h3>
+<ul>
+<li>可以建立捷徑到同一個 file</li>
+<li>When does a file actually get deleted?
+<ol type="1">
+<li>deleting the link but not the file</li>
+<li>deleting the file but leaves the link → dangling pointer</li>
+</ol>
+😃 deleting the file when <strong>reference counters</strong> is 0</li>
+</ul>
+<p><img src="/assets/%5BOS%5DChapter-10/Untitled%2011.png" /></p>
+<h3 id="general-graph-directory">General-Graph Directory</h3>
+<ul>
+<li><p>可以隨便亂指，甚至可以有 cycle</p></li>
+<li><p>有可能會明明 access 不到了，但是因為有 link
+在，所以也沒刪掉檔案</p>
+<p><img src="/assets/%5BOS%5DChapter-10/Untitled%2012.png" /></p>
+<ul>
+<li><p>Garbage collection</p>
+<p>→ 從 root 開始 traverse，mark 每一個人，沒 mark 到的就刪掉</p>
+<p>☹️ Poor performance</p></li>
+<li><p>Use cycle-detection algorithm when a link is created</p></li>
+</ul></li>
+</ul>
+<p><img src="/assets/%5BOS%5DChapter-10/Untitled%2013.png" /></p>
+<h2 id="review-slides-ii">Review Slides (II)</h2>
+<ul>
+<li>Directory structure: pros &amp; cons
+<ul>
+<li>One-level directory</li>
+<li>Two-level directory</li>
+<li>Tree-structured directory</li>
+<li>Acyclic-graph directory</li>
+<li>General-graph directory</li>
+</ul></li>
+</ul>
+<h1 id="file-system-mounting-file-sharing">File System Mounting &amp;
+File Sharing</h1>
+<h2 id="mounting">Mounting</h2>
+<ul>
+<li><p>A file system must be mounted before it can be accessed</p></li>
+<li><p>Mount point — 接到的位址（the root path that a FS will be mounted
+to），系統槽就是 mount 在 <code>/</code></p></li>
+<li><p>Mount timing: three possibility</p>
+<ol type="1">
+<li>boot time （系統槽）</li>
+<li>automatically at run-time（USB）</li>
+<li>manually at run-time</li>
+</ol></li>
+<li><p>File System Mounting Example</p>
+<p><img src="/assets/%5BOS%5DChapter-10/Untitled%2014.png" /></p>
+<ul>
+<li>Partition B 的 mount point 是在 <code>/usr</code></li>
+<li>Partition C 的 mount point 是在 <code>/home</code></li>
+</ul></li>
+<li><p><code>mount –t ext2 /dev/sda0 /mnt/hdd</code></p>
+<ul>
+<li>mount 一個 file type 是 <code>ext2</code> 的（所以知道這是啥
+FS，才能正確讀取），他現在是 <code>/dev/sda0</code> （是被 I/O device
+attach 成一個檔案的，mount 之後才可以讀取）要 mount 到
+<code>/mnt/hdd</code></li>
+</ul></li>
+<li><p>How to extend the tree</p>
+<ul>
+<li><p>Tree 長這樣</p>
+<p><img src="/assets/%5BOS%5DChapter-10/Untitled%2015.png" /></p></li>
+<li><p>前面的 <code>m</code> 代表那不是我管的，是 mount
+進來的，所以要去查下面的 mount table</p>
+<p><img src="/assets/%5BOS%5DChapter-10/Untitled%2016.png" /></p></li>
+<li><p>mount 就會修改這裡面的內容</p>
+<p><img src="/assets/%5BOS%5DChapter-10/Untitled%2017.png" /></p></li>
+</ul></li>
+</ul>
+<h2 id="sharing">Sharing</h2>
+<ul>
+<li><p>基本上都是 multi-user，所以要 sharing，但是要處理
+permission</p></li>
+<li><p>對於每一個 process，需要去管理他的</p>
+<ul>
+<li>Identity：誰 call 的（Login 就知道了）（也有 groping
+去幫助管理）</li>
+<li>Permission：知道是誰後要知道他可以動誰</li>
+</ul></li>
+<li><p>Each user — UserID, GroupID</p></li>
+<li><p>Each file has 3 sets of attributes — owner (one and only), group
+(can operate), others</p>
+<p><img src="/assets/%5BOS%5DChapter-10/Untitled%2018.png" /></p></li>
+<li><p>Access-Control</p>
+<p>Create an access-control list (ACL) for each user</p>
+<ul>
+<li>每次 request 就去查他的權限</li>
+</ul>
+<p>☹️  會太大，每新增一個 user or file ACL will be huger</p>
+<ul>
+<li>3 classes of users → 3 ACL (<strong>RWX</strong>) for each file
+<ul>
+<li>Owner — (e.g. 7 = RWX = 111)</li>
+<li>group — (e.g. 6 = RWX = 110)</li>
+<li>other (public) — (e.g. 4 = RWX = 100)</li>
+</ul>
+<img src="/assets/%5BOS%5DChapter-10/Untitled%2019.png" title="fig:"
+alt="chmod 664 intro.ps (第一個 bit 代表他 484 dir)" /></li>
+</ul></li>
+</ul>
+<h1 id="protection">Protection</h1>
+<ul>
+<li>Access control protection</li>
+<li>Data failure protection
+<ul>
+<li>用加密的方式保護他不會遺失</li>
+</ul></li>
+</ul>
+<h2 id="review-slides-iii">Review Slides (III)</h2>
+<ul>
+<li>File system mounting point, timing?</li>
+<li>Access-control list? How does it function?</li>
+</ul>
+<h1 id="textbook-problem-set">Textbook Problem Set</h1>
+<p><img src="/assets/%5BOS%5DChapter-10/Untitled%2020.png" /></p>
+<div class="note warning"><p>此筆記為清華大學周志遠教授作業系統之課堂筆記，所有內容及圖片皆取材於課堂內容。<br />
+如內容有誤，歡迎來信 <a
+href="mailto:mail@arui.dev">mail@arui.dev</a>。</p>
+</div>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>ARui
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://blog.arui.dev/[OS]Chapter-10/" title="[OS] Chapter 10 — File System Interface">https://blog.arui.dev/[OS]Chapter-10/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Operating-System/" rel="tag"># Operating System</a>
+              <a href="/tags/Notes/" rel="tag"># Notes</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/%5BOS%5DChapter-7/" rel="prev" title="[OS] Chapter 7 — Deadlocks">
+                  <i class="fa fa-chevron-left"></i> [OS] Chapter 7 — Deadlocks
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/%5BOS%5DChapter-11/" rel="next" title="[OS] Chapter 11 — File System Implementation">
+                  [OS] Chapter 11 — File System Implementation <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-coffee"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ARui</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

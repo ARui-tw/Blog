@@ -65,7 +65,7 @@
 <meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2035.png">
 <meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-6/Untitled%2036.png">
 <meta property="article:published_time" content="2022-01-31T10:06:24.000Z">
-<meta property="article:modified_time" content="2022-01-31T14:58:23.105Z">
+<meta property="article:modified_time" content="2022-02-01T14:18:25.755Z">
 <meta property="article:author" content="ARui">
 <meta property="article:tag" content="Operating System">
 <meta property="article:tag" content="Notes">
@@ -179,7 +179,7 @@ Algorithm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" hr
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -265,9 +265,15 @@ Algorithm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" hr
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2022-01-31 18:06:24 / Modified: 22:58:23" itemprop="dateCreated datePublished" datetime="2022-01-31T18:06:24+08:00">2022-01-31</time>
+      <time title="Created: 2022-01-31 18:06:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:06:24+08:00">2022-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-01 22:18:25" itemprop="dateModified" datetime="2022-02-01T22:18:25+08:00">2022-02-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -493,7 +499,7 @@ by355)</li>
 <p><img src="/assets/%5BOS%5DChapter-6/Untitled%207.png" /></p>
 <ul>
 <li><p>Mutual exclusion: Yes</p>
-<p>⇒ 因為只有正在 CS 裡面的人把他設成 Flase 才可以放下一個進去</p></li>
+<p>⇒ 因為只有正在 CS 裡面的人把他設成 False 才可以放下一個進去</p></li>
 <li><p>Progress: Yes</p>
 <p>⇒ 只要沒人在裡面，想進去就可以馬上進去</p></li>
 <li><p>Bounded-Wait: No</p>
@@ -554,9 +560,9 @@ Pthread</p>
 <li><p>因為 lock 多是在 threads 之間，semaphore 多是在 process
 之間。</p></li>
 <li><p>POSIX Semaphore routines:</p>
-<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sem_init</span>(<span class="keyword">sem_t</span> *sem, <span class="keyword">int</span> pshared, <span class="keyword">unsigned</span> <span class="keyword">int</span> value)</span><br><span class="line"><span class="built_in">sem_wait</span>(<span class="keyword">sem_t</span> *sem)</span><br><span class="line"><span class="built_in">sem_post</span>(<span class="keyword">sem_t</span> *sem)</span><br><span class="line"><span class="built_in">sem_getvalue</span>(<span class="keyword">sem_t</span> *sem, <span class="keyword">int</span> *valptr) <span class="comment">// check</span></span><br><span class="line"><span class="built_in">sem_destory</span>(<span class="keyword">sem_t</span> *sem)</span><br></pre></td></tr></table></figure></p></li>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sem_init</span>(<span class="keyword">sem_t</span> *sem, <span class="keyword">int</span> pshared, <span class="keyword">unsigned</span> <span class="keyword">int</span> value)</span><br><span class="line"><span class="built_in">sem_wait</span>(<span class="keyword">sem_t</span> *sem)</span><br><span class="line"><span class="built_in">sem_post</span>(<span class="keyword">sem_t</span> *sem)</span><br><span class="line"><span class="built_in">sem_getvalue</span>(<span class="keyword">sem_t</span> *sem, <span class="keyword">int</span> *valptr) <span class="comment">// check</span></span><br><span class="line"><span class="built_in">sem_destroy</span>(<span class="keyword">sem_t</span> *sem)</span><br></pre></td></tr></table></figure></p></li>
 <li><p>Example:</p>
-<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;semaphore.h&gt;</span></span></span><br><span class="line"><span class="keyword">sem_t</span> sem;</span><br><span class="line"><span class="built_in">sem_init</span>(&amp;sem);</span><br><span class="line"><span class="built_in">sem_wait</span>(&amp;sem);</span><br><span class="line">	<span class="comment">// critical section</span></span><br><span class="line"><span class="built_in">sem_post</span>(&amp;sem);</span><br><span class="line"><span class="built_in">sem_destory</span>(&amp;sem);</span><br></pre></td></tr></table></figure></p></li>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;semaphore.h&gt;</span></span></span><br><span class="line"><span class="keyword">sem_t</span> sem;</span><br><span class="line"><span class="built_in">sem_init</span>(&amp;sem);</span><br><span class="line"><span class="built_in">sem_wait</span>(&amp;sem);</span><br><span class="line">	<span class="comment">// critical section</span></span><br><span class="line"><span class="built_in">sem_post</span>(&amp;sem);</span><br><span class="line"><span class="built_in">sem_destroy</span>(&amp;sem);</span><br></pre></td></tr></table></figure></p></li>
 <li><p>Another example</p>
 <p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">	<span class="built_in">wait</span>(mutex);   <span class="comment">// pthread_mutex_lock(&amp;mutex)</span></span><br><span class="line">		<span class="comment">// critical section</span></span><br><span class="line">	<span class="built_in">signal</span>(mutex); <span class="comment">// pthread_mutex_unlock(&amp;mutex)</span></span><br><span class="line">		<span class="comment">// remainder section</span></span><br><span class="line">&#125; <span class="keyword">while</span>(<span class="number">1</span>);</span><br></pre></td></tr></table></figure></p>
 <ul>
@@ -783,11 +789,11 @@ alt="P2 被叫醒了" />
 <ul>
 <li>Declared as of type <code>pthread_mutex_t</code></li>
 <li>Initialized with <code>pthread_mutex_init()</code></li>
-<li>Destroyed with <code>pthread_mutex_destory()</code></li>
+<li>Destroyed with <code>pthread_mutex_destroy()</code></li>
 <li>Use <code>pthread_mutex_lock()</code> and
 <code>pthread_mutex_unlock()</code></li>
 </ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> “pthread.h”</span></span><br><span class="line">pthread_mutex mutex;</span><br><span class="line"><span class="built_in">pthread_mutex_init</span> (&amp;mutex, <span class="literal">NULL</span>);  <span class="comment">// NULL -&gt; optional configuration</span></span><br><span class="line"><span class="built_in">pthread_mutex_lock</span>(&amp;mutex);</span><br><span class="line">	**<span class="comment">// Critical Section**</span></span><br><span class="line"><span class="built_in">pthread_mutex_unlock</span>(&amp;mutex);</span><br><span class="line"><span class="built_in">pthread_mutex_destory</span>(&amp;mutex);</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> “pthread.h”</span></span><br><span class="line">pthread_mutex mutex;</span><br><span class="line"><span class="built_in">pthread_mutex_init</span> (&amp;mutex, <span class="literal">NULL</span>);  <span class="comment">// NULL -&gt; optional configuration</span></span><br><span class="line"><span class="built_in">pthread_mutex_lock</span>(&amp;mutex);</span><br><span class="line">	**<span class="comment">// Critical Section**</span></span><br><span class="line"><span class="built_in">pthread_mutex_unlock</span>(&amp;mutex);</span><br><span class="line"><span class="built_in">pthread_mutex_destroy</span>(&amp;mutex);</span><br></pre></td></tr></table></figure>
 <h2 id="condition-variables-cv">Condition Variables (CV)</h2>
 <p>跟上面的一樣。</p>
 <ul>
@@ -825,7 +831,7 @@ release <code>mutex</code> （所以不是下面那行做的，是 <code>wait</c
 就直接 release 掉了！）</p>
 <p><code>counter</code> lock <code>mutex</code></p>
 <p><img src="/assets/%5BOS%5DChapter-6/Untitled%2026.png" /></p></li>
-<li><p><code>conter</code> go into CS and call <code>signal</code>.</p>
+<li><p><code>counter</code> go into CS and call <code>signal</code>.</p>
 <p><code>action</code> is waked up, but thread is locked.
 （<code>unlock</code> 會先呼叫 <code>lock</code>
 確定可以跑，但顯然不行，因為 lock 還在 counter 那邊 ）</p>
@@ -973,6 +979,9 @@ href="mailto:mail@arui.dev">mail@arui.dev</a>。</p>
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/%5BOS%5DChapter-7/" rel="next" title="[OS] Chapter 7 — Deadlocks">
+                  [OS] Chapter 7 — Deadlocks <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>

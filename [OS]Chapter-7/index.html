@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.arui.dev","root":"/","images":"/images","scheme":"Gemini","darkmode":"ture","version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Deadlock Characterization Notion 好讀版   📖 程式之間彼此等待，無法進行了   Example  2 processes and 2 tape drivers  一人各拿一個，然後等對方手上那個  2 processes, and semaphores A &amp; B  P1 (hold B, wait A): wait(A), signal(B) P2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[OS] Chapter 7 — Deadlocks">
+<meta property="og:url" content="https://blog.arui.dev/[OS]Chapter-7/">
+<meta property="og:site_name" content="ARui&#39;s Blog">
+<meta property="og:description" content="Deadlock Characterization Notion 好讀版   📖 程式之間彼此等待，無法進行了   Example  2 processes and 2 tape drivers  一人各拿一個，然後等對方手上那個  2 processes, and semaphores A &amp; B  P1 (hold B, wait A): wait(A), signal(B) P2">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-7/Untitled.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-7/Untitled%201.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-7/Untitled%202.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-7/Untitled%203.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-7/Untitled%204.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-7/Untitled%205.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-7/Untitled%206.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-7/Untitled%207.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-7/Untitled%208.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-7/Untitled%209.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-7/Untitled%2010.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-7/Untitled%2011.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-7/Untitled%2012.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-7/Untitled%2013.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-7/Untitled%2014.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-7/Untitled%2015.png">
+<meta property="article:published_time" content="2022-01-31T10:07:24.000Z">
+<meta property="article:modified_time" content="2022-02-01T09:09:10.311Z">
+<meta property="article:author" content="ARui">
+<meta property="article:tag" content="Operating System">
+<meta property="article:tag" content="Notes">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-7/Untitled.png">
+
+
+<link rel="canonical" href="https://blog.arui.dev/[OS]Chapter-7/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.arui.dev/[OS]Chapter-7/","path":"[OS]Chapter-7/","title":"[OS] Chapter 7 — Deadlocks"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>[OS] Chapter 7 — Deadlocks | ARui's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">ARui's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#deadlock-characterization"><span class="nav-number">1.</span> <span class="nav-text">Deadlock Characterization</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#system-model"><span class="nav-number">2.</span> <span class="nav-text">System Model</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#resource-allocation-graph"><span class="nav-number">2.1.</span> <span class="nav-text">Resource-Allocation Graph</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#deadlock-detection"><span class="nav-number">2.1.1.</span> <span class="nav-text">Deadlock Detection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#handling-deadlocks"><span class="nav-number">2.1.2.</span> <span class="nav-text">Handling Deadlocks</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#review-slides-i"><span class="nav-number">2.2.</span> <span class="nav-text">Review Slides ( I )</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#deadlock-prevention-deadlock-avoidance"><span class="nav-number">3.</span> <span class="nav-text">Deadlock Prevention
+&amp; Deadlock Avoidance</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#deadlock-prevention"><span class="nav-number">3.1.</span> <span class="nav-text">Deadlock Prevention</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#avoidance-algorithms"><span class="nav-number">3.2.</span> <span class="nav-text">Avoidance Algorithms</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#resource-allocation-graph-rag-algorithm"><span class="nav-number">3.2.1.</span> <span class="nav-text">Resource-Allocation
+Graph (RAG) Algorithm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bankers-algorithm"><span class="nav-number">3.2.2.</span> <span class="nav-text">Banker’s algorithm</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#review-slides-ii"><span class="nav-number">3.3.</span> <span class="nav-text">Review Slides (II)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#deadlock-detection-recovery-from-deadlock"><span class="nav-number">4.</span> <span class="nav-text">Deadlock Detection
+&amp; Recovery from Deadlock</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#textbook-problem-set"><span class="nav-number">5.</span> <span class="nav-text">Textbook Problem Set</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ARui</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/arui-tw" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;arui-tw" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:mail@arui.dev" title="E-Mail → mailto:mail@arui.dev" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/profile.php?id=100002082516453" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100002082516453" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/[OS]Chapter-7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ARui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ARui's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [OS] Chapter 7 — Deadlocks
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-01-31 18:07:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:07:24+08:00">2022-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-01 17:09:10" itemprop="dateModified" datetime="2022-02-01T17:09:10+08:00">2022-02-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Operating-System-Notes/" itemprop="url" rel="index"><span itemprop="name">Operating System Notes</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>4.8k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="deadlock-characterization">Deadlock Characterization</h1>
+<div class="note default"><p><a
+target="_blank" rel="noopener" href="https://www.notion.so/arui-tw/Chapter-7-Deadlocks-b345b44b6ac14b28a37bdc7bb497edb9">Notion
+好讀版</a></p>
+</div>
+<aside>
+<p>📖 程式之間彼此等待，無法進行了</p>
+</aside>
+<ul>
+<li>Example
+<ul>
+<li>2 processes and 2 tape drivers
+<ul>
+<li>一人各拿一個，然後等對方手上那個</li>
+</ul></li>
+<li>2 processes, and semaphores A &amp; B
+<ul>
+<li>P1 (hold B, wait A): wait(A), signal(B)</li>
+<li>P2 (hold A, wait B): wait(B) , signal(A)</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><strong>Necessary Condition</strong> →
+一定要<strong>全部</strong>的條件<strong>同時</strong>發生</p>
+<ul>
+<li><p>Mutual exclusion — 資源是沒有共享性的（暫時）</p></li>
+<li><p>Hold and Wait — 會 hold resource 然後 wait 別人</p></li>
+<li><p>No preemptive — 不能強制別人放開 resource</p></li>
+<li><p>Circular wait — 一定會有一個 circular 的 wait。</p>
+<p><span class="math inline">\(P_0 \rightarrow P_1 \rightarrow P_1
+\rightarrow \dots\rightarrow P_n \rightarrow P_0\)</span></p></li>
+</ul>
+<p><img src="/assets/%5BOS%5DChapter-7/Untitled.png" /></p>
+<span id="more"></span>
+<h1 id="system-model">System Model</h1>
+<ul>
+<li><p>要有某些資源 <span class="math inline">\(R_1, R_2, \dots,
+R_m\)</span></p>
+<ul>
+<li>E.g. CPU, memory pages, I/O devices</li>
+</ul></li>
+<li><p>每個資源 <span class="math inline">\(R_i\)</span>
+可能會有複數的共 <span class="math inline">\(W_i\)</span> 個
+instances</p>
+<ul>
+<li>E.g. a computer has 2 CPUs</li>
+</ul></li>
+<li><p>每一個 process 取得 resource 的方式：</p>
+<p>Request → use → release</p></li>
+</ul>
+<h2 id="resource-allocation-graph">Resource-Allocation Graph</h2>
+<figure>
+<img src="/assets/%5BOS%5DChapter-7/Untitled%201.png"
+alt="圓形跟正方形不能改" />
+<figcaption aria-hidden="true">圓形跟正方形不能改</figcaption>
+</figure>
+<ul>
+<li>3 processes, P1 <em>~ P3</em></li>
+<li>4 resources, R1 <em>~ R4</em>
+<ul>
+<li>R1 and R3 each has one instance</li>
+<li>R2 has two instances</li>
+<li>R4 has three instances</li>
+</ul></li>
+<li>Request edges:
+<ul>
+<li>P1 → R1: P1 requests R1 （一直存在因為 resource 正在被用）</li>
+</ul></li>
+<li>Assignment edges:
+<ul>
+<li>R2 → P1: 那個 instance 正在被 P2 使用</li>
+</ul></li>
+</ul>
+<p>⇒ P1 is hold on an instance of R2 and waiting for an instance of
+R1</p>
+<ul>
+<li>If the graph contains a cycle, a deadlock may exist
+<ul>
+<li><p>如果有 multiple instances，那就要檢查每一條路線都是 cycle
+才行</p></li>
+<li><p>Example 1</p>
+<p><img src="/assets/%5BOS%5DChapter-7/Untitled%202.png" /></p>
+<ol type="1">
+<li>P1 is waiting for P2</li>
+<li>P2 is waiting for P3 → P1 is waiting for P3</li>
+<li>P3 is waiting for P1 or P2, and they both waiting for P3</li>
+</ol>
+<p>⇒ deadlock!</p></li>
+<li><p>Example 2</p>
+<p><img src="/assets/%5BOS%5DChapter-7/Untitled%203.png" /></p>
+<ol type="1">
+<li>P1 is waiting for P2 or P3</li>
+<li>P3 is waiting for P1 or P4</li>
+<li>Since P2 and P4 wait no one</li>
+</ol>
+<p>⇒ no deadlock</p></li>
+</ul></li>
+</ul>
+<h3 id="deadlock-detection">Deadlock Detection</h3>
+<ul>
+<li>沒 cycle → 沒 deadlock</li>
+<li>有 cycle
+<ul>
+<li>one instance per resource type → 有 deadlock</li>
+<li>multiple instances per resource type → 可能有 deadlock</li>
+</ul></li>
+</ul>
+<h3 id="handling-deadlocks">Handling Deadlocks</h3>
+<ul>
+<li>確保不會進去
+<ul>
+<li>deadlock prevention — 確保至少一個必要條件不會發生</li>
+<li>deadlock avoidance — 在 runtime 去不斷的檢查</li>
+</ul></li>
+<li>讓他進去再 recover
+<ul>
+<li>deadlock detection</li>
+<li>deadlock recovery</li>
+</ul></li>
+<li>完全不處理（ignore the problem）
+<ul>
+<li>讓 user 去中斷他</li>
+</ul></li>
+</ul>
+<h2 id="review-slides-i">Review Slides ( I )</h2>
+<ul>
+<li>deadlock necessary conditions?
+<ul>
+<li>mutual exclusion</li>
+<li>hold &amp; wait</li>
+<li>no preemption</li>
+<li>circular wait</li>
+</ul></li>
+<li>resource-allocation graph?
+<ul>
+<li>cycle in RAG → deadlock?</li>
+</ul></li>
+<li>deadlock handling types?
+<ul>
+<li>deadlock prevention</li>
+<li>deadlock avoidance</li>
+<li>deadlock recovery</li>
+<li>ignore the problem</li>
+</ul></li>
+</ul>
+<h1 id="deadlock-prevention-deadlock-avoidance">Deadlock Prevention
+&amp; Deadlock Avoidance</h1>
+<h2 id="deadlock-prevention">Deadlock Prevention</h2>
+<ul>
+<li>每一種 resource 各拿掉一種條件。（每一個可以不一樣）
+<ul>
+<li><p>Mutual exclusion (ME): do not require ME on sharable
+resources</p>
+<ul>
+<li>E.g. set file to read only → no mutual exclusion (can many read in
+same time)</li>
+<li>但不是所有都可以這樣解</li>
+<li>（Memory 是 support concurrent access 的，是 programer 的行為讓他有
+ME 的條件出來的）</li>
+</ul></li>
+<li><p>Hold &amp; Wait</p>
+<ul>
+<li>規定他要 free 掉手上的 resource 才能去要其他
+resource。或是一就要把全部的 resource 要齊（只要要等就要把拿到的 free
+掉，可以等，但是手上不能有東西）。</li>
+<li>All or nothing allocation</li>
+<li>去改變 mutex_wait 的實作</li>
+</ul>
+<p>☹️ Resource 使用率降低，可能會有 starvation</p></li>
+<li><p>No preemption</p>
+<ul>
+<li>改成可以作 preemptive</li>
+<li>E.g. preemptive 的 scheduler → 有 timer 去讓 OS always control
+CPU</li>
+</ul>
+<p>☹️ Overhead，要多一塊 memory 去暫存資料</p>
+<p>→ Printer 的代價就太高了（要重印）</p></li>
+<li><p>Circular wait</p>
+<ul>
+<li><p>在 request resource 的時候，如果你要 request <span
+class="math inline">\(R_k\)</span>，那就要 release <span
+class="math inline">\(R_i, \forall i \geq k\)</span>。（小於 <span
+class="math inline">\(k\)</span> 的可以繼續 hold）</p>
+<p>手上不能握比較大的。</p></li>
+<li><p>Example</p>
+<ul>
+<li>F(<em>tape drive</em>) = 1, F(<em>disk drive</em>) = 5,
+F(<em>printer</em>) = 12</li>
+<li>如果 hold disk，可以要 printer</li>
+<li>如果 hold printer 和 tape，那 request drive 就要 release
+printer，tape 可以留著</li>
+</ul></li>
+<li><p>Proof</p>
+<ul>
+<li><p>證明有 deadlock 但是不可能成立</p></li>
+<li><p><span class="math inline">\(P_0(R_0) \rightarrow
+R_1\)</span>(<span class="math inline">\(P_0\)</span> hold <span
+class="math inline">\(R_0\)</span> and request <span
+class="math inline">\(R_1\)</span>)</p>
+<p><span class="math inline">\(P_1(R_1) \rightarrow R_2, \dots, P_N(R_N)
+\rightarrow \red {R_0}\)</span></p></li>
+<li><p>但是最後一個不可能成立，因為 <span
+class="math inline">\(N&gt;0\)</span></p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="avoidance-algorithms">Avoidance Algorithms</h2>
+<ul>
+<li><p>Single instance of a resource type</p>
+<p>→ 用 resource-allocation graph (RAG) algorithm ****直接偵測
+circle</p></li>
+<li><p>Multiple instances of a resource type</p>
+<p>→ banker’s algorithm</p></li>
+</ul>
+<h3 id="resource-allocation-graph-rag-algorithm">Resource-Allocation
+Graph (RAG) Algorithm</h3>
+<p><img src="/assets/%5BOS%5DChapter-7/Untitled%204.png" /></p>
+<ul>
+<li>Request edges:
+<ul>
+<li><span class="math inline">\(P_i \rightarrow R_j\)</span>: <span
+class="math inline">\(P_i\)</span> waiting for <span
+class="math inline">\(R_j\)</span></li>
+</ul></li>
+<li>Assignment edges:
+<ul>
+<li><span class="math inline">\(R_j → P_i\)</span>: <span
+class="math inline">\(R_j\)</span> is allocated and held by <span
+class="math inline">\(P_i\)</span></li>
+<li>Resource 被 release 可能轉回 claim edge</li>
+</ul></li>
+<li>Claim edge:
+<ul>
+<li><span class="math inline">\(P_i \rightarrow R_j\)</span>: <span
+class="math inline">\(P_i\)</span> may request <span
+class="math inline">\(R_j\)</span> <strong>in the future</strong> (worst
+case)</li>
+<li>真的發生就會變成 request edges</li>
+</ul></li>
+<li>Example
+<ul>
+<li><p>這不會出事</p>
+<p><img src="/assets/%5BOS%5DChapter-7/Untitled%205.png" /></p></li>
+<li><p>當 P2 request for R1 的時候，他會被擋掉。因為我們會假設 claim
+的情形會在未來 somehow 發生。</p>
+<p><img src="/assets/%5BOS%5DChapter-7/Untitled%206.png" /></p></li>
+</ul></li>
+<li>Cycle-detection algorithm ⇒ <span
+class="math inline">\(O(n^2)\)</span></li>
+</ul>
+<h3 id="bankers-algorithm"><strong>Banker’s algorithm</strong></h3>
+<p>去考慮 worse case。</p>
+<p><img src="/assets/%5BOS%5DChapter-7/Untitled%207.png" /></p>
+<ul>
+<li>Safe state → 可以找到一個 safe sequence
+讓程式照著跑，結束前都不會遇到 deadlock</li>
+<li>Unsafe state → 有機率會 deadlock</li>
+<li>Deadlock avoidance → 不要進到 unsafe</li>
+</ul>
+<p><strong>Safe Sequence</strong></p>
+<ul>
+<li><p>Assume 有 12 個 tape drives</p></li>
+<li><p>Safe state:</p>
+<ul>
+<li><p>At t0:</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Max Needs</th>
+<th>Current Holding</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>P0</td>
+<td>10</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td>P1</td>
+<td>4</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td>P2</td>
+<td>9</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Max need is hinted from processes</li>
+<li>Max need is worst case</li>
+</ul>
+<p>→ &lt;P1, P0, P2&gt; is a safe sequence</p>
+<ol type="1">
+<li><p>給 P1 3 個（有的都給他）</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Max Needs</th>
+<th>Current Holding</th>
+<th>Available</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>P0</td>
+<td>10</td>
+<td>5</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>P1</td>
+<td>4</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td>P2</td>
+<td>9</td>
+<td>2</td>
+<td></td>
+</tr>
+</tbody>
+</table></li>
+<li><p>給 P0 5 個</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Max Needs</th>
+<th>Current Holding</th>
+<th>Available</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>P0</td>
+<td>10</td>
+<td>5</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td>P1</td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>P2</td>
+<td>9</td>
+<td>2</td>
+<td></td>
+</tr>
+</tbody>
+</table></li>
+<li><p>給 P2 10 個</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Max Needs</th>
+<th>Current Holding</th>
+<th>Available</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>P0</td>
+<td>10</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>P1</td>
+<td>4</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>P2</td>
+<td>9</td>
+<td>2</td>
+<td>10</td>
+</tr>
+</tbody>
+</table></li>
+</ol></li>
+</ul></li>
+<li><p>Unsafe state:</p>
+<ul>
+<li><p>At t1:</p>
+<p>假設這時候 OS 拿到的一個 request 說 P2 想要多一個 tape drive。</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Max Needs</th>
+<th>Current Holding</th>
+<th>Available</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>P0</td>
+<td>10</td>
+<td>5</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>P1</td>
+<td>4</td>
+<td>2</td>
+<td>3 → 2</td>
+</tr>
+<tr class="odd">
+<td>P2</td>
+<td>9</td>
+<td>2 → 3</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>跑一次上面的流程，然後我們就會發現，如果我們同意了（P2 的 current
+holding 變成 3 了），我們就會發現他可能會 deadlock （i.e. 進到 unsafe
+state）。</li>
+<li>所以 OS 就會擋掉這個 request。</li>
+</ul></li>
+</ul></li>
+<li><p>Banker algorithm:</p>
+<ol type="1">
+<li><p>拿到 request，先假設同意了</p></li>
+<li><p>然後去跑 safe sequence</p>
+<p>選 sequence 的順序隨便都沒差。</p></li>
+<li><p>如果 safe sequence 存在，我們就 grant request，反之就不同意</p>
+<p>如果有數個，那就都可以，反正至少一個就好了</p></li>
+</ol></li>
+<li><p>Banker’s Algorithm Example 1</p>
+<p>我懶得貼.. P.27</p></li>
+<li><p>Programming Example</p>
+<p>A, B, C are semaphores initialized with the values of 2, 1, 1.</p>
+<p>用 round-robin 跑。</p>
+<ul>
+<li><p>原本</p>
+<p><img src="/assets/%5BOS%5DChapter-7/Untitled%208.png" /></p></li>
+<li><p>Use avoidance</p>
+<p><img src="/assets/%5BOS%5DChapter-7/Untitled%209.png" /></p>
+<ul>
+<li>P4 的 wait(A) 如果成功了，加上 claim edge 就會 dead lock，所以 OS
+不會讓他拿</li>
+<li>接下來 P2 就會搶到 A，然後 eventually 他就會 signal A and
+C，剩下的就會成功結束了</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="review-slides-ii">Review Slides (II)</h2>
+<ul>
+<li>deadlock prevention methods?
+<ul>
+<li>mutual exclusion</li>
+<li>hold &amp; wait</li>
+<li>no preemption</li>
+<li>circular wait</li>
+</ul></li>
+<li>deadlock avoidance methods?
+<ul>
+<li>safe state definition?</li>
+<li>safe sequence?</li>
+<li>claim edge?</li>
+</ul></li>
+</ul>
+<h1 id="deadlock-detection-recovery-from-deadlock">Deadlock Detection
+&amp; Recovery from Deadlock</h1>
+<ul>
+<li><p>deadlock 了再解</p>
+<p>（就算卡住了，也只是 user program，OS 一定不會卡住的啦，要信任
+OS）</p></li>
+<li><p>所以就就當下的情況去跑上面那些 check</p></li>
+<li><p>Single instance</p>
+<p><img src="/assets/%5BOS%5DChapter-7/Untitled%2010.png" /></p></li>
+<li><p>Multiple-Instance → Banker’s algorithm</p>
+<ul>
+<li>可以把 Max Needs 拿掉，沒用了</li>
+<li>去檢查有沒有 safe sequence 存在，有就當作沒事。沒有就代表進入
+deadlock 了。</li>
+</ul>
+<p><img src="/assets/%5BOS%5DChapter-7/Untitled%2011.png" /></p></li>
+<li><p>Deadlock Recovery</p>
+<p>→ Process termination</p>
+<ul>
+<li>但是要 kill 誰？（可能可以 kill priority 低的）（但是一直 kill
+priority 低的可能會 starvation ）</li>
+<li>Kill 掉之後還可以 roll back 嗎？</li>
+</ul></li>
+</ul>
+<h1 id="textbook-problem-set">Textbook Problem Set</h1>
+<p><img src="/assets/%5BOS%5DChapter-7/Untitled%2012.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-7/Untitled%2013.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-7/Untitled%2014.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-7/Untitled%2015.png" /></p>
+<div class="note warning"><p>此筆記為清華大學周志遠教授作業系統之課堂筆記，所有內容及圖片皆取材於課堂內容。<br />
+如內容有誤，歡迎來信 <a
+href="mailto:mail@arui.dev">mail@arui.dev</a>。</p>
+</div>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>ARui
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://blog.arui.dev/[OS]Chapter-7/" title="[OS] Chapter 7 — Deadlocks">https://blog.arui.dev/[OS]Chapter-7/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Operating-System/" rel="tag"># Operating System</a>
+              <a href="/tags/Notes/" rel="tag"># Notes</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/%5BOS%5DChapter-6/" rel="prev" title="[OS] Chapter 6 — Process Synchronization">
+                  <i class="fa fa-chevron-left"></i> [OS] Chapter 6 — Process Synchronization
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/%5BOS%5DChapter-10/" rel="next" title="[OS] Chapter 10 — File System Interface">
+                  [OS] Chapter 10 — File System Interface <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-coffee"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ARui</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

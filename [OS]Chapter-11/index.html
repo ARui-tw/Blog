@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.arui.dev","root":"/","images":"/images","scheme":"Gemini","darkmode":"ture","version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Notion 好讀版  File-System Structure  一個 disk 提供的最小單位是 sectors（usually 512 bytes） 但是 mapping 的時候不喜歡用 sector，太小了 所以都用 Blocks，通常是四到十幾個 sectors 一個 OS 可以 support &gt; 1 個 FS type 需要兩個 interface  對上：user prog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[OS] Chapter 11 — File System Implementation">
+<meta property="og:url" content="https://blog.arui.dev/[OS]Chapter-11/">
+<meta property="og:site_name" content="ARui&#39;s Blog">
+<meta property="og:description" content="Notion 好讀版  File-System Structure  一個 disk 提供的最小單位是 sectors（usually 512 bytes） 但是 mapping 的時候不喜歡用 sector，太小了 所以都用 Blocks，通常是四到十幾個 sectors 一個 OS 可以 support &gt; 1 個 FS type 需要兩個 interface  對上：user prog">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-11/Untitled.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-11/Untitled%201.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-11/Untitled%202.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-11/Untitled%203.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-11/Untitled%204.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-11/Untitled%205.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-11/Untitled%206.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-11/Untitled%207.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-11/Untitled%208.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-11/Untitled%209.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-11/Untitled%2010.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-11/Untitled%2011.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-11/Untitled%2012.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-11/Untitled%2013.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-11/Untitled%2014.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-11/Untitled%2015.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-11/Untitled%2016.png">
+<meta property="og:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-11/Untitled%2017.png">
+<meta property="article:published_time" content="2022-01-31T10:11:24.000Z">
+<meta property="article:modified_time" content="2022-02-01T14:14:53.533Z">
+<meta property="article:author" content="ARui">
+<meta property="article:tag" content="Operating System">
+<meta property="article:tag" content="Notes">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.arui.dev/assets/%5BOS%5DChapter-11/Untitled.png">
+
+
+<link rel="canonical" href="https://blog.arui.dev/[OS]Chapter-11/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.arui.dev/[OS]Chapter-11/","path":"[OS]Chapter-11/","title":"[OS] Chapter 11 — File System Implementation"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>[OS] Chapter 11 — File System Implementation | ARui's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">ARui's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#file-system-structure"><span class="nav-number">1.</span> <span class="nav-text">File-System Structure</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#layered-file-system"><span class="nav-number">1.1.</span> <span class="nav-text">Layered File System</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#file-system-implementation"><span class="nav-number">2.</span> <span class="nav-text">File System Implementation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#on-disk-structure"><span class="nav-number">2.1.</span> <span class="nav-text">On-Disk Structure</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#in-memory-structure"><span class="nav-number">2.2.</span> <span class="nav-text">In-Memory Structure</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#virtual-file-system"><span class="nav-number">2.3.</span> <span class="nav-text">Virtual File System</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#directory-implementation"><span class="nav-number">2.4.</span> <span class="nav-text">Directory
+Implementation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#review-slides-i"><span class="nav-number">2.5.</span> <span class="nav-text">Review Slides (I)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#allocation-methods"><span class="nav-number">3.</span> <span class="nav-text">Allocation Methods</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#contiguous-allocation"><span class="nav-number">3.1.</span> <span class="nav-text">Contiguous Allocation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extent-based-file-system-ext"><span class="nav-number">3.2.</span> <span class="nav-text">Extent-Based File System
+(Ext)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#linked-allocation"><span class="nav-number">3.3.</span> <span class="nav-text">Linked Allocation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fat-file-allocation-table-file-system"><span class="nav-number">3.4.</span> <span class="nav-text">FAT (File Allocation
+Table) file system</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#indexed-allocation"><span class="nav-number">3.5.</span> <span class="nav-text">Indexed Allocation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#combined-scheme-unix-inode"><span class="nav-number">3.6.</span> <span class="nav-text">Combined Scheme: Unix inode</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#free-space-management"><span class="nav-number">4.</span> <span class="nav-text">Free-Space Management</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#review-slides-ii"><span class="nav-number">4.1.</span> <span class="nav-text">Review Slides (II)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#textbook-questions"><span class="nav-number">5.</span> <span class="nav-text">Textbook Questions</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ARui</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/arui-tw" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;arui-tw" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:mail@arui.dev" title="E-Mail → mailto:mail@arui.dev" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/profile.php?id=100002082516453" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100002082516453" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/[OS]Chapter-11/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ARui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ARui's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [OS] Chapter 11 — File System Implementation
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-01-31 18:11:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:11:24+08:00">2022-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-01 22:14:53" itemprop="dateModified" datetime="2022-02-01T22:14:53+08:00">2022-02-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Operating-System-Notes/" itemprop="url" rel="index"><span itemprop="name">Operating System Notes</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>4.4k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <div class="note default"><p><a
+target="_blank" rel="noopener" href="https://arui-tw.notion.site/Chapter-11-File-System-Implementation-3bd2f7997ad041ac8966f8bd52fd1b18">Notion
+好讀版</a></p>
+</div>
+<h1 id="file-system-structure">File-System Structure</h1>
+<ul>
+<li>一個 disk 提供的最小單位是 sectors（usually 512 bytes）</li>
+<li>但是 mapping 的時候不喜歡用 sector，太小了</li>
+<li>所以都用 Blocks，通常是四到十幾個 sectors</li>
+<li>一個 OS 可以 support &gt; 1 個 FS type</li>
+<li>需要兩個 interface
+<ul>
+<li>對上：user programs</li>
+<li>對下：physical storage (disk)</li>
+</ul></li>
+</ul>
+<h2 id="layered-file-system">Layered File System</h2>
+<ul>
+<li>最上層是 API</li>
+<li>最下層（最終要寫到 disk 上面去的）要透過 driver 寫過去，那 driver
+要的是單位是 sector</li>
+<li>Logical file system — 根據 file path 找到 file
+ID，也要去判斷權限（i.e. 判斷 API 是不是合法可執行的東西）</li>
+<li>File-organization module — 每一個 FS 最不一樣的地方。要找到在
+logical 中的位址對應到的 physical 的地方。（甚至需要 map
+到不同的電腦）</li>
+<li>Basic File system — 最基本的 I/O 的動作（跟檔案管理無關啦）</li>
+</ul>
+<figure>
+<img src="/assets/%5BOS%5DChapter-11/Untitled.png"
+alt="右邊的名詞不用記" />
+<figcaption aria-hidden="true">右邊的名詞不用記</figcaption>
+</figure>
+<ul>
+<li><p>之所以一個 <code>fread</code> 可以對不同的 file system
+作操作就是中間有 FS manager (VFS — Virtual File System)</p>
+<p><img src="/assets/%5BOS%5DChapter-11/Untitled%201.png" /></p></li>
+</ul>
+<span id="more"></span>
+<h1 id="file-system-implementation">File System Implementation</h1>
+<h2 id="on-disk-structure">On-Disk Structure</h2>
+<p>→ 因為 reboot 後，資料還是要在，所以和之前的不一樣</p>
+<ul>
+<li>Boot control <strong>block</strong> ****(per partition) — 關於
+booting 的 code 或資訊
+<ul>
+<li>裝 OS 他就會幫你 create 起來</li>
+<li>一個 partition 只會有一個（也最多一個） boot control
+block，通常會放在最上面</li>
+<li>如果不是開機槽，那就不會有這個 block</li>
+<li>Unix File System → boot block; NTFS → partition boot sector</li>
+</ul></li>
+<li>Partition control block ****(per partition) — 關於這個 partition
+的資訊
+<ul>
+<li>details: # of blocks, block size, free-block-list, free FCB
+pointers, etc</li>
+<li>UFS → superblock; NTFS → Master File Table</li>
+<li>如果沒有 boot control block，那他應該會在最前面</li>
+</ul></li>
+<li>File control block (per file) — file 的 metadata
+<ul>
+<li>注意不存 data，data 會有一個指標指過去</li>
+<li>UFS — <strong>inode</strong>; NTFS: stored in MFT (relational
+database)</li>
+</ul></li>
+<li>Directory structure (per file system): organize files</li>
+</ul>
+<p><img src="/assets/%5BOS%5DChapter-11/Untitled%202.png" /></p>
+<ul>
+<li><p><code>$ stat</code></p>
+<p><img src="/assets/%5BOS%5DChapter-11/Untitled%203.png" /></p></li>
+</ul>
+<h2 id="in-memory-structure">In-Memory Structure</h2>
+<p>→ 一樣的，只是哪些東西要被 load 到 memory 裡面</p>
+<ul>
+<li>in-memory partition table — 有人被 mount，他就會存關於這個 partition
+的資訊。Unmount 就會被移除。</li>
+<li>in-memory directory structure — 最近 accessed 到的 directory</li>
+<li>system-wide open-file table — 被 open 的 file 的 file control
+block</li>
+<li>per-process open-file table — process 對於一個 file 需要 keep
+的資訊，且 file close 的時候，他就會被清掉，不會寫回去。</li>
+</ul>
+<p><strong>File-Open</strong></p>
+<p><img src="/assets/%5BOS%5DChapter-11/Untitled%204.png" /></p>
+<ul>
+<li>如果沒讀過這個 directory，他就會去 disk （secondary
+storage）的地方把他拉出來</li>
+<li>Directory 的最後接的是 file control block</li>
+</ul>
+<p><strong>File-Read</strong></p>
+<p><img src="/assets/%5BOS%5DChapter-11/Untitled%205.png" /></p>
+<ul>
+<li>上面 open 好了，所以兩個 open-file table 都 ready 了</li>
+</ul>
+<ol type="1">
+<li>去 per-process 確認有沒有權限（logical file system）</li>
+<li>如果有，去 system-wide 找 file control block 裡面存的 data block 的
+pointer</li>
+</ol>
+<p><strong>File-Create</strong></p>
+<ol type="1">
+<li>OS allocates a new FCB</li>
+<li>Update directory structure
+<ol type="1">
+<li>OS read in the corresponding directory structure into memory</li>
+<li><strong>Updates the dir structure</strong> with the new file name
+and the FCB</li>
+<li>(After file being closed), OS writes back the directory structure
+back to disk → Close 才會寫回去，因為 disk 太慢了</li>
+</ol></li>
+<li>The file appears in user’s dir command</li>
+</ol>
+<h2 id="virtual-file-system">Virtual File System</h2>
+<ul>
+<li>Four main object types defined by Linux VFS Disk Allocation Methods
+<ul>
+<li>inode (FCB) → an individual <strong>file</strong></li>
+<li>file object → an <strong>open file</strong> (per process)</li>
+<li>superblock object → an entire file system</li>
+<li>entry object → an individual directory entry</li>
+</ul></li>
+</ul>
+<h2 id="directory-implementation"><strong>Directory
+Implementation</strong></h2>
+<p>大型系統的 directory 太大了，且掉了很慘</p>
+<ul>
+<li>Linear lists
+<ul>
+<li>use link list and traverse</li>
+<li>easy to program but poor performance</li>
+</ul></li>
+<li>Hash table
+<ul>
+<li>把 file path 當成 key，FCB 是 value</li>
+<li>constant time for searching</li>
+<li>linked list for collisions on a hash entry</li>
+<li>hash table usually has fixed # of entries</li>
+</ul></li>
+</ul>
+<h2 id="review-slides-i">Review Slides (I)</h2>
+<ul>
+<li>Transfer unit between memory and disk?</li>
+<li>App → LFS → FOM → BFS → I/O Control → Devices</li>
+<li>on-disk structure
+<ul>
+<li>Boot control block, Partition control block</li>
+<li>File control block, Directory structure</li>
+</ul></li>
+<li>In-memory
+<ul>
+<li>Partition table, Directory structure</li>
+<li>System-wide open-file table</li>
+<li>Per-process open-file table</li>
+</ul></li>
+<li>Steps to open file, read/write file and create file?</li>
+<li>Purpose of VFS?</li>
+</ul>
+<h1 id="allocation-methods">Allocation Methods</h1>
+<p>把 file 對應到 block。</p>
+<h2 id="contiguous-allocation">Contiguous Allocation</h2>
+<figure>
+<img src="/assets/%5BOS%5DChapter-11/Untitled%206.png"
+alt="右邊的表，每一行就是一個 inode，start 和 length 是 metadata" />
+<figcaption aria-hidden="true">右邊的表，每一行就是一個 inode，start 和
+length 是 metadata</figcaption>
+</figure>
+<ul>
+<li>一個 block 一定只屬於一個 file</li>
+<li>Sequential access 和 random access 都很有效率（根據 I/O
+的次數作判斷）→ random 是因為可以用算的飛過去</li>
+<li>☹️ Problems
+<ul>
+<li>External fragmentation → compaction（硬碟清理）</li>
+<li>File cannot grow（會被後面卡住）→ 搬移資料（big cost）</li>
+</ul></li>
+</ul>
+<h2 id="extent-based-file-system-ext">Extent-Based File System
+(Ext)</h2>
+<ul>
+<li>用 link list 的方法把 extent 串起來</li>
+<li>所以除了存 start 和 length，還要多存 pointer to next extent</li>
+<li>☹️ Problems
+<ul>
+<li>Random access become more costly</li>
+<li>“Internal fragmentation” → extent 給他的 blocks 沒用完</li>
+</ul></li>
+</ul>
+<h2 id="linked-allocation">Linked Allocation</h2>
+<p><img src="/assets/%5BOS%5DChapter-11/Untitled%207.png" /></p>
+<ul>
+<li>把下一個 block 的 pointer 存在 data block 裡面，dir 只會有第一個
+pointer</li>
+<li>Only good for <strong>sequential-access</strong> files, random
+access need to traverse through the link list</li>
+<li>Each access to a link list is a disk I/O (because link pointer is
+stored inside the data block)</li>
+<li>每一個 data block 都會浪費 4 byte 去存 pointer</li>
+<li>Reliability → 斷了就 GG</li>
+</ul>
+<h2 id="fat-file-allocation-table-file-system">FAT (File Allocation
+Table) file system</h2>
+<p><img src="/assets/%5BOS%5DChapter-11/Untitled%208.png" /></p>
+<ul>
+<li>把整個 pointers 存起來，所以就變成一個純 link list，存取還是需要
+traverse，但是不用 I/O，只會有很快的 memory access</li>
+<li>超快，但是需要空間</li>
+<li>Link 斷了也 GG</li>
+</ul>
+<h2 id="indexed-allocation">Indexed Allocation</h2>
+<p><img src="/assets/%5BOS%5DChapter-11/Untitled%209.png" /></p>
+<ul>
+<li>跟剛剛很像，但是他是用 index，不用 traverse</li>
+<li>很快，random 也超快</li>
+<li>注意那個 index 也是存在 disk 上了，他也是一個 block</li>
+<li>所以 inode 會存那個 index 在的 block</li>
+<li>☹️
+<ul>
+<li>Index block 很浪費空間，小的 block 根本用不完</li>
+<li>Index block 如果不夠大？
+<ul>
+<li><p>Linked Indexed Scheme</p>
+<p>→ search time 會變長</p>
+<p><img src="/assets/%5BOS%5DChapter-11/Untitled%2010.png" /></p></li>
+<li><p>Multilevel Scheme (two-level)</p>
+<p>→ 大 file 這個比較優</p>
+<p>→ 小 file 就很浪費</p>
+<p><img src="/assets/%5BOS%5DChapter-11/Untitled%2011.png" /></p></li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="combined-scheme-unix-inode">Combined Scheme: Unix inode</h2>
+<p>根據 file size 決定用哪個</p>
+<p><img src="/assets/%5BOS%5DChapter-11/Untitled%2012.png" /></p>
+<h1 id="free-space-management">Free-Space Management</h1>
+<ul>
+<li>找到全部的 free block</li>
+<li>Free-space list: records all free disk blocks</li>
+<li>Scheme
+<ul>
+<li><p>Bit vector</p>
+<p><img src="/assets/%5BOS%5DChapter-11/Untitled%2013.png" /></p>
+<ul>
+<li>用一串 1 和 0 去紀錄他是不是 free 的</li>
+<li>🙂 simplicity, efficient</li>
+<li>☹️ 因為是 fix size，會浪費 memory 空間</li>
+</ul></li>
+<li><p>Linked list (same as linked allocation)</p>
+<p><img src="/assets/%5BOS%5DChapter-11/Untitled%2014.png" /></p></li>
+<li><p>Grouping (same as linked index allocation)</p></li>
+<li><p>Counting (same as contiguous allocation)</p>
+<p>→ keep the address of the first free block and # of contiguous free
+blocks</p></li>
+</ul></li>
+</ul>
+<h2 id="review-slides-ii">Review Slides (II)</h2>
+<ul>
+<li>Allocation:
+<ul>
+<li>Contiguous file allocation? Extent-based file system?</li>
+<li>Linked allocation?</li>
+<li>Indexed allocation?
+<ul>
+<li>Linked scheme</li>
+<li>multilevel index allocation</li>
+<li>Combine scheme</li>
+</ul></li>
+</ul></li>
+<li>Free space:
+<ul>
+<li>Bit vector, linked list, counting, grouping</li>
+</ul></li>
+</ul>
+<h1 id="textbook-questions">Textbook Questions</h1>
+<p><img src="/assets/%5BOS%5DChapter-11/Untitled%2015.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-11/Untitled%2016.png" /></p>
+<p><img src="/assets/%5BOS%5DChapter-11/Untitled%2017.png" /></p>
+<div class="note warning"><p>此筆記為清華大學周志遠教授作業系統之課堂筆記，所有內容及圖片皆取材於課堂內容。<br />
+如內容有誤，歡迎來信 <a
+href="mailto:mail@arui.dev">mail@arui.dev</a>。</p>
+</div>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>ARui
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://blog.arui.dev/[OS]Chapter-11/" title="[OS] Chapter 11 — File System Implementation">https://blog.arui.dev/[OS]Chapter-11/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Operating-System/" rel="tag"># Operating System</a>
+              <a href="/tags/Notes/" rel="tag"># Notes</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/%5BOS%5DChapter-10/" rel="prev" title="[OS] Chapter 10 — File System Interface">
+                  <i class="fa fa-chevron-left"></i> [OS] Chapter 10 — File System Interface
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/%5BOS%5DChapter-13/" rel="next" title="[OS] Chapter 13 — I/O System">
+                  [OS] Chapter 13 — I/O System <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-coffee"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ARui</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

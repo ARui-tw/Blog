@@ -128,7 +128,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -213,9 +213,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2022-01-31 18:05:24 / Modified: 22:50:30" itemprop="dateCreated datePublished" datetime="2022-01-31T18:05:24+08:00">2022-01-31</time>
+      <time title="Created: 2022-01-31 18:05:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:05:24+08:00">2022-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-01 22:21:49" itemprop="dateModified" datetime="2022-02-01T22:21:49+08:00">2022-02-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -267,35 +273,6 @@ target="_blank" rel="noopener" href="https://arui-tw.notion.site/Chapter-5-Proce
 <p>Ready state → Running state</p>
 <p><img src="/assets/%5BOS%5DChapter-5/Untitled%202.png" /></p>
 <p>下面都假設是 single core，只有單一隻程式</p>
-<h3 id="preemptive-vs.-non-preemptive">Preemptive vs.
-Non-preemptive</h3>
-<ul>
-<li>Preemptive → 一個 process 可以在 CPU burst 中間被打斷</li>
-<li>Non-preemptive → 一個 process 不能在 CPU burst
-中間被打斷，一定要做完的</li>
-<li>CPU scheduling 要做事的時間點：
-<ol type="1">
-<li><font color=#A865C9>A process switch from running to waiting → CPU
-空下來了，可以加東西囉</font></li>
-<li>A process switch from running to ready（可能是 timer
-到了，所以被丟過去了）→ CPU 空下來了，可以加東西囉</li>
-<li>A process switch from waiting to ready → 看看有沒有更重要，需要就把
-running 的拿掉換他</li>
-<li><font color=#A865C9>A process terminates → CPU
-空下來了，可以加東西囉</font></li>
-</ol>
-<ul>
-<li>紫色是 Non-preemptive 的 scheduler 只能做的事</li>
-</ul></li>
-<li>大部分都是 preemptive。（Windows, Mac OS）</li>
-<li>Preemptive issue
-<ul>
-<li>會打斷東西，所以可能會 raise condition（如果不打斷就不會產生）</li>
-<li>會影響到 OS 需不需要處理 synchronisation 的問題</li>
-<li>Unix solution: 進到 kernel space 就 disable 2 和 3（就會變成
-non-preemptive）</li>
-</ul></li>
-</ul>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/%5BOS%5DChapter-5/#more" rel="contents">
@@ -352,9 +329,15 @@ non-preemptive）</li>
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2022-01-31 18:06:24 / Modified: 22:58:23" itemprop="dateCreated datePublished" datetime="2022-01-31T18:06:24+08:00">2022-01-31</time>
+      <time title="Created: 2022-01-31 18:06:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:06:24+08:00">2022-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-01 22:18:25" itemprop="dateModified" datetime="2022-02-01T22:18:25+08:00">2022-02-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -426,6 +409,656 @@ race condition，要用同步化解決）</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/%5BOS%5DChapter-6/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/[OS]Chapter-7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ARui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ARui's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/%5BOS%5DChapter-7/" class="post-title-link" itemprop="url">[OS] Chapter 7 — Deadlocks</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-01-31 18:07:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:07:24+08:00">2022-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-01 17:09:10" itemprop="dateModified" datetime="2022-02-01T17:09:10+08:00">2022-02-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Operating-System-Notes/" itemprop="url" rel="index"><span itemprop="name">Operating System Notes</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>4.8k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="deadlock-characterization">Deadlock Characterization</h1>
+<div class="note default"><p><a
+target="_blank" rel="noopener" href="https://www.notion.so/arui-tw/Chapter-7-Deadlocks-b345b44b6ac14b28a37bdc7bb497edb9">Notion
+好讀版</a></p>
+</div>
+<aside>
+<p>📖 程式之間彼此等待，無法進行了</p>
+</aside>
+<ul>
+<li>Example
+<ul>
+<li>2 processes and 2 tape drivers
+<ul>
+<li>一人各拿一個，然後等對方手上那個</li>
+</ul></li>
+<li>2 processes, and semaphores A &amp; B
+<ul>
+<li>P1 (hold B, wait A): wait(A), signal(B)</li>
+<li>P2 (hold A, wait B): wait(B) , signal(A)</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><strong>Necessary Condition</strong> →
+一定要<strong>全部</strong>的條件<strong>同時</strong>發生</p>
+<ul>
+<li><p>Mutual exclusion — 資源是沒有共享性的（暫時）</p></li>
+<li><p>Hold and Wait — 會 hold resource 然後 wait 別人</p></li>
+<li><p>No preemptive — 不能強制別人放開 resource</p></li>
+<li><p>Circular wait — 一定會有一個 circular 的 wait。</p>
+<p><span class="math inline">\(P_0 \rightarrow P_1 \rightarrow P_1
+\rightarrow \dots\rightarrow P_n \rightarrow P_0\)</span></p></li>
+</ul>
+<p><img src="/assets/%5BOS%5DChapter-7/Untitled.png" /></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/%5BOS%5DChapter-7/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/[OS]Chapter-10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ARui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ARui's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/%5BOS%5DChapter-10/" class="post-title-link" itemprop="url">[OS] Chapter 10 — File System Interface</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-01-31 18:10:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:10:24+08:00">2022-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-01 22:22:32" itemprop="dateModified" datetime="2022-02-01T22:22:32+08:00">2022-02-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Operating-System-Notes/" itemprop="url" rel="index"><span itemprop="name">Operating System Notes</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>3.8k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="note default"><p><a
+target="_blank" rel="noopener" href="https://arui-tw.notion.site/Chapter-10-File-System-Interface-588a7531b9aa40058c8423706f01da16">Notion
+好讀版</a></p>
+</div>
+<aside>
+<p>✏️ 從使用者的角度去看</p>
+</aside>
+<h1 id="file-concept">File Concept</h1>
+<p>File 也是抽像的概念。</p>
+<aside>
+<p>📖 <strong>File (Data)</strong>: a logical storage unit created by
+OS</p>
+</aside>
+<ul>
+<li><p>Physical storage unit in disk</p>
+<p><img src="/assets/%5BOS%5DChapter-10/Untitled.png" /></p></li>
+<li><p>File attributes (Metadata)</p>
+<ul>
+<li>Identifier: non-human-readable name</li>
+<li>Name</li>
+<li>Type</li>
+<li>Location</li>
+<li>Size</li>
+<li><strong>Protection</strong></li>
+<li>Last-access time, Last-updated time</li>
+</ul></li>
+<li><p>File operations</p>
+<ul>
+<li>Create</li>
+<li>Write</li>
+<li>Read</li>
+<li>Repositioning within a file (i.e. file seek)</li>
+<li>Delete</li>
+<li>Truncating → 切掉尾巴</li>
+<li>Appending → 貼在尾巴
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/%5BOS%5DChapter-10/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/[OS]Chapter-11/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ARui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ARui's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/%5BOS%5DChapter-11/" class="post-title-link" itemprop="url">[OS] Chapter 11 — File System Implementation</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-01-31 18:11:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:11:24+08:00">2022-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-01 22:14:53" itemprop="dateModified" datetime="2022-02-01T22:14:53+08:00">2022-02-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Operating-System-Notes/" itemprop="url" rel="index"><span itemprop="name">Operating System Notes</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>4.4k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="note default"><p><a
+target="_blank" rel="noopener" href="https://arui-tw.notion.site/Chapter-11-File-System-Implementation-3bd2f7997ad041ac8966f8bd52fd1b18">Notion
+好讀版</a></p>
+</div>
+<h1 id="file-system-structure">File-System Structure</h1>
+<ul>
+<li>一個 disk 提供的最小單位是 sectors（usually 512 bytes）</li>
+<li>但是 mapping 的時候不喜歡用 sector，太小了</li>
+<li>所以都用 Blocks，通常是四到十幾個 sectors</li>
+<li>一個 OS 可以 support &gt; 1 個 FS type</li>
+<li>需要兩個 interface
+<ul>
+<li>對上：user programs</li>
+<li>對下：physical storage (disk)</li>
+</ul></li>
+</ul>
+<h2 id="layered-file-system">Layered File System</h2>
+<ul>
+<li>最上層是 API</li>
+<li>最下層（最終要寫到 disk 上面去的）要透過 driver 寫過去，那 driver
+要的是單位是 sector</li>
+<li>Logical file system — 根據 file path 找到 file
+ID，也要去判斷權限（i.e. 判斷 API 是不是合法可執行的東西）</li>
+<li>File-organization module — 每一個 FS 最不一樣的地方。要找到在
+logical 中的位址對應到的 physical 的地方。（甚至需要 map
+到不同的電腦）</li>
+<li>Basic File system — 最基本的 I/O 的動作（跟檔案管理無關啦）</li>
+</ul>
+<figure>
+<img src="/assets/%5BOS%5DChapter-11/Untitled.png"
+alt="右邊的名詞不用記" />
+<figcaption aria-hidden="true">右邊的名詞不用記</figcaption>
+</figure>
+<ul>
+<li><p>之所以一個 <code>fread</code> 可以對不同的 file system
+作操作就是中間有 FS manager (VFS — Virtual File System)</p>
+<p><img src="/assets/%5BOS%5DChapter-11/Untitled%201.png" /></p></li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/%5BOS%5DChapter-11/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/[OS]Chapter-12/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ARui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ARui's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/%5BOS%5DChapter-12/" class="post-title-link" itemprop="url">[OS] Chapter 12 — Mass Storage System</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-01-31 18:12:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:12:24+08:00">2022-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-01 22:16:21" itemprop="dateModified" datetime="2022-02-01T22:16:21+08:00">2022-02-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Operating-System-Notes/" itemprop="url" rel="index"><span itemprop="name">Operating System Notes</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>4.3k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="note default"><p><a
+target="_blank" rel="noopener" href="https://arui-tw.notion.site/Chapter-12-Mass-Storage-System-0a7b775db2304a7c88922dc8457ade4a">Notion
+好讀版</a></p>
+</div>
+<aside>
+<p>✏️ 泛指所有 secondary storage</p>
+</aside>
+<h1 id="disk-structure">Disk Structure</h1>
+<p>由磁盤組成，最小儲存單位是 sector，買來就切死的，所以用軟體的 block
+（多個 sector）來控制。Sector 會有
+number，所以可以對特定資料作讀取。</p>
+<p><img src="/assets/%5BOS%5DChapter-12/Untitled.png" /></p>
+<h2 id="sectors-per-track"><strong>Sectors per Track</strong></h2>
+<ul>
+<li>Constant linear velocity ****(CLV)
+<ul>
+<li><p>Density of bits per track 是固定的</p></li>
+<li><p>這樣內圈的資料量就會小於外圈的</p></li>
+<li><p>但是這樣讀取資料的速度會不固定</p>
+<p>→ 讀內圈要轉比較快</p></li>
+<li><p>applications: CD-ROM and DVD-ROM</p></li>
+</ul></li>
+<li>Constant angular velocity ****(CAV)
+<ul>
+<li>keep same rotation speed</li>
+<li>內圈 density 比較高</li>
+<li>這樣轉速就不用改</li>
+<li>applications: hard disks</li>
+</ul></li>
+</ul>
+<h2 id="disk-io">Disk IO</h2>
+<p><img src="/assets/%5BOS%5DChapter-12/Untitled%201.png" /></p>
+<ul>
+<li>EIDE, ATA, SATA (Serial ATA), USB, SCSI, etc</li>
+<li>效能會有差</li>
+<li>I/O bus is controlled by controller</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/%5BOS%5DChapter-12/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/[OS]Chapter-13/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ARui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ARui's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/%5BOS%5DChapter-13/" class="post-title-link" itemprop="url">[OS] Chapter 13 — I/O System</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-01-31 18:12:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:12:24+08:00">2022-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-01 22:20:34" itemprop="dateModified" datetime="2022-02-01T22:20:34+08:00">2022-02-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Operating-System-Notes/" itemprop="url" rel="index"><span itemprop="name">Operating System Notes</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>3.2k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="note default"><p><a
+target="_blank" rel="noopener" href="https://www.notion.so/arui-tw/Chapter-13-I-O-System-7f1b37167d5b4a77bc4e18c96b74ed95">Notion
+好讀版</a></p>
+</div>
+<h1 id="overview">Overview</h1>
+<ul>
+<li><p>電腦不是在做 I/O 就是在做計算</p></li>
+<li><p><strong>I/O devices</strong>: tape, HD, mouse, joystick, network
+card, screen, flash disks, etc</p></li>
+<li><p><strong>I/O subsystem</strong>: the methods to <strong>control
+all I/O devices</strong></p></li>
+<li><p>Two conflicting trends</p>
+<ul>
+<li>我們希望他是 interface，這樣才可以 standardization 的控制</li>
+<li>但是他又很多樣性</li>
+</ul></li>
+<li><p><strong>Device drivers</strong>: a uniform device-access
+<strong>interface</strong> to the I/O subsystem</p>
+<p>⇒ Similar to system calls between apps and OS</p></li>
+<li><p>Device categories</p>
+<ul>
+<li>Storage devices: disks, tapes</li>
+<li>Transmission devices: network cards, modems</li>
+<li>Human-interface devices: keyboard, screen, mouse</li>
+<li>Specialized devices: joystick, touchpad</li>
+</ul></li>
+</ul>
+<h1 id="io-hardware">I/O Hardware</h1>
+<ul>
+<li><p><strong>Port</strong>: A <strong>connection point</strong>
+between I/O devices and the host. 每個 port 都有自己的 ID，那就是 device
+對於電腦的 identifier。</p>
+<p>→ E.g.: USB ports</p></li>
+<li><p><strong>Controller</strong>: A collection of electronics that can
+operate a port, a bus, or a device</p>
+<p>⇒ A controller could have its own processor, memory, etc. (E.g.: SCSI
+controller)</p></li>
+<li><p><strong>Bus</strong>: A set of <strong>wires and a well-defined
+protocol</strong> that specifies messages sent over the
+wires（連接的方式，除了物理相接，還有 protocol 的部分）</p>
+<p>→ E.g.: PCI bus</p></li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/%5BOS%5DChapter-13/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
