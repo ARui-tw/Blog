@@ -4,7 +4,7 @@ date: 2022-01-31 18:06:24
 tags:
     - Operating System
     - Notes
-categories: Notes
+categories: Operating System Notes
 ---
 
 {% note default %}
@@ -226,7 +226,7 @@ boolean TestAndSet (bool &lock) {
 
 - Mutual exclusion: Yes
     
-    ⇒ 因為只有正在 CS 裡面的人把他設成 Flase 才可以放下一個進去
+    ⇒ 因為只有正在 CS 裡面的人把他設成 False 才可以放下一個進去
     
 - Progress: Yes
     
@@ -293,7 +293,7 @@ boolean TestAndSet (bool &lock) {
     sem_wait(sem_t *sem)
     sem_post(sem_t *sem)
     sem_getvalue(sem_t *sem, int *valptr) // check
-    sem_destory(sem_t *sem)
+    sem_destroy(sem_t *sem)
     ```
     
 - Example:
@@ -305,7 +305,7 @@ boolean TestAndSet (bool &lock) {
     sem_wait(&sem);
     	// critical section
     sem_post(&sem);
-    sem_destory(&sem);
+    sem_destroy(&sem);
     ```
     
 - Another example
@@ -632,7 +632,7 @@ To use mutex:
 
 - Declared as of type `pthread_mutex_t`
 - Initialized with `pthread_mutex_init()`
-- Destroyed with `pthread_mutex_destory()`
+- Destroyed with `pthread_mutex_destroy()`
 - Use `pthread_mutex_lock()` and `pthread_mutex_unlock()`
 
 ```cpp
@@ -642,7 +642,7 @@ pthread_mutex_init (&mutex, NULL);  // NULL -> optional configuration
 pthread_mutex_lock(&mutex);
 	**// Critical Section**
 pthread_mutex_unlock(&mutex);
-pthread_mutex_destory(&mutex);
+pthread_mutex_destroy(&mutex);
 ```
 
 ## Condition Variables (CV)
@@ -677,7 +677,7 @@ pthread_mutex_destory(&mutex);
             
             ![](/assets/[OS]Chapter-6/Untitled%2026.png)
             
-        3. `conter` go into CS and call `signal`.
+        3. `counter` go into CS and call `signal`.
             
             `action` is waked up, but thread is locked. （`unlock` 會先呼叫 `lock` 確定可以跑，但顯然不行，因為 lock 還在 counter 那邊 ）
             

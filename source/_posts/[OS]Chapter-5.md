@@ -40,6 +40,8 @@ Ready state → Running state
 
 下面都假設是 single core，只有單一隻程式
 
+<!-- more -->
+
 ### Preemptive vs. Non-preemptive
 
 - Preemptive → 一個 process 可以在 CPU burst 中間被打斷
@@ -55,8 +57,6 @@ Ready state → Running state
     - 會打斷東西，所以可能會 raise condition（如果不打斷就不會產生）
     - 會影響到 OS 需不需要處理 synchronisation 的問題
     - Unix solution: 進到 kernel space 就 disable 2 和 3（就會變成 non-preemptive）
-
-<!-- more -->
 
 ## Dispatcher
 
