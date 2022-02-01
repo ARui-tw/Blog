@@ -152,7 +152,7 @@
         <a href="mailto:mail@arui.dev" title="E-Mail → mailto:mail@arui.dev" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
       </span>
       <span class="links-of-author-item">
-        <a href="https://www.facebook.com/profile.php?id=100002082516453" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;profile.php?id&#x3D;100002082516453" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+        <a href="https://www.facebook.com/ARuiTW/" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;ARuiTW&#x2F;" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
       </span>
   </div>
 
@@ -181,6 +181,271 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/[OS]Chapter-12/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ARui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ARui's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/%5BOS%5DChapter-12/" class="post-title-link" itemprop="url">[OS] Chapter 12 — Mass Storage System</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-01-31 18:12:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:12:24+08:00">2022-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-01 22:16:21" itemprop="dateModified" datetime="2022-02-01T22:16:21+08:00">2022-02-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Operating-System-Notes/" itemprop="url" rel="index"><span itemprop="name">Operating System Notes</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>4.3k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="note default"><p><a
+target="_blank" rel="noopener" href="https://arui-tw.notion.site/Chapter-12-Mass-Storage-System-0a7b775db2304a7c88922dc8457ade4a">Notion
+好讀版</a></p>
+</div>
+<aside>
+<p>✏️ 泛指所有 secondary storage</p>
+</aside>
+<h1 id="disk-structure">Disk Structure</h1>
+<p>由磁盤組成，最小儲存單位是 sector，買來就切死的，所以用軟體的 block
+（多個 sector）來控制。Sector 會有
+number，所以可以對特定資料作讀取。</p>
+<p><img src="/assets/%5BOS%5DChapter-12/Untitled.png" /></p>
+<h2 id="sectors-per-track"><strong>Sectors per Track</strong></h2>
+<ul>
+<li>Constant linear velocity ****(CLV)
+<ul>
+<li><p>Density of bits per track 是固定的</p></li>
+<li><p>這樣內圈的資料量就會小於外圈的</p></li>
+<li><p>但是這樣讀取資料的速度會不固定</p>
+<p>→ 讀內圈要轉比較快</p></li>
+<li><p>applications: CD-ROM and DVD-ROM</p></li>
+</ul></li>
+<li>Constant angular velocity ****(CAV)
+<ul>
+<li>keep same rotation speed</li>
+<li>內圈 density 比較高</li>
+<li>這樣轉速就不用改</li>
+<li>applications: hard disks</li>
+</ul></li>
+</ul>
+<h2 id="disk-io">Disk IO</h2>
+<p><img src="/assets/%5BOS%5DChapter-12/Untitled%201.png" /></p>
+<ul>
+<li>EIDE, ATA, SATA (Serial ATA), USB, SCSI, etc</li>
+<li>效能會有差</li>
+<li>I/O bus is controlled by controller</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/%5BOS%5DChapter-12/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/[OS]Chapter-13/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ARui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ARui's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/%5BOS%5DChapter-13/" class="post-title-link" itemprop="url">[OS] Chapter 13 — I/O System</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-01-31 18:12:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:12:24+08:00">2022-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-01 22:20:34" itemprop="dateModified" datetime="2022-02-01T22:20:34+08:00">2022-02-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Operating-System-Notes/" itemprop="url" rel="index"><span itemprop="name">Operating System Notes</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>3.2k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="note default"><p><a
+target="_blank" rel="noopener" href="https://www.notion.so/arui-tw/Chapter-13-I-O-System-7f1b37167d5b4a77bc4e18c96b74ed95">Notion
+好讀版</a></p>
+</div>
+<h1 id="overview">Overview</h1>
+<ul>
+<li><p>電腦不是在做 I/O 就是在做計算</p></li>
+<li><p><strong>I/O devices</strong>: tape, HD, mouse, joystick, network
+card, screen, flash disks, etc</p></li>
+<li><p><strong>I/O subsystem</strong>: the methods to <strong>control
+all I/O devices</strong></p></li>
+<li><p>Two conflicting trends</p>
+<ul>
+<li>我們希望他是 interface，這樣才可以 standardization 的控制</li>
+<li>但是他又很多樣性</li>
+</ul></li>
+<li><p><strong>Device drivers</strong>: a uniform device-access
+<strong>interface</strong> to the I/O subsystem</p>
+<p>⇒ Similar to system calls between apps and OS</p></li>
+<li><p>Device categories</p>
+<ul>
+<li>Storage devices: disks, tapes</li>
+<li>Transmission devices: network cards, modems</li>
+<li>Human-interface devices: keyboard, screen, mouse</li>
+<li>Specialized devices: joystick, touchpad</li>
+</ul></li>
+</ul>
+<h1 id="io-hardware">I/O Hardware</h1>
+<ul>
+<li><p><strong>Port</strong>: A <strong>connection point</strong>
+between I/O devices and the host. 每個 port 都有自己的 ID，那就是 device
+對於電腦的 identifier。</p>
+<p>→ E.g.: USB ports</p></li>
+<li><p><strong>Controller</strong>: A collection of electronics that can
+operate a port, a bus, or a device</p>
+<p>⇒ A controller could have its own processor, memory, etc. (E.g.: SCSI
+controller)</p></li>
+<li><p><strong>Bus</strong>: A set of <strong>wires and a well-defined
+protocol</strong> that specifies messages sent over the
+wires（連接的方式，除了物理相接，還有 protocol 的部分）</p>
+<p>→ E.g.: PCI bus</p></li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/%5BOS%5DChapter-13/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -276,139 +541,6 @@ target="_blank" rel="noopener" href="https://arui-tw.notion.site/Chapter-5-Proce
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/%5BOS%5DChapter-5/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/[OS]Chapter-6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ARui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ARui's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/%5BOS%5DChapter-6/" class="post-title-link" itemprop="url">[OS] Chapter 6 — Process Synchronization</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2022-01-31 18:06:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:06:24+08:00">2022-01-31</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-02-01 22:18:25" itemprop="dateModified" datetime="2022-02-01T22:18:25+08:00">2022-02-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Operating-System-Notes/" itemprop="url" rel="index"><span itemprop="name">Operating System Notes</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-item" title="Symbols count in article">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>12k</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="note default"><p><a
-target="_blank" rel="noopener" href="https://arui-tw.notion.site/Chapter-6-Process-Synchronization-dc2fdd2951b047f78a39377759ebe90c">Notion
-好讀版</a></p>
-</div>
-<h1 id="background">Background</h1>
-<ul>
-<li>因為有 share 的 data，會被多個 content 去用他，所以需要</li>
-<li>就算只有一個 core，也會有 Concurrent 的問題（因為會有 content
-switch）</li>
-<li>重點就是他們 execute 的 order</li>
-<li>Consumer &amp; Producer Problem
-<ul>
-<li><p>用 counter 去記還有幾個空位</p></li>
-<li><p>Producer</p>
-<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">	nextItem = <span class="built_in">getItem</span>( );</span><br><span class="line">	<span class="keyword">while</span> (counter == BUFFER_SIZE);</span><br><span class="line">	buffer[in] = nextItem;</span><br><span class="line">	in = (in + <span class="number">1</span>) % BUFFER_SIZE;</span><br><span class="line">	counter++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p></li>
-<li><p>Consumer</p>
-<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">	<span class="keyword">while</span> (counter == <span class="number">0</span>) ;</span><br><span class="line">	item = buffer[out];</span><br><span class="line">	out = (out + <span class="number">1</span>) % BUFFER_SIZE;</span><br><span class="line">	counter--;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p></li>
-<li><p>但是 counter 會是這兩隻 thread
-共用的東東，所以會出現不一致的問題：</p>
-<ul>
-<li><p><code>counter++</code></p>
-<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">move ax, counter</span><br><span class="line">add  ax, <span class="number">1</span></span><br><span class="line">move counter, ax</span><br></pre></td></tr></table></figure></p></li>
-<li><p><code>counter--</code></p>
-<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">move bx, counter</span><br><span class="line">sub  bx, <span class="number">1</span></span><br><span class="line">move counter, bx</span><br></pre></td></tr></table></figure></p></li>
-<li><p>但是…如果是這樣呢？（counter initially is 5）</p>
-<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">producer: move ax, counter   <span class="comment">// ax = 5</span></span><br><span class="line">producer: add ax, <span class="number">1</span>          <span class="comment">// ax = 6</span></span><br><span class="line">context <span class="keyword">switch</span></span><br><span class="line">consumer: move bx, counter   <span class="comment">// bx = 5</span></span><br><span class="line">consumer: sub bx, <span class="number">1</span>          <span class="comment">// bx = 4</span></span><br><span class="line">context <span class="keyword">switch</span></span><br><span class="line">producer: move counter, ax   <span class="comment">// counter = 6</span></span><br><span class="line">context <span class="keyword">switch</span></span><br><span class="line">consumer: move counter, bx   <span class="comment">// counter = 4</span></span><br></pre></td></tr></table></figure></p>
-<p>不過如果不是 preemptive 就不會有這個問題了。</p></li>
-</ul></li>
-</ul></li>
-</ul>
-<h2 id="race-condition">Race Condition</h2>
-<aside>
-<p>📖 多個 process 操作 shared data
-concurrently，結果會取決於最後完成的人。（這是描述一個問題點，所以是因為有
-race condition，要用同步化解決）</p>
-</aside>
-<ul>
-<li>Single processor 的可以用 disable interrupt 或 non-preemptive CPU
-來解決。</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/%5BOS%5DChapter-6/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -824,7 +956,7 @@ alt="右邊的名詞不用記" />
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/[OS]Chapter-12/">
+    <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/[OS]Chapter-6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -837,7 +969,7 @@ alt="右邊的名詞不用記" />
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/%5BOS%5DChapter-12/" class="post-title-link" itemprop="url">[OS] Chapter 12 — Mass Storage System</a>
+          <a href="/%5BOS%5DChapter-6/" class="post-title-link" itemprop="url">[OS] Chapter 6 — Process Synchronization</a>
         </h2>
 
         <div class="post-meta-container">
@@ -848,14 +980,14 @@ alt="右邊的名詞不用記" />
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2022-01-31 18:12:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:12:24+08:00">2022-01-31</time>
+      <time title="Created: 2022-01-31 18:06:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:06:24+08:00">2022-01-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-02-01 22:16:21" itemprop="dateModified" datetime="2022-02-01T22:16:21+08:00">2022-02-01</time>
+      <time title="Modified: 2022-02-01 22:18:25" itemprop="dateModified" datetime="2022-02-01T22:18:25+08:00">2022-02-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -873,7 +1005,7 @@ alt="右邊的名詞不用記" />
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>4.3k</span>
+      <span>12k</span>
     </span>
 </div>
 
@@ -885,180 +1017,48 @@ alt="右邊的名詞不用記" />
     
     <div class="post-body" itemprop="articleBody">
           <div class="note default"><p><a
-target="_blank" rel="noopener" href="https://arui-tw.notion.site/Chapter-12-Mass-Storage-System-0a7b775db2304a7c88922dc8457ade4a">Notion
+target="_blank" rel="noopener" href="https://arui-tw.notion.site/Chapter-6-Process-Synchronization-dc2fdd2951b047f78a39377759ebe90c">Notion
 好讀版</a></p>
 </div>
+<h1 id="background">Background</h1>
+<ul>
+<li>因為有 share 的 data，會被多個 content 去用他，所以需要</li>
+<li>就算只有一個 core，也會有 Concurrent 的問題（因為會有 content
+switch）</li>
+<li>重點就是他們 execute 的 order</li>
+<li>Consumer &amp; Producer Problem
+<ul>
+<li><p>用 counter 去記還有幾個空位</p></li>
+<li><p>Producer</p>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">	nextItem = <span class="built_in">getItem</span>( );</span><br><span class="line">	<span class="keyword">while</span> (counter == BUFFER_SIZE);</span><br><span class="line">	buffer[in] = nextItem;</span><br><span class="line">	in = (in + <span class="number">1</span>) % BUFFER_SIZE;</span><br><span class="line">	counter++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p></li>
+<li><p>Consumer</p>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">	<span class="keyword">while</span> (counter == <span class="number">0</span>) ;</span><br><span class="line">	item = buffer[out];</span><br><span class="line">	out = (out + <span class="number">1</span>) % BUFFER_SIZE;</span><br><span class="line">	counter--;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p></li>
+<li><p>但是 counter 會是這兩隻 thread
+共用的東東，所以會出現不一致的問題：</p>
+<ul>
+<li><p><code>counter++</code></p>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">move ax, counter</span><br><span class="line">add  ax, <span class="number">1</span></span><br><span class="line">move counter, ax</span><br></pre></td></tr></table></figure></p></li>
+<li><p><code>counter--</code></p>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">move bx, counter</span><br><span class="line">sub  bx, <span class="number">1</span></span><br><span class="line">move counter, bx</span><br></pre></td></tr></table></figure></p></li>
+<li><p>但是…如果是這樣呢？（counter initially is 5）</p>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">producer: move ax, counter   <span class="comment">// ax = 5</span></span><br><span class="line">producer: add ax, <span class="number">1</span>          <span class="comment">// ax = 6</span></span><br><span class="line">context <span class="keyword">switch</span></span><br><span class="line">consumer: move bx, counter   <span class="comment">// bx = 5</span></span><br><span class="line">consumer: sub bx, <span class="number">1</span>          <span class="comment">// bx = 4</span></span><br><span class="line">context <span class="keyword">switch</span></span><br><span class="line">producer: move counter, ax   <span class="comment">// counter = 6</span></span><br><span class="line">context <span class="keyword">switch</span></span><br><span class="line">consumer: move counter, bx   <span class="comment">// counter = 4</span></span><br></pre></td></tr></table></figure></p>
+<p>不過如果不是 preemptive 就不會有這個問題了。</p></li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="race-condition">Race Condition</h2>
 <aside>
-<p>✏️ 泛指所有 secondary storage</p>
+<p>📖 多個 process 操作 shared data
+concurrently，結果會取決於最後完成的人。（這是描述一個問題點，所以是因為有
+race condition，要用同步化解決）</p>
 </aside>
-<h1 id="disk-structure">Disk Structure</h1>
-<p>由磁盤組成，最小儲存單位是 sector，買來就切死的，所以用軟體的 block
-（多個 sector）來控制。Sector 會有
-number，所以可以對特定資料作讀取。</p>
-<p><img src="/assets/%5BOS%5DChapter-12/Untitled.png" /></p>
-<h2 id="sectors-per-track"><strong>Sectors per Track</strong></h2>
 <ul>
-<li>Constant linear velocity ****(CLV)
-<ul>
-<li><p>Density of bits per track 是固定的</p></li>
-<li><p>這樣內圈的資料量就會小於外圈的</p></li>
-<li><p>但是這樣讀取資料的速度會不固定</p>
-<p>→ 讀內圈要轉比較快</p></li>
-<li><p>applications: CD-ROM and DVD-ROM</p></li>
-</ul></li>
-<li>Constant angular velocity ****(CAV)
-<ul>
-<li>keep same rotation speed</li>
-<li>內圈 density 比較高</li>
-<li>這樣轉速就不用改</li>
-<li>applications: hard disks</li>
-</ul></li>
-</ul>
-<h2 id="disk-io">Disk IO</h2>
-<p><img src="/assets/%5BOS%5DChapter-12/Untitled%201.png" /></p>
-<ul>
-<li>EIDE, ATA, SATA (Serial ATA), USB, SCSI, etc</li>
-<li>效能會有差</li>
-<li>I/O bus is controlled by controller</li>
+<li>Single processor 的可以用 disable interrupt 或 non-preemptive CPU
+來解決。</li>
 </ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/%5BOS%5DChapter-12/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/[OS]Chapter-13/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ARui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ARui's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/%5BOS%5DChapter-13/" class="post-title-link" itemprop="url">[OS] Chapter 13 — I/O System</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2022-01-31 18:12:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:12:24+08:00">2022-01-31</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-02-01 22:20:34" itemprop="dateModified" datetime="2022-02-01T22:20:34+08:00">2022-02-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Operating-System-Notes/" itemprop="url" rel="index"><span itemprop="name">Operating System Notes</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-item" title="Symbols count in article">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>3.2k</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="note default"><p><a
-target="_blank" rel="noopener" href="https://www.notion.so/arui-tw/Chapter-13-I-O-System-7f1b37167d5b4a77bc4e18c96b74ed95">Notion
-好讀版</a></p>
-</div>
-<h1 id="overview">Overview</h1>
-<ul>
-<li><p>電腦不是在做 I/O 就是在做計算</p></li>
-<li><p><strong>I/O devices</strong>: tape, HD, mouse, joystick, network
-card, screen, flash disks, etc</p></li>
-<li><p><strong>I/O subsystem</strong>: the methods to <strong>control
-all I/O devices</strong></p></li>
-<li><p>Two conflicting trends</p>
-<ul>
-<li>我們希望他是 interface，這樣才可以 standardization 的控制</li>
-<li>但是他又很多樣性</li>
-</ul></li>
-<li><p><strong>Device drivers</strong>: a uniform device-access
-<strong>interface</strong> to the I/O subsystem</p>
-<p>⇒ Similar to system calls between apps and OS</p></li>
-<li><p>Device categories</p>
-<ul>
-<li>Storage devices: disks, tapes</li>
-<li>Transmission devices: network cards, modems</li>
-<li>Human-interface devices: keyboard, screen, mouse</li>
-<li>Specialized devices: joystick, touchpad</li>
-</ul></li>
-</ul>
-<h1 id="io-hardware">I/O Hardware</h1>
-<ul>
-<li><p><strong>Port</strong>: A <strong>connection point</strong>
-between I/O devices and the host. 每個 port 都有自己的 ID，那就是 device
-對於電腦的 identifier。</p>
-<p>→ E.g.: USB ports</p></li>
-<li><p><strong>Controller</strong>: A collection of electronics that can
-operate a port, a bus, or a device</p>
-<p>⇒ A controller could have its own processor, memory, etc. (E.g.: SCSI
-controller)</p></li>
-<li><p><strong>Bus</strong>: A set of <strong>wires and a well-defined
-protocol</strong> that specifies messages sent over the
-wires（連接的方式，除了物理相接，還有 protocol 的部分）</p>
-<p>→ E.g.: PCI bus</p></li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/%5BOS%5DChapter-13/#more" rel="contents">
+              <a class="btn" href="/%5BOS%5DChapter-6/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
