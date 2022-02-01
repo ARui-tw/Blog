@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.arui.dev","root":"/","images":"/images","scheme":"Gemini","darkmode":"ture","version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Notion 好讀版  網路溝通可以分成兩種主要的 API  Web Service APIs (e.g. SOAP, JSON-RPC, XML-RPC, REST) Web Socket APIs  HTTP HTTP&#x2F;2: the difference between HTTP&#x2F;1.1, benefits and how to use it REST (REpresentational St">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WebSocket">
+<meta property="og:url" content="https://blog.arui.dev/WebSocket/">
+<meta property="og:site_name" content="ARui&#39;s Blog">
+<meta property="og:description" content="Notion 好讀版  網路溝通可以分成兩種主要的 API  Web Service APIs (e.g. SOAP, JSON-RPC, XML-RPC, REST) Web Socket APIs  HTTP HTTP&#x2F;2: the difference between HTTP&#x2F;1.1, benefits and how to use it REST (REpresentational St">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.arui.dev/assets/WebSocket/Untitled.png">
+<meta property="article:published_time" content="2021-05-12T09:50:24.000Z">
+<meta property="article:modified_time" content="2022-02-01T15:10:57.026Z">
+<meta property="article:author" content="ARui">
+<meta property="article:tag" content="Notes">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.arui.dev/assets/WebSocket/Untitled.png">
+
+
+<link rel="canonical" href="https://blog.arui.dev/WebSocket/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.arui.dev/WebSocket/","path":"WebSocket/","title":"WebSocket"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>WebSocket | ARui's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">ARui's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#http"><span class="nav-number">1.</span> <span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#rest-representational-state-transfer"><span class="nav-number">1.1.</span> <span class="nav-text">REST (REpresentational
+State Transfer)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#http-polling%E8%BC%AA%E8%A9%A2"><span class="nav-number">1.2.</span> <span class="nav-text">HTTP polling(輪詢)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#http-short-polling"><span class="nav-number">1.2.1.</span> <span class="nav-text">HTTP Short Polling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#http-long-polling"><span class="nav-number">1.2.2.</span> <span class="nav-text">HTTP Long Polling</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#http-streaming"><span class="nav-number">1.3.</span> <span class="nav-text">HTTP Streaming</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sse-server-sent-events-eventsource"><span class="nav-number">1.3.1.</span> <span class="nav-text">SSE (Server Sent Events &#x2F;
+EventSource)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#websockets"><span class="nav-number">1.4.</span> <span class="nav-text">WebSockets</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ARui</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/arui-tw" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;arui-tw" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:mail@arui.dev" title="E-Mail → mailto:mail@arui.dev" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/ARuiTW/" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;ARuiTW&#x2F;" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/WebSocket/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ARui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ARui's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          WebSocket
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-05-12 17:50:24" itemprop="dateCreated datePublished" datetime="2021-05-12T17:50:24+08:00">2021-05-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-01 23:10:57" itemprop="dateModified" datetime="2022-02-01T23:10:57+08:00">2022-02-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Tech-Share/" itemprop="url" rel="index"><span itemprop="name">Tech Share</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>2.4k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <div class="note default"><p><a
+target="_blank" rel="noopener" href="https://arui-tw.notion.site/WebSocket-4aae9807cbc94e69b3e91fe69c58262b">Notion
+好讀版</a></p>
+</div>
+<p>網路溝通可以分成兩種主要的 API</p>
+<ul>
+<li>Web Service APIs (e.g. SOAP, JSON-RPC, XML-RPC, REST)</li>
+<li>Web Socket APIs</li>
+</ul>
+<h1 id="http">HTTP</h1>
+<p><a
+target="_blank" rel="noopener" href="https://factoryhr.medium.com/http-2-the-difference-between-http-1-1-benefits-and-how-to-use-it-38094fa0e95b">HTTP/2:
+the difference between HTTP/1.1, benefits and how to use it</a></p>
+<h2 id="rest-representational-state-transfer">REST (REpresentational
+State Transfer)</h2>
+<p>→ 幫 HTTP 套規則</p>
+<ul>
+<li>GET → 取得資料</li>
+<li>PUT → 修改資料</li>
+<li>POST → 新增資料</li>
+<li>DELETE → 刪除資料</li>
+</ul>
+<span id="more"></span>
+<h2 id="http-polling輪詢">HTTP polling(輪詢)</h2>
+<p>可以用兔子（Client）和店老闆（Server）來想像。</p>
+<h3 id="http-short-polling">HTTP Short Polling</h3>
+<p>需要一直問。像是兔子一直站在店旁邊不停地問「有紅蘿蔔嗎？」，每問一次老闆就要回他一次「沒有。」或是「有。」老闆回完話後，兔子過一陣子之後就會再問一次「有紅蘿蔔嗎？」所以整個流程就會像：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">00:00:00 兔子 -&gt; 有紅蘿蔔嗎？</span><br><span class="line">00:00:01 老闆 -&gt; 沒有。</span><br><span class="line">00:00:03 兔子 -&gt; 有紅蘿蔔嗎？</span><br><span class="line">00:00:04 老闆 -&gt; 沒有。</span><br><span class="line">00:00:06 兔子 -&gt; 有紅蘿蔔嗎？</span><br><span class="line">00:00:07 老闆 -&gt; 有，拿去。</span><br><span class="line">00:00:09 兔子 -&gt; 有紅蘿蔔嗎？</span><br></pre></td></tr></table></figure>
+<p>這種方法雖然不會占用 Client 和 Server
+過多的資源，但是因為他每過一陣子才會再重新問一次，所以也不能拿到即時的資料。還有就是在來回傳輸的過程中還是會頻繁的浪費網路資源，還有可能什麼都沒拿到。</p>
+<h3 id="http-long-polling">HTTP Long Polling</h3>
+<p>這個方法就是老闆生氣了，不想要理兔子了，所以他決定等到貨到了再跟兔子說有紅蘿蔔了。但是如過或太久沒有到，久到他都氣消了，他還是會跟兔子說「沒有」。所以對話會變成下面這樣：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">00:00:00 兔子 -&gt; 有紅蘿蔔嗎？</span><br><span class="line">00:00:10 老闆 -&gt; 沒有。</span><br><span class="line">00:00:10 兔子 -&gt; 有紅蘿蔔嗎？</span><br><span class="line">00:00:13 老闆 -&gt; 有，拿去。</span><br><span class="line">00:00:13 兔子 -&gt; 有紅蘿蔔嗎？</span><br></pre></td></tr></table></figure>
+<p>這個的缺點就是老闆和兔子同時都被耽擱了，老闆在等著要回復兔子，而兔子也等著老闆的回覆。也就是說，前端和後端的通訊同時都被卡住了。還有如果資料更新的很頻繁，這個方法就會相對的很沒有效率，因為每次老闆都會馬上回答有貨了，而不能累積很多再一次給兔子。但他的優點就在於這種方法是沒有延遲的，因為老闆一拿到貨就會馬上跟兔子說有紅蘿蔔。</p>
+<h2 id="http-streaming">HTTP Streaming</h2>
+<p>這次換兔子覺得麻煩了，所以他跟老闆說，我就在這邊等著，只要貨一有情況就要馬上跟我說喔，等我拿夠了，我會再跟你說。所以對會變成這樣：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">00:00:00 兔子 -&gt; 有紅蘿蔔嗎？</span><br><span class="line">00:00:01 老闆 -&gt; 等一下喔。</span><br><span class="line">00:00:02 老闆 -&gt; 貨快到了。</span><br><span class="line">00:00:03 老闆 -&gt; 有，拿去。</span><br><span class="line">00:00:03 老闆 -&gt; 正在等下一次送貨。</span><br><span class="line">00:00:04 老闆 -&gt; 貨快到了。</span><br><span class="line">00:00:05 老闆 -&gt; 有，拿去。</span><br><span class="line">00:00:05 老闆 -&gt; 正在等下一次送貨。</span><br><span class="line">00:00:06 兔子 -&gt; 夠了，謝啦。</span><br></pre></td></tr></table></figure>
+<p>這個方法最大的問題是由於他是建立在 HTTP
+協定上的一種傳輸機制，所以有可能會因為代理伺服器（proxy）或防火牆（firewall）將其中的資料存放在緩衝區中，造成資料回應上的延遲。</p>
+<h3 id="sse-server-sent-events-eventsource">SSE (Server Sent Events /
+EventSource)</h3>
+<p>這個方法和上一個類似，只是兔子覺得老闆太多廢話了，所以他跟老闆說，不要什麼都跟我說，只要有貨再跟我說就好了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">00:00:00 兔子 -&gt; 有紅蘿蔔嗎？</span><br><span class="line">00:00:03 老闆 -&gt; 有，拿去。</span><br><span class="line">00:00:05 老闆 -&gt; 有，拿去。</span><br><span class="line">00:00:06 兔子 -&gt; 夠了，謝啦。</span><br></pre></td></tr></table></figure>
+<p>這兩個都共有的問題 MDN 上有提到</p>
+<blockquote>
+<p>當連線不是透過 HTTP/2 時，SSE
+會受到最大連線數限制所苦，尤其當開啟多個分頁。每個瀏覽器有自己的限制數而且被限制在很低的數量（6）。</p>
+</blockquote>
+<p>但是透過 HTTP/2 就沒差了。但是還是有一些<a
+target="_blank" rel="noopener" href="https://caniuse.com/eventsource">瀏覽器</a>不支援 SSE。</p>
+<h2 id="websockets">WebSockets</h2>
+<p>過了這麼久，兔子和老闆都變成朋友了。所以他們無話不談，誰都可以自由的溝通。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">00:00:00 兔子 -&gt; 有紅蘿蔔嗎？</span><br><span class="line">00:00:01 老闆 -&gt; 等一下喔。</span><br><span class="line">00:00:01 兔子 -&gt; 好啊。</span><br><span class="line">00:00:03 老闆 -&gt; 有貨了，拿去。</span><br><span class="line">00:00:03 老闆 -&gt; 正在等下一次送貨。</span><br><span class="line">00:00:04 兔子 -&gt; 這是甚麼口味阿。</span><br><span class="line">00:00:04 老闆 -&gt; 我不知道欸，蘿蔔口味吧。</span><br><span class="line">00:00:05 老闆 -&gt; 貨快到了。</span><br><span class="line">00:00:05 兔子 -&gt; 太棒了，超好吃的欸。</span><br><span class="line">00:00:06 兔子 -&gt; 但是我吃夠了，謝啦。</span><br></pre></td></tr></table></figure>
+<p>但實際上，老闆跟兔子還是要先培養感情才能這樣輕鬆的溝通的，所以他們一開始還是會透過原本
+HTTP 的方式來連線。</p>
+<p><img src="/assets/WebSocket/Untitled.png" /></p>
+<p>這就分別是 Client 和 Server 會傳給對方的訊息。Client 會傳送要求
+Upgrade 到 websocket 的請求和 websocket 的 Key 等資料。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">GET /chat HTTP/1.1</span><br><span class="line">Host: example.com:8000</span><br><span class="line">Upgrade: websocket</span><br><span class="line">Connection: Upgrade</span><br><span class="line">Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==</span><br><span class="line">Sec-WebSocket-Version: 13</span><br></pre></td></tr></table></figure>
+<p>如果 Server 端沒有問題，他也會回傳可以 Upgrade的訊息。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 101 Switching Protocols</span><br><span class="line">Upgrade: websocket</span><br><span class="line">Connection: Upgrade</span><br><span class="line">Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=</span><br></pre></td></tr></table></figure>
+<p>然後因為 WebSocket 是在另一個通訊方式下溝通的，所以他並不會占用原本用
+HTTP 溝通的管道。</p>
+<p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=1BfCnjr_Vjg">WebSockets in
+100 Seconds &amp; Beyond with Socket.io</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>ARui
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://blog.arui.dev/WebSocket/" title="WebSocket">https://blog.arui.dev/WebSocket/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Notes/" rel="tag"># Notes</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/%5BOS%5DChapter-5/" rel="next" title="[OS] Chapter 5 — Process Scheduling">
+                  [OS] Chapter 5 — Process Scheduling <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-coffee"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ARui</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
