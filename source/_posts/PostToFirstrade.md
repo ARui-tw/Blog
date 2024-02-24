@@ -10,6 +10,8 @@ categories: Investment
 
 從郵局匯款到 Fristrade，綁定約定到入帳最快可能可以**四天完成**。兩天是綁定的時間，兩天是匯款的時間。郵局這邊的手續費因為活動期間，用行動郵局 App 轉帳只要 168。之後最便宜應該也要 [300 + 100](https://www.post.gov.tw/post/internet/B_saving/index.jsp?ID=3020204)。**中轉行收 15 USD**。
 
+<!-- more -->
+
 # 時間線
 
 - `2024/02/15 17:00` 申請綁定約定帳戶
