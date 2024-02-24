@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.arui.dev","root":"/","images":"/images","scheme":"Gemini","darkmode":"ture","version":"8.14.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="TL;DR 從郵局匯款到 Fristrade，綁定約定到入帳最快可能可以四天完成。兩天是綁定的時間，兩天是匯款的時間。郵局這邊的手續費因為活動期間，用行動郵局 App 轉帳只要 168。之後最便宜應該也要 300 + 100。中轉行收 15 USD。 時間線  2024&#x2F;02&#x2F;15 17:00 申請綁定約定帳戶 2024&#x2F;02&#x2F;17 12:01 通知綁定完成 2024&#x2F;02&#x2F;19 14:19 匯款">
+<meta property="og:type" content="article">
+<meta property="og:title" content="從中華郵政匯款到 Firstrade 的美元帳戶">
+<meta property="og:url" content="https://blog.arui.dev/PostToFirstrade/">
+<meta property="og:site_name" content="ARui&#39;s Blog">
+<meta property="og:description" content="TL;DR 從郵局匯款到 Fristrade，綁定約定到入帳最快可能可以四天完成。兩天是綁定的時間，兩天是匯款的時間。郵局這邊的手續費因為活動期間，用行動郵局 App 轉帳只要 168。之後最便宜應該也要 300 + 100。中轉行收 15 USD。 時間線  2024&#x2F;02&#x2F;15 17:00 申請綁定約定帳戶 2024&#x2F;02&#x2F;17 12:01 通知綁定完成 2024&#x2F;02&#x2F;19 14:19 匯款">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.arui.dev/assets/PostToFirstrade/OutwardRemittanceForm.jpeg">
+<meta property="og:image" content="https://blog.arui.dev/assets/PostToFirstrade/PostRecord.png">
+<meta property="article:published_time" content="2024-02-24T15:27:00.000Z">
+<meta property="article:modified_time" content="2024-02-24T16:51:15.754Z">
+<meta property="article:author" content="ARui">
+<meta property="article:tag" content="Notes">
+<meta property="article:tag" content="Operating System">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.arui.dev/assets/PostToFirstrade/OutwardRemittanceForm.jpeg">
+
+
+<link rel="canonical" href="https://blog.arui.dev/PostToFirstrade/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.arui.dev/PostToFirstrade/","path":"PostToFirstrade/","title":"從中華郵政匯款到 Firstrade 的美元帳戶"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>從中華郵政匯款到 Firstrade 的美元帳戶 | ARui's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">ARui's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#tldr"><span class="nav-number">1.</span> <span class="nav-text">TL;DR</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%99%82%E9%96%93%E7%B7%9A"><span class="nav-number">2.</span> <span class="nav-text">時間線</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B2%BB%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">費用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B4%B0%E7%AF%80"><span class="nav-number">4.</span> <span class="nav-text">細節</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%B3%E8%AB%8B%E7%B6%81%E5%AE%9A%E7%B4%84%E5%AE%9A%E5%B8%B3%E6%88%B6"><span class="nav-number">4.1.</span> <span class="nav-text">申請綁定約定帳戶</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%B5%E5%B1%80%E5%8C%AF%E6%AC%BE"><span class="nav-number">4.2.</span> <span class="nav-text">郵局匯款</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ARui</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/arui-tw" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;arui-tw" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:mail@arui.dev" title="E-Mail → mailto:mail@arui.dev" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/ARuiTW/" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;ARuiTW&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/PostToFirstrade/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ARui">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ARui's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="從中華郵政匯款到 Firstrade 的美元帳戶 | ARui's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          從中華郵政匯款到 Firstrade 的美元帳戶
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-02-24 23:27:00" itemprop="dateCreated datePublished" datetime="2024-02-24T23:27:00+08:00">2024-02-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-02-25 00:51:15" itemprop="dateModified" datetime="2024-02-25T00:51:15+08:00">2024-02-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Investment/" itemprop="url" rel="index"><span itemprop="name">Investment</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>528</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="tldr">TL;DR</h1>
+<p>從郵局匯款到
+Fristrade，綁定約定到入帳最快可能可以<strong>四天完成</strong>。兩天是綁定的時間，兩天是匯款的時間。郵局這邊的手續費因為活動期間，用行動郵局
+App 轉帳只要 168。之後最便宜應該也要 <a
+target="_blank" rel="noopener" href="https://www.post.gov.tw/post/internet/B_saving/index.jsp?ID=3020204">300
++ 100</a>。<strong>中轉行收 15 USD</strong>。</p>
+<h1 id="時間線">時間線</h1>
+<ul>
+<li><code>2024/02/15 17:00</code> 申請綁定約定帳戶</li>
+<li><code>2024/02/17 12:01</code> 通知綁定完成</li>
+<li><code>2024/02/19 14:19</code> 匯款至 Firstrade</li>
+<li><code>2024/02/21 09:26</code> 看到 Fristrade 收到款項</li>
+<li><code>2024/02/21 晚上</code> 申請匯款補助</li>
+<li><code>2024/02/21 下午</code> 收到匯款補助</li>
+</ul>
+<h1 id="費用">費用</h1>
+<table>
+<thead>
+<tr class="header">
+<th>項目</th>
+<th>金額</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>申請綁定約定帳戶</td>
+<td>NT$0</td>
+</tr>
+<tr class="even">
+<td>郵局匯款（活動期間）</td>
+<td>NT$158</td>
+</tr>
+<tr class="odd">
+<td>中轉行</td>
+<td>US$15</td>
+</tr>
+<tr class="even">
+<td>Firstrade 補助</td>
+<td>-US$21</td>
+</tr>
+<tr class="odd">
+<td>合計花費</td>
+<td>≈ -NT$31.70</td>
+</tr>
+</tbody>
+</table>
+<h1 id="細節">細節</h1>
+<h2 id="申請綁定約定帳戶">申請綁定約定帳戶</h2>
+<p>需要的東西有：身分證、郵局存摺、印章和 Firstrade
+的帳戶資訊。這個過程大概需要 5 分鐘。</p>
+<p>到郵局後，會給你一張紙填寫，基本上就照著 Firstrade
+給的資料填就好了。可以參考下面這張照片。（抱歉這種小朋友字體。）</p>
+<figure>
+<img src="/assets/PostToFirstrade/OutwardRemittanceForm.jpeg"
+alt="郵局約定表格" />
+<figcaption aria-hidden="true">郵局約定表格</figcaption>
+</figure>
+<p>不建議直接照抄（因為我字很醜），要抄還是照著 Firstrade
+的資料抄。或是參考網路上的教學，例如<a
+target="_blank" rel="noopener" href="https://george-dewi.com/firstrade/#t-1688828552566">這篇</a>。</p>
+<h2 id="郵局匯款">郵局匯款</h2>
+<p>大概等 2 天之後，就會收到郵局的簡訊通知。簡訊內容大概是這樣：</p>
+<blockquote>
+<p>中華郵政客戶您好：您申請網路（行動）郵局外匯匯出匯款服務已生效，請登入網路郵局或下載行動郵局APP，即可使用相關功能。</p>
+</blockquote>
+<p>我是用 <strong>行動郵局 App</strong>
+來轉帳的。一開始還以為是在一般的轉帳的地方，結果他是要去 App
+下面的「更多」→「外匯匯款」→「匯出匯款」才有。匯出的教學網路上一定也很多，要注意的就是要寫對附言。寫錯就麻煩了（我也沒遇過就是了
+XD）。</p>
+<p>因為我是在活動期間，所以手續費只要 168。下面是匯款紀錄。</p>
+<figure>
+<img src="/assets/PostToFirstrade/PostRecord.png" alt="匯款紀錄" />
+<figcaption aria-hidden="true">匯款紀錄</figcaption>
+</figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>ARui
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://blog.arui.dev/PostToFirstrade/" title="從中華郵政匯款到 Firstrade 的美元帳戶">https://blog.arui.dev/PostToFirstrade/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Notes/" rel="tag"># Notes</a>
+              <a href="/tags/Operating-System/" rel="tag"># Operating System</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/%5BOS%5DChapter-13/" rel="prev" title="[OS] Chapter 13 — I/O System">
+                  <i class="fa fa-chevron-left"></i> [OS] Chapter 13 — I/O System
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-coffee"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ARui</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
