@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
@@ -275,6 +275,141 @@ target="_blank" rel="noopener" href="https://www.post.gov.tw/post/internet/B_sav
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/[OS]Chapter-12/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ARui">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ARui's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | ARui's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/%5BOS%5DChapter-12/" class="post-title-link" itemprop="url">[OS] Chapter 12 — Mass Storage System</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-01-31 18:12:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:12:24+08:00">2022-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-01 22:16:21" itemprop="dateModified" datetime="2022-02-01T22:16:21+08:00">2022-02-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Operating-System-Notes/" itemprop="url" rel="index"><span itemprop="name">Operating System Notes</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.7k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <div class="note default"><p><a
+target="_blank" rel="noopener" href="https://arui-tw.notion.site/Chapter-12-Mass-Storage-System-0a7b775db2304a7c88922dc8457ade4a">Notion
+好讀版</a></p>
+</div>
+<aside>
+<p>✏️ 泛指所有 secondary storage</p>
+</aside>
+<h1 id="disk-structure">Disk Structure</h1>
+<p>由磁盤組成，最小儲存單位是 sector，買來就切死的，所以用軟體的 block
+（多個 sector）來控制。Sector 會有
+number，所以可以對特定資料作讀取。</p>
+<p><img src="/assets/%5BOS%5DChapter-12/Untitled.png" /></p>
+<h2 id="sectors-per-track"><strong>Sectors per Track</strong></h2>
+<ul>
+<li>Constant linear velocity ****(CLV)
+<ul>
+<li><p>Density of bits per track 是固定的</p></li>
+<li><p>這樣內圈的資料量就會小於外圈的</p></li>
+<li><p>但是這樣讀取資料的速度會不固定</p>
+<p>→ 讀內圈要轉比較快</p></li>
+<li><p>applications: CD-ROM and DVD-ROM</p></li>
+</ul></li>
+<li>Constant angular velocity ****(CAV)
+<ul>
+<li>keep same rotation speed</li>
+<li>內圈 density 比較高</li>
+<li>這樣轉速就不用改</li>
+<li>applications: hard disks</li>
+</ul></li>
+</ul>
+<h2 id="disk-io">Disk IO</h2>
+<p><img src="/assets/%5BOS%5DChapter-12/Untitled%201.png" /></p>
+<ul>
+<li>EIDE, ATA, SATA (Serial ATA), USB, SCSI, etc</li>
+<li>效能會有差</li>
+<li>I/O bus is controlled by controller</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/%5BOS%5DChapter-12/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/[OS]Chapter-13/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -303,9 +438,15 @@ target="_blank" rel="noopener" href="https://www.post.gov.tw/post/internet/B_sav
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2022-02-01 08:12:24 / Modified: 22:20:34" itemprop="dateCreated datePublished" datetime="2022-02-01T08:12:24+08:00">2022-02-01</time>
+      <time title="Created: 2022-01-31 18:12:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:12:24+08:00">2022-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-01 22:20:34" itemprop="dateModified" datetime="2022-02-01T22:20:34+08:00">2022-02-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -409,135 +550,6 @@ wires（連接的方式，除了物理相接，還有 protocol 的部分）</p>
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/[OS]Chapter-12/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="ARui">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ARui's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | ARui's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/%5BOS%5DChapter-12/" class="post-title-link" itemprop="url">[OS] Chapter 12 — Mass Storage System</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2022-02-01 08:12:24 / Modified: 22:16:21" itemprop="dateCreated datePublished" datetime="2022-02-01T08:12:24+08:00">2022-02-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Operating-System-Notes/" itemprop="url" rel="index"><span itemprop="name">Operating System Notes</span></a>
-        </span>
-    </span>
-
-  
-    <span class="post-meta-item" title="Word count in article">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">Word count in article: </span>
-      <span>1.7k</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <div class="note default"><p><a
-target="_blank" rel="noopener" href="https://arui-tw.notion.site/Chapter-12-Mass-Storage-System-0a7b775db2304a7c88922dc8457ade4a">Notion
-好讀版</a></p>
-</div>
-<aside>
-<p>✏️ 泛指所有 secondary storage</p>
-</aside>
-<h1 id="disk-structure">Disk Structure</h1>
-<p>由磁盤組成，最小儲存單位是 sector，買來就切死的，所以用軟體的 block
-（多個 sector）來控制。Sector 會有
-number，所以可以對特定資料作讀取。</p>
-<p><img src="/assets/%5BOS%5DChapter-12/Untitled.png" /></p>
-<h2 id="sectors-per-track"><strong>Sectors per Track</strong></h2>
-<ul>
-<li>Constant linear velocity ****(CLV)
-<ul>
-<li><p>Density of bits per track 是固定的</p></li>
-<li><p>這樣內圈的資料量就會小於外圈的</p></li>
-<li><p>但是這樣讀取資料的速度會不固定</p>
-<p>→ 讀內圈要轉比較快</p></li>
-<li><p>applications: CD-ROM and DVD-ROM</p></li>
-</ul></li>
-<li>Constant angular velocity ****(CAV)
-<ul>
-<li>keep same rotation speed</li>
-<li>內圈 density 比較高</li>
-<li>這樣轉速就不用改</li>
-<li>applications: hard disks</li>
-</ul></li>
-</ul>
-<h2 id="disk-io">Disk IO</h2>
-<p><img src="/assets/%5BOS%5DChapter-12/Untitled%201.png" /></p>
-<ul>
-<li>EIDE, ATA, SATA (Serial ATA), USB, SCSI, etc</li>
-<li>效能會有差</li>
-<li>I/O bus is controlled by controller</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/%5BOS%5DChapter-12/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/[OS]Chapter-11/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -566,9 +578,15 @@ number，所以可以對特定資料作讀取。</p>
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2022-02-01 08:11:24 / Modified: 22:14:53" itemprop="dateCreated datePublished" datetime="2022-02-01T08:11:24+08:00">2022-02-01</time>
+      <time title="Created: 2022-01-31 18:11:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:11:24+08:00">2022-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-01 22:14:53" itemprop="dateModified" datetime="2022-02-01T22:14:53+08:00">2022-02-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -696,9 +714,15 @@ alt="右邊的名詞不用記" />
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2022-02-01 08:10:24 / Modified: 22:22:32" itemprop="dateCreated datePublished" datetime="2022-02-01T08:10:24+08:00">2022-02-01</time>
+      <time title="Created: 2022-01-31 18:10:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:10:24+08:00">2022-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-01 22:22:32" itemprop="dateModified" datetime="2022-02-01T22:22:32+08:00">2022-02-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -823,9 +847,15 @@ OS</p>
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2022-02-01 08:07:24 / Modified: 17:09:10" itemprop="dateCreated datePublished" datetime="2022-02-01T08:07:24+08:00">2022-02-01</time>
+      <time title="Created: 2022-01-31 18:07:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:07:24+08:00">2022-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-01 17:09:10" itemprop="dateModified" datetime="2022-02-01T17:09:10+08:00">2022-02-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -948,9 +978,15 @@ target="_blank" rel="noopener" href="https://www.notion.so/arui-tw/Chapter-7-Dea
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2022-02-01 08:06:24 / Modified: 22:18:25" itemprop="dateCreated datePublished" datetime="2022-02-01T08:06:24+08:00">2022-02-01</time>
+      <time title="Created: 2022-01-31 18:06:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:06:24+08:00">2022-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-01 22:18:25" itemprop="dateModified" datetime="2022-02-01T22:18:25+08:00">2022-02-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1080,9 +1116,15 @@ race condition，要用同步化解決）</p>
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2022-02-01 08:05:24 / Modified: 22:21:49" itemprop="dateCreated datePublished" datetime="2022-02-01T08:05:24+08:00">2022-02-01</time>
+      <time title="Created: 2022-01-31 18:05:24" itemprop="dateCreated datePublished" datetime="2022-01-31T18:05:24+08:00">2022-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-01 22:21:49" itemprop="dateModified" datetime="2022-02-01T22:21:49+08:00">2022-02-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1196,7 +1238,7 @@ target="_blank" rel="noopener" href="https://arui-tw.notion.site/Chapter-5-Proce
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2021-05-13 06:50:24" itemprop="dateCreated datePublished" datetime="2021-05-13T06:50:24+08:00">2021-05-13</time>
+      <time title="Created: 2021-05-12 17:50:24" itemprop="dateCreated datePublished" datetime="2021-05-12T17:50:24+08:00">2021-05-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
