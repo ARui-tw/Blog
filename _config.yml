@@ -110,3 +110,21 @@ symbols_count_time:
   time: false
   total_time: false
   total_symbols: false
+
+feed:
+  enable: true
+  type:
+    - atom
+    - rss2
+  path:
+    - atom.xml
+    - rss.xml
+  limit: 20
+  hub:
+  # content: true
+  # content_limit: 140
+  # content_limit_delim: " "
+  order_by: -date
+  # icon: icon.png
+  autodiscovery: true
+  # template:

@@ -9,7 +9,7 @@ categories: NYCU
 
 # 作業系統
 
-- 英文課名：Operating System）
+- 英文課名：Operating System
 - 永久課號：CSIC30015
 - 教師：吳俊峯
 
