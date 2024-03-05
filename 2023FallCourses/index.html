@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.arui.dev","root":"/","images":"/images","scheme":"Gemini","darkmode":"ture","version":"8.14.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="作業系統  英文課名：Operating System） 永久課號：CSIC30015 教師：吳俊峯  課程內容 因為沒上過交大這邊教的大學部 OS，所以不知道跟大學的差別有多少。但是體感上跟清大差不少。清大周志遠教授的 OS 感覺比較想是每個 component 都碰一下，但是這堂比較偏向每個都會教到比較深層的。但可能時間的關係，所以也沒有辦法教很多很深。老師好像是作記憶體的（他下學期還有開一門">
+<meta property="og:type" content="article">
+<meta property="og:title" content="陽明交大資工所碩一上（2023 Fall）修課心得">
+<meta property="og:url" content="https://blog.arui.dev/2023FallCourses/">
+<meta property="og:site_name" content="ARui&#39;s Blog">
+<meta property="og:description" content="作業系統  英文課名：Operating System） 永久課號：CSIC30015 教師：吳俊峯  課程內容 因為沒上過交大這邊教的大學部 OS，所以不知道跟大學的差別有多少。但是體感上跟清大差不少。清大周志遠教授的 OS 感覺比較想是每個 component 都碰一下，但是這堂比較偏向每個都會教到比較深層的。但可能時間的關係，所以也沒有辦法教很多很深。老師好像是作記憶體的（他下學期還有開一門">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-02-24T15:27:00.000Z">
+<meta property="article:modified_time" content="2024-03-05T18:52:49.101Z">
+<meta property="article:author" content="ARui">
+<meta property="article:tag" content="NYCU">
+<meta property="article:tag" content="Course">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.arui.dev/2023FallCourses/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.arui.dev/2023FallCourses/","path":"2023FallCourses/","title":"陽明交大資工所碩一上（2023 Fall）修課心得"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>陽明交大資工所碩一上（2023 Fall）修課心得 | ARui's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">ARui's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%9C%E6%A5%AD%E7%B3%BB%E7%B5%B1"><span class="nav-number">1.</span> <span class="nav-text">作業系統</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AA%B2%E7%A8%8B%E5%85%A7%E5%AE%B9"><span class="nav-number">1.1.</span> <span class="nav-text">課程內容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E8%AA%B2%E6%96%B9%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">上課方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%80%83%E8%A9%A6%E4%BD%9C%E6%A5%AD"><span class="nav-number">1.3.</span> <span class="nav-text">考試作業</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">1.4.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%BE%8C%E6%83%B3%E8%AA%AA%E7%9A%84%E8%A9%B1"><span class="nav-number">1.5.</span> <span class="nav-text">最後想說的話</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%A1%E5%8B%99%E7%B3%BB%E7%B5%B1%E9%96%8B%E7%99%BC%E8%88%87%E7%AE%A1%E7%90%86%E4%B8%80"><span class="nav-number">2.</span> <span class="nav-text">校務系統開發與管理（一）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AA%B2%E7%A8%8B%E5%85%A7%E5%AE%B9-1"><span class="nav-number">2.1.</span> <span class="nav-text">課程內容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E8%AA%B2%E6%96%B9%E5%BC%8F-1"><span class="nav-number">2.2.</span> <span class="nav-text">上課方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%80%83%E8%A9%A6%E4%BD%9C%E6%A5%AD-1"><span class="nav-number">2.3.</span> <span class="nav-text">考試作業</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96-1"><span class="nav-number">2.4.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%BE%8C%E6%83%B3%E8%AA%AA%E7%9A%84%E8%A9%B1-1"><span class="nav-number">2.5.</span> <span class="nav-text">最後想說的話</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AB%96%E6%96%87%E7%A0%94%E8%A8%8E"><span class="nav-number">3.</span> <span class="nav-text">論文研討</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AA%B2%E7%A8%8B%E5%85%A7%E5%AE%B9-2"><span class="nav-number">3.1.</span> <span class="nav-text">課程內容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E8%AA%B2%E6%96%B9%E5%BC%8F-2"><span class="nav-number">3.2.</span> <span class="nav-text">上課方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%80%83%E8%A9%A6%E4%BD%9C%E6%A5%AD-2"><span class="nav-number">3.3.</span> <span class="nav-text">考試作業</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96-2"><span class="nav-number">3.4.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%BE%8C%E6%83%B3%E8%AA%AA%E7%9A%84%E8%A9%B1-2"><span class="nav-number">3.5.</span> <span class="nav-text">最後想說的話</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%84%A1%E7%B7%9A%E5%A4%9A%E5%AA%92%E9%AB%94%E7%B6%B2%E8%B7%AF"><span class="nav-number">4.</span> <span class="nav-text">無線多媒體網路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AA%B2%E7%A8%8B%E5%85%A7%E5%AE%B9-3"><span class="nav-number">4.1.</span> <span class="nav-text">課程內容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E8%AA%B2%E6%96%B9%E5%BC%8F-3"><span class="nav-number">4.2.</span> <span class="nav-text">上課方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%80%83%E8%A9%A6%E4%BD%9C%E6%A5%AD-3"><span class="nav-number">4.3.</span> <span class="nav-text">考試作業</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96-3"><span class="nav-number">4.4.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%BE%8C%E6%83%B3%E8%AA%AA%E7%9A%84%E8%A9%B1-3"><span class="nav-number">4.5.</span> <span class="nav-text">最後想說的話</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B6%B2%E8%B7%AF%E5%AE%89%E5%85%A8"><span class="nav-number">5.</span> <span class="nav-text">網路安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AA%B2%E7%A8%8B%E5%85%A7%E5%AE%B9-4"><span class="nav-number">5.1.</span> <span class="nav-text">課程內容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E8%AA%B2%E6%96%B9%E5%BC%8F-4"><span class="nav-number">5.2.</span> <span class="nav-text">上課方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%80%83%E8%A9%A6%E4%BD%9C%E6%A5%AD-4"><span class="nav-number">5.3.</span> <span class="nav-text">考試作業</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96-4"><span class="nav-number">5.4.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%BE%8C%E6%83%B3%E8%AA%AA%E7%9A%84%E8%A9%B1-4"><span class="nav-number">5.5.</span> <span class="nav-text">最後想說的話</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BB%9F%E9%AB%94%E5%AE%9A%E7%BE%A9%E7%B6%B2%E8%B7%AF%E5%8F%8A%E7%B6%B2%E8%B7%AF%E5%8A%9F%E8%83%BD%E8%99%9B%E6%93%AC%E5%8C%96"><span class="nav-number">6.</span> <span class="nav-text">軟體定義網路及網路功能虛擬化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AA%B2%E7%A8%8B%E5%85%A7%E5%AE%B9-5"><span class="nav-number">6.1.</span> <span class="nav-text">課程內容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E8%AA%B2%E6%96%B9%E5%BC%8F-5"><span class="nav-number">6.2.</span> <span class="nav-text">上課方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%80%83%E8%A9%A6%E4%BD%9C%E6%A5%AD-5"><span class="nav-number">6.3.</span> <span class="nav-text">考試作業</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96-5"><span class="nav-number">6.4.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%BE%8C%E6%83%B3%E8%AA%AA%E7%9A%84%E8%A9%B1-5"><span class="nav-number">6.5.</span> <span class="nav-text">最後想說的話</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ARui</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/arui-tw" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;arui-tw" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:mail@arui.dev" title="E-Mail → mailto:mail@arui.dev" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/ARuiTW/" title="Facebook → https:&#x2F;&#x2F;www.facebook.com&#x2F;ARuiTW&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>Facebook</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/arui-tw/" title="LinkedIn → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;arui-tw&#x2F;" rel="noopener me" target="_blank"><i class="fab fa-linkedin fa-fw"></i>LinkedIn</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.arui.dev/2023FallCourses/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ARui">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ARui's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="陽明交大資工所碩一上（2023 Fall）修課心得 | ARui's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          陽明交大資工所碩一上（2023 Fall）修課心得
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-02-24 23:27:00" itemprop="dateCreated datePublished" datetime="2024-02-24T23:27:00+08:00">2024-02-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-03-06 02:52:49" itemprop="dateModified" datetime="2024-03-06T02:52:49+08:00">2024-03-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/NYCU/" itemprop="url" rel="index"><span itemprop="name">NYCU</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>2k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="作業系統">作業系統</h1>
+<ul>
+<li>英文課名：Operating System）</li>
+<li>永久課號：CSIC30015</li>
+<li>教師：吳俊峯</li>
+</ul>
+<h2 id="課程內容">課程內容</h2>
+<p>因為沒上過交大這邊教的大學部
+OS，所以不知道跟大學的差別有多少。但是體感上跟清大差不少。清大周志遠教授的
+OS 感覺比較想是每個 component
+都碰一下，但是這堂比較偏向每個都會教到比較深層的。但可能時間的關係，所以也沒有辦法教很多很深。老師好像是作記憶體的（他下學期還有開一門〈記憶體與儲存系統〉），所以那段講的特別細節和清楚。</p>
+<h2 id="上課方式">上課方式</h2>
+<p>英文授課。線上實體並行，會有影片存檔。課間的學生提問都會被錄下來。基本上我除了第一堂和期中期末以外都沒去過了
+XDD</p>
+<h2 id="考試作業">考試作業</h2>
+<ul>
+<li>20% Midterm Exam
+<ul>
+<li>有人在 nctuplus 上面丟考古了，Dcard
+也有一個篇在討論這個。基本上跟去年考古一樣，多了一個 section
+的是非題。滿分依舊破百。</li>
+</ul></li>
+<li>30% Final Exam
+<ul>
+<li>沒檢討，考卷沒發回來。會考到期中範圍，記得複習。</li>
+</ul></li>
+<li>20% Paper Presentation
+<ul>
+<li>這年因為人數的關係兩個人一組。一組約 12~15
+分鐘報一篇。要從老師指定的 conferences 中選（USENIX OSDI, USENIX ATC,
+USENIX FAST, SOSP, ASPLOS, HPCA, ACM SC, ISCA, MICRO, EuroSys）。或是
+Rank A 且十頁以上的。</li>
+<li>第二週報加兩分，第三周報加一分。用英文報加兩分。</li>
+</ul></li>
+<li>30% Homework
+<ul>
+<li>作業一
+<ul>
+<li>要改 Linux 的 uname，需要一台虛擬機。然後實作一個簡單的 system
+calls。</li>
+</ul></li>
+<li>作業二
+<ul>
+<li>用 pthread 去作不同 policy 的 scheduling。</li>
+</ul></li>
+<li>作業三
+<ul>
+<li>寫一個 kernel module 去印出系統資料。</li>
+</ul></li>
+</ul></li>
+<li>10% Class Participation (1 question 2pts)</li>
+</ul>
+<h2 id="其他">其他</h2>
+<p>不點名。線上也可以發問。</p>
+<h2 id="最後想說的話">最後想說的話</h2>
+<p>老師的英文很好，用近乎兩倍速也可以聽懂。解釋能力也很好，闡述都很清楚。學生問問題如果遇到他不會他也會在下次補充。可能因為有加分的關係，所以很多人在問問題。最後還有小調三分，佛！</p>
+<p>班平均 86.85，還有不少人破百 @@</p>
+<h1 id="校務系統開發與管理一">校務系統開發與管理（一）</h1>
+<ul>
+<li>英文課名：Institutional System Development and Management</li>
+<li>永久課號：CSIC30060</li>
+<li>教師：鄭昌杰（雖然上面寫很多人，但是基本上是鄭老師在帶。）</li>
+</ul>
+<h2 id="課程內容-1">課程內容</h2>
+<p>學生上台報告和報進度。有時候會安排演講，可以跟 Sophi（我們的
+PM）許願。</p>
+<h2 id="上課方式-1">上課方式</h2>
+<p>每週會排一到兩個人上台報告。之後就是報大家這周各自的進度，老師會給你一些參考意見，但真的只是參考，他也不會強迫你作什麼。如果有遇到「人際」問題也可以在這時候提出來，人很好的
+Sophi 會幫你解決。基本上老師也想趕快閃人（大家都想），所以都會在 2:30
+分左右結束課程。</p>
+<h2 id="考試作業-1">考試作業</h2>
+<p>無。評分由老師評估你這學期的開發進度。基本上不要亂搞應該都會 A+</p>
+<h2 id="其他-1">其他</h2>
+<p>可以請假，但是不要太誇張。</p>
+<h2 id="最後想說的話-1">最後想說的話</h2>
+<p>戊組人們少數聚在一起的時間（？）。老師和 Sophi
+人都很好，有問題都可以提出來。</p>
+<h1 id="論文研討">論文研討</h1>
+<ul>
+<li>英文課名：Seminars</li>
+<li>永久課號：CSIC30115</li>
+<li>教師：每週都有不同的講者</li>
+</ul>
+<h2 id="課程內容-2">課程內容</h2>
+<p>聽演講。</p>
+<h2 id="上課方式-2">上課方式</h2>
+<p>每週會要請講者去演講。通常是一個小時會結束。有時候會出現跟 CS
+毫無關係的演講主題，像是兩性關係（超ㄏ）。多數都是企業來宣傳。</p>
+<h2 id="考試作業-2">考試作業</h2>
+<p>手寫 100
+字心得。沒寫算沒到。助教會每週更新目前大家的出席次數。聽說會真的數字數，有人在
+Dcard 抱怨他被抓到。</p>
+<h2 id="其他-2">其他</h2>
+<p>可以三次不出席。</p>
+<h2 id="最後想說的話-2">最後想說的話</h2>
+<p>真心希望他們可以邀請更有料的講者 =
+=。有記得好的應該是一次是微軟的和另一個國外大學來講。</p>
+<h1 id="無線多媒體網路">無線多媒體網路</h1>
+<ul>
+<li>英文課名：Wireless Multimedia Networks</li>
+<li>永久課號：CSIC30073</li>
+<li>教師：趙禧綠</li>
+</ul>
+<h2 id="課程內容-3">課程內容</h2>
+<ul>
+<li>Quality of Service (QoS)</li>
+<li>Inserve</li>
+<li>DiffServ</li>
+<li>MPLS</li>
+<li>Internet Traffic Engineering</li>
+<li>IGMP &amp; Multicasting</li>
+<li>MIMO Beamforming</li>
+<li>Dynamic Reuse of Unlicensed Spectrum</li>
+<li>TSN</li>
+</ul>
+<h2 id="上課方式-3">上課方式</h2>
+<p>投影片加上板書作畫。一開始沒有錄影，期中後經學生要求有錄影上傳。上課老師會想要學生的反應，但是我們這屆沒什麼反應，所以坐第一排的同學就可以一直跟老師對話
+XD。老師時不時會分享他實驗室的東西和他之前的經驗，可以感受到他對於這個領域的熱情。</p>
+<h2 id="考試作業-3">考試作業</h2>
+<ul>
+<li>Midterm: 30%
+<ul>
+<li>考題有問答和選擇。可以跟老師要去年考古，但是不會給解答。可以跟老師
+argue 範圍 XDD</li>
+</ul></li>
+<li>Final: 35%
+<ul>
+<li>類似期中考。但是老師忘記給考古了 QQ</li>
+</ul></li>
+<li>Project: 35%
+<ul>
+<li>可以一到二人，但是兩個人的要做的比一個人的難。題目自訂，老師是說拿課堂內教過的，但好像很多人拿其他課或實驗室在做的東西來延伸？期末考前有一次
+Proposal
+報告，老師會給意見和評價難度。期末後的報告是線上報告，這年是另外約時間。</li>
+</ul></li>
+</ul>
+<h2 id="其他-3">其他</h2>
+<p>不點名，但是強烈建議到課。自己啃講義或是原文書很痛苦……</p>
+<h2 id="最後想說的話-3">最後想說的話</h2>
+<p>老師會把 5G 念成「五雞」，把 Wi-Fi 念成「歪ㄈㄞ」。</p>
+<p>老師的解釋都很清楚，但是小生駑鈍，很多之前學過的東西都忘記了。下課可以去找老師一直問到懂為止。有時候太多人問一樣的問題老師會叫已經問過的同學講給剛來的同學。可能因為小班的關係，老師都很
+free，想要什麼都可以問問看。</p>
+<p>最後成績看不到細項，但是拿 A+ 就沒有去跟老師問成績了 XD</p>
+<h1 id="網路安全">網路安全</h1>
+<ul>
+<li>英文課名：Network Security</li>
+<li>永久課號：CSIC30093</li>
+<li>教師：謝續平</li>
+</ul>
+<h2 id="課程內容-4">課程內容</h2>
+<p>基本上就是照著《William Stallings, Network Security Essentials –
+Applications and Standards, Pearson》的各個章節。</p>
+<h2 id="上課方式-4">上課方式</h2>
+<p>投影片加上口述補充。</p>
+<h2 id="考試作業-4">考試作業</h2>
+<p>老師說會在根據當年的成績調整分配。</p>
+<ul>
+<li>Midterm Exam: 30% ± 10%
+<ul>
+<li>考前六章，交大資工考古題系統上面有考古。有一定的題數會和前幾年的重複。建議可以多刷幾年。</li>
+</ul></li>
+<li>Final Exam: 30% ± 10%
+<ul>
+<li>大致跟期中考一樣。</li>
+</ul></li>
+<li>Project + Homeworks + quizzes: 40% +- 20%
+<ul>
+<li>Project 是從助教給的 CVE
+中挑一個出來重現，建議早點開始挑個簡單的來寫。報告要分三次交，每次會有不同的進度。基本上分數很好拿，全班平均超高。</li>
+</ul></li>
+</ul>
+<h2 id="其他-4">其他</h2>
+<p>不點名，沒線上，沒錄影。會有 pop quiz。這學期遇到兩次。</p>
+<h2 id="最後想說的話-4">最後想說的話</h2>
+<p>甜爛。建議去上課，拿原文書啃很花時間，但是可以學到比較多東西。 <img
+src="/assets/2023FallCourses/score.png" alt="Untitled" /></p>
+<h1 id="軟體定義網路及網路功能虛擬化">軟體定義網路及網路功能虛擬化</h1>
+<ul>
+<li>英文課名：Software Defined Networks and Network Function
+Virtualization</li>
+<li>永久課號：CSIC30127</li>
+<li>教師：曾建超（超哥）</li>
+</ul>
+<h2 id="課程內容-5">課程內容</h2>
+<p>沒…沒在上課 Orz</p>
+<h2 id="上課方式-5">上課方式</h2>
+<p>投影片加上口述補充。</p>
+<h2 id="考試作業-5">考試作業</h2>
+<ul>
+<li>大概每兩週一個 Lab，deadline 的下一周要去實體 Demo。週而復始直到寫完
+Final Project :)</li>
+<li>Labs
+<ol type="1">
+<li>Environment Setup and Basic Operation (5%)</li>
+<li>OpenFlow Protocol Observation and Flow Rule Installation (10%)</li>
+<li>SDN-enabled Learning Bridge (15%)</li>
+<li>Unicast DHCP Application (15%)</li>
+<li>Proxy ARP (15%)</li>
+<li>Network Function Virtualization (15%)</li>
+</ol></li>
+<li>Final Project: (25%)
+<ul>
+<li>Virtual Routers</li>
+<li>基本上就是把前面的東西串起來</li>
+</ul></li>
+</ul>
+<h2 id="其他-5">其他</h2>
+<p>不點名，有線上，有錄影。因為沒考試，所以只要可以把功課寫出來，不上課也不會真的出大事（？</p>
+<h2 id="最後想說的話-5">最後想說的話</h2>
+<p>希望超哥不會看到我沒上課 QQ</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>ARui
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://blog.arui.dev/2023FallCourses/" title="陽明交大資工所碩一上（2023 Fall）修課心得">https://blog.arui.dev/2023FallCourses/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/NYCU/" rel="tag"># NYCU</a>
+              <a href="/tags/Course/" rel="tag"># Course</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/%5BOS%5DChapter-12/" rel="prev" title="[OS] Chapter 12 — Mass Storage System">
+                  <i class="fa fa-chevron-left"></i> [OS] Chapter 12 — Mass Storage System
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/PostToFirstrade/" rel="next" title="從中華郵政匯款到 Firstrade 的美元帳戶">
+                  從中華郵政匯款到 Firstrade 的美元帳戶 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-coffee"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ARui</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
